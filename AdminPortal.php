@@ -25,7 +25,7 @@ if(isset($_SESSION["username"])) {
     <div class="wrapper fadeInDown">
   <div id="formContent"> 
     <!-- Icon -->
-      <p class="companyName mt-5"><h1>COMPANY</h1></p>
+      <p class="companyName mt-5"><h1>BIZMATECH</h1></p>
     <!-- Login Form -->  
       <input type="text" id="txtBoxUserName" name="txtBoxUserName" placeholder="Username">  
       <input type="password" id="txtBoxPassword" name="txtBoxPassword" placeholder="Password"> 

@@ -28,94 +28,9 @@ if(!isset($_SESSION["username"])) {
     <div id="wrapper">
 
         <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
-            <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="AdminDashboard.php">
-                <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="fas fa-globe"></i>
-                </div>
-                <div class="sidebar-brand-text mx-3">Company</div>
-            </a>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider my-0">
-
-            <!-- Nav Item - Dashboard -->
-            <li class="nav-item">
-                <a class="nav-link" href="AdminDashboard.php">
-                    <i class="ml-1 fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span></a>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                <h6>User Settings</h6>
-            </div>
-
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCreate"
-                    aria-expanded="true" aria-controls="collapsePages">
-                    <i class="ml-1 fas fa-fw fa-plus"></i>
-                    <span>Create Account</span>
-                </a>
-                <div id="collapseCreate" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded"> 
-                        <a class="collapse-item" href="AdminCreateAccountEmployee.php"><i class="fas fa-fw fa-user"></i> Employee Accounts</a> 
-                        <a class="collapse-item" href="AdminCreateAccountAdmin.php"><i class="fas fa-fw fa-user"></i> Admin Accounts</a>  
-                        <div class="collapse-divider"></div> 
-                    </div>
-                </div>
-            </li>  
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAccounts"
-                    aria-expanded="true" aria-controls="collapsePages">
-                    <i class="ml-1 fas fa-fw fa-user"></i>
-                    <span>Account Lists</span>
-                </a>
-                <div id="collapseAccounts" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded"> 
-                        <a class="collapse-item" href="AdminDashboardEmployeeAccounts.php"><i class="fas fa-fw fa-user"></i> Employee Accounts</a> 
-                        <a class="collapse-item" href="AdminDashboardAdminAccounts.php"><i class="fas fa-fw fa-user"></i> Admin Accounts</a>  
-                        <div class="collapse-divider"></div> 
-                    </div>
-                </div>
-            </li> 
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                <h6>Generate</h6>
-            </div>
-
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item active">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-                    aria-expanded="true" aria-controls="collapsePages">
-                    <i class="ml-1 fas fa-fw fa-folder"></i>
-                    <span>Reports</span>
-                </a>
-                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded"> 
-                        <a class="collapse-item active" href="AdminReportsDaily.php"><i class="fas fa-fw fa-list"></i> Daily Logs</a>  
-                        <div class="collapse-divider"></div> 
-                    </div>
-                </div>
-            </li> 
-            <!-- Divider -->
-            <hr class="sidebar-divider d-none d-md-block">
-
-            <!-- Sidebar Toggler (Sidebar) -->
-            <div class="text-center d-none d-md-inline">
-                <button class="rounded-circle border-0" id="sidebarToggle"></button>
-            </div>
-  
-        </ul>
+        <?php
+            include('sidebar.php');
+        ?>
         <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
@@ -167,18 +82,26 @@ if(!isset($_SESSION["username"])) {
                                     <th>No.</th>
                                     <th>Username</th>
                                     <th>Date</th>
-                                    <th>Time</th> 
-                                    <th>Status</th>
+                                    <th>Time in</th> 
+                                    <th>Time out</th>
+                                    <th>Time in</th> 
+                                    <th>Time out</th> 
                                 </tr>
                             </thead>
                             <tbody class="text-center">
                                 <?php
-                                    $sql = "SELECT ID, Employee_ID, Employee_Date, Employee_Time, Employee_Status FROM `employee_log`";
+                                    $sql = "SELECT ID, Employee_ID, Employee_Date, Employee_Time, Employee_Status, Employee_TimeInAM,
+                                    Employee_TimeOutAM, Employee_TimeInPM, Employee_TimeOutPM FROM `employee_log`";
                                     $result = $conn -> query($sql);
 
                                     if($result-> num_rows > 0) {
                                         while ($row = $result -> fetch_assoc()) {
-                                            echo "<tr><td>".$row["ID"]."</td><td>".$row["Employee_ID"]."</td><td>".$row["Employee_Date"]."</td><td>".$row["Employee_Time"]."</td><td>".$row["Employee_Status"]."</td></td>";
+                                            echo "<tr><td>".$row["ID"].
+                                                "</td><td>".$row["Employee_ID"].
+                                                "</td><td>".$row["Employee_Date"].
+                                                "</td><td>".$row["Employee_Time"].
+                                                "</td><td>".$row["Employee_Status"].
+                                                "</td></td>";
                                         }
                                         echo "</table>";
                                     }
