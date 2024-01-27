@@ -76,32 +76,24 @@ if(!isset($_SESSION["username"])) {
                     <!-- Content Row -->
                     <div class="row pl-1 pr-1"> 
                         <div class="col col-lg-12">
-                        <table id="dailyLogsTable" class="table table-success shadow-lg hover" style="width:100%">
+                        <table id="dailyLogsTable" class="table table-primary shadow-lg hover" style="width:100%">
                             <thead class="text-center">
                                 <tr>
                                     <th>No.</th>
                                     <th>Username</th>
                                     <th>Date</th>
-                                    <th>Time in</th> 
-                                    <th>Time out</th>
-                                    <th>Time in</th> 
-                                    <th>Time out</th> 
+                                    <th>Time</th> 
+                                    <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody class="text-center">
                                 <?php
-                                    $sql = "SELECT ID, Employee_ID, Employee_Date, Employee_Time, Employee_Status, Employee_TimeInAM,
-                                    Employee_TimeOutAM, Employee_TimeInPM, Employee_TimeOutPM FROM `employee_log`";
+                                    $sql = "SELECT ID, Employee_ID, Employee_Date, Employee_Time, Employee_Status FROM `employee_log`";
                                     $result = $conn -> query($sql);
 
                                     if($result-> num_rows > 0) {
                                         while ($row = $result -> fetch_assoc()) {
-                                            echo "<tr><td>".$row["ID"].
-                                                "</td><td>".$row["Employee_ID"].
-                                                "</td><td>".$row["Employee_Date"].
-                                                "</td><td>".$row["Employee_Time"].
-                                                "</td><td>".$row["Employee_Status"].
-                                                "</td></td>";
+                                            echo "<tr><td>".$row["ID"]."</td><td>".$row["Employee_ID"]."</td><td>".$row["Employee_Date"]."</td><td>".$row["Employee_Time"]."</td><td>".$row["Employee_Status"]."</td></td>";
                                         }
                                         echo "</table>";
                                     }

@@ -76,7 +76,7 @@ if(!isset($_SESSION["username"])) {
                     <!-- Content Row -->
                     <div class="row pl-1 pr-1"> 
                         <div class="col col-lg-12">
-                        <table id="employeeTable" class="table table-success shadow-lg hover" style="width:100%">
+                        <table id="employeeTable" class="table table-primary shadow-lg hover" style="width:100%">
                             <thead class="text-center">
                                 <tr>
                                     <th>No.</th>
@@ -147,9 +147,10 @@ if(!isset($_SESSION["username"])) {
                                                 <div class="h2 mb-3 pl-1">
                                                 <select class="form-control" id="EmployeeEdit_Department" name="EmployeeEdit_Department" aria-label="Default select example" required>  
                                                     <option value="" selected disable>Select Department</option>
-                                                    <option value="Malanday">Malanday</option>
+                                                    <option value="Mandaue">Mandaue</option>
                                                     <option value="Sto. Niño">Sto. Niño</option>
-                                                    <option value="Tumana">Tumana</option> 
+                                                    <option value="Ibabao">Ibabao</option>
+                                                    <option value="Lapu-Lapu">Lapu Lapu</option>  
                                                 </select>
                                             </div>
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Employee Position (Select)</div>
@@ -157,7 +158,8 @@ if(!isset($_SESSION["username"])) {
                                             <select class="form-control" id="EmployeeEdit_Position" name="EmployeeEdit_Position" aria-label="Default select example" required> 
                                                 <option value="" selected disable>Select Position</option> 
                                                 <option value="Staff">Staff</option>
-                                                <option value="Driver">Driver</option> 
+                                                <option value="Driver">Driver</option>
+                                                <option value="Intern">Intern</option>  
                                             </select>
                                             </div>
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Employee Sex (Select)</div>

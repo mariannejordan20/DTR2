@@ -12,10 +12,9 @@ if(isset($_POST['username']) && isset($_POST['password'])){
    $row = mysqli_num_rows($result);
 
    if($row > 0) 
-      { 
-         $data = mysqli_fetch_array($result);
-         $_SESSION["username"] = $data["username"];
-         echo $data["username"];
-      } 
+   { 
+      $_SESSION["username"] = $username;
+      echo "1";
+   } 
 }
 ?>

@@ -10,6 +10,7 @@
 <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/sweetalert2@10">
 <!-- JavaScript Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
 <!-- Ajax  -->
@@ -113,6 +114,49 @@
     <script src="myStyles/JS/all.min.js"></script> 
     <!-- Page level custom scripts -->
     <script src="myStyles/JS/chart-area-demo.js"></script>
-    <script src="myStyles/JS/chart-pie-demo.js"></script> 
+    <script src="myStyles/JS/chart-pie-demo.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <!-- Add your new script for SweetAlert messages -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('btnTimeIn').addEventListener('click', function () {
+          var userId = document.getElementById('textBoxUserID').value.trim();
+          if (userId === '') {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error!',
+              text: 'Please enter an Employee ID number.',
+              confirmButtonColor: '#ff3c00',
+            });
+          } else {
+            Swal.fire({
+              icon: 'success',
+              title: 'TIME-IN Successful!',
+              showConfirmButton: false,
+              timer: 1500
+            });
+          }
+        });
+
+        document.getElementById('btnTimeOut').addEventListener('click', function () {
+          var userId = document.getElementById('textBoxUserID').value.trim();
+          if (userId === '') {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error!',
+              text: 'Please enter an Employee ID number.',
+              confirmButtonColor: '#ff3c00',
+            });
+          } else {
+            Swal.fire({
+              icon: 'success',
+              title: 'TIME-OUT Successful!',
+              showConfirmButton: false,
+              timer: 1500
+            });
+          }
+        });
+      });
+    </script>
 </body>
 </html>

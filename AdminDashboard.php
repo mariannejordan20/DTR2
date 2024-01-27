@@ -81,10 +81,10 @@ if(!isset($_SESSION["username"])) {
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                Mandaue Employees</div>
+                                                Mandaue Interns</div>
                                             <div class="h1 ml-1 font-weight-bold text-gray-800">
                                             <?php
-                                                $query = "SELECT ID FROM `employee_information` WHERE `Employee_Department`= 'Malanday'";
+                                                $query = "SELECT ID FROM `employee_information` WHERE `Employee_Department`= 'Mandaue'";
                                                 $Malanday = mysqli_query($conn, $query);
 
                                                 $rowMalanday = mysqli_num_rows($Malanday);
@@ -106,7 +106,7 @@ if(!isset($_SESSION["username"])) {
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                Sto. Niño Employees</div>
+                                                Sto. Niño Interns</div>
                                             <div class="h1 ml-1 font-weight-bold text-gray-800">
                                             <?php
                                                 $query = "SELECT ID FROM `employee_information` WHERE `Employee_Department`= 'Sto. Niño'";
@@ -131,10 +131,35 @@ if(!isset($_SESSION["username"])) {
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                Ibabao Employees</div>
+                                                Ibabao Interns</div>
                                             <div class="h1 ml-1 font-weight-bold text-gray-800">
                                                 <?php
-                                                    $query = "SELECT ID FROM `employee_information` WHERE `Employee_Department`= 'Tumana'";
+                                                    $query = "SELECT ID FROM `employee_information` WHERE `Employee_Department`= 'Ibabao'";
+                                                    $Tumana = mysqli_query($conn, $query);
+
+                                                    $rowTumana = mysqli_num_rows($Tumana);
+
+                                                    echo "<h2>$rowTumana</h2>" 
+                                                ?>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                        <i class="fas fa-user fa-2x text-gray-600 mt-3"></i> 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-warning shadow-lg h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                Lapu Lapu Interns</div>
+                                            <div class="h1 ml-1 font-weight-bold text-gray-800">
+                                                <?php
+                                                    $query = "SELECT ID FROM `employee_information` WHERE `Employee_Department`= 'Lapu-Lapu'";
                                                     $Tumana = mysqli_query($conn, $query);
 
                                                     $rowTumana = mysqli_num_rows($Tumana);
@@ -156,7 +181,7 @@ if(!isset($_SESSION["username"])) {
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                Total Accounts</div>
+                                                Total Interns</div>
                                             <div class="h1 ml-1 font-weight-bold text-gray-800">
                                                 <?php
                                                     $query = "SELECT ID FROM `employee_information`";
