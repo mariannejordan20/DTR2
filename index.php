@@ -95,11 +95,14 @@
         </div>
       </div>
       <div class="row mb-3">
-        <div class="col-lg-12">
-          <button type="button" id="btnTimeIn" name="btnTimeIn" class="btn-In buttons">TIME-IN</button>
-          <button type="button" id="btnTimeOut" name="btnTimeOut" class="btn-Out buttons">TIME-OUT</button> 
-        </div>  
-      </div>  
+    <div class="col-lg-12">
+        <button type="button" id="btnTimeIn1" name="btnTimeIn1" class="btn-In buttons">TIME-IN 1</button>
+        <button type="button" id="btnTimeOut1" name="btnTimeOut1" class="btn-Out buttons">TIME-OUT 1</button>
+        <button type="button" id="btnTimeIn2" name="btnTimeIn2" class="btn-In buttons">TIME-IN 2</button>
+        <button type="button" id="btnTimeOut2" name="btnTimeOut2" class="btn-Out buttons">TIME-OUT 2</button>
+    </div>
+</div>
+ 
   </div> 
   <script src="myStyles/JS/indexJS.js"></script>
   <script src="myStyles/JS/dntJS.js"></script>
@@ -117,47 +120,6 @@
     <script src="myStyles/JS/chart-area-demo.js"></script>
     <script src="myStyles/JS/chart-pie-demo.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <!-- Add your new script for SweetAlert messages -->
-    <script>
-      document.addEventListener('DOMContentLoaded', function () {
-        document.getElementById('btnTimeIn').addEventListener('click', function () {
-          var userId = document.getElementById('textBoxUserID').value.trim();
-          if (userId === '') {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error!',
-              text: 'Please enter an Employee ID number.',
-              confirmButtonColor: '#ff3c00',
-            });
-          } else {
-            Swal.fire({
-              icon: 'success',
-              title: 'TIME-IN Successful!',
-              showConfirmButton: false,
-              timer: 1500
-            });
-          }
-        });
-
-        document.getElementById('btnTimeOut').addEventListener('click', function () {
-          var userId = document.getElementById('textBoxUserID').value.trim();
-          if (userId === '') {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error!',
-              text: 'Please enter an Employee ID number.',
-              confirmButtonColor: '#ff3c00',
-            });
-          } else {
-            Swal.fire({
-              icon: 'success',
-              title: 'TIME-OUT Successful!',
-              showConfirmButton: false,
-              timer: 1500
-            });
-          }
-        });
-      });
-    </script>
+  
 </body>
 </html>
