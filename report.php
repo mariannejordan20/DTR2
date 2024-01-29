@@ -84,8 +84,6 @@
             echo '<th>No</th>';
             echo '<th>Username</th>';
             echo '<th>Date</th>';
-            echo '<th>Time</th>';
-            echo '<th>Status</th>';
             echo '</tr>';
             echo '</thead>';
             echo '<tbody>';
