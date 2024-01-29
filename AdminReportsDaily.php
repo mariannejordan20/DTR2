@@ -70,12 +70,12 @@ if(!isset($_SESSION["username"])) {
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
-                <div class="container-fluid"> 
-                    <!-- Page Heading --> 
-                    <h1 class="h3 text-gray-800 mb-4">Daily Logs Lists</h1> 
-                    <!-- Content Row -->
-                    <div>
-        <a href="report.php" class="btn btn-primary">Print All</a>
+                <div class="container-fluid">
+    <!-- Page Heading -->
+    <h1 class="h3 text-gray-800 mb-4">Daily Logs Lists</h1>
+    <!-- Content Row -->
+    <div>
+        <a href="report.php" class="btn btn-primary mb-3">Print All</a>
     </div>
     <div class="row pl-1 pr-1">
         <div class="col col-lg-12">
@@ -94,8 +94,10 @@ if(!isset($_SESSION["username"])) {
                         <th class="font-weight-bold">NO.</th>
                         <th class="font-weight-bold">EMPLOYEE ID</th>
                         <th class="font-weight-bold">DATE</th>
-                        <th class="font-weight-bold">TIME</th>
-                        <th class="font-weight-bold">STATUS</th>
+                        <th class="font-weight-bold">TimeIn (Am)</th>
+                        <th class="font-weight-bold">TimeOut (Am)</th>
+                        <th class="font-weight-bold">TimeIn (Pm)</th>
+                        <th class="font-weight-bold">TimeOut (Pm)</th>
                         <th class="font-weight-bold">ACTIONS</th>
                     </tr>
                 </thead>
@@ -103,7 +105,12 @@ if(!isset($_SESSION["username"])) {
                     <?php
                     require_once "connection.php"; // Include your database connection file
 
-                    $get_log_details = mysqli_query($conn, "SELECT * FROM employee_log");
+                    $get_log_details = mysqli_query($conn, "SELECT el.ID, el.Employee_ID, el.Employee_Date, el.Employee_Time, el.Employee_Status,
+                                        ei.Employee_FullName, ei.Employee_Department, ei.Employee_Position, ei.Employee_Sex, ei.user_type,
+                                        el.Employee_TimeInAm, el.Employee_TimeOutAm, el.Employee_TimeInPm, el.Employee_TimeOutPm
+                                 FROM employee_log el
+                                 JOIN employee_information ei ON el.Employee_ID = ei.Employee_ID");
+
 
                     $counter = 1;
 
@@ -113,8 +120,10 @@ if(!isset($_SESSION["username"])) {
                             <td class="text-gray-700"><?php echo $counter ?></td>
                             <td class="text-gray-900"><?php echo $row['Employee_ID'] ?></td>
                             <td class="text-gray-700"><?php echo $row['Employee_Date'] ?></td>
-                            <td class="text-gray-700"><?php echo $row['Employee_Time'] ?></td>
-                            <td class="text-gray-700"><?php echo $row['Employee_Status'] ?></td>
+                            <td class="text-gray-700"><?php echo $row['Employee_TimeInAm'] ?></td>
+                            <td class="text-gray-700"><?php echo $row['Employee_TimeOutAm'] ?></td>
+                            <td class="text-gray-700"><?php echo $row['Employee_TimeInPm'] ?></td>
+                            <td class="text-gray-700"><?php echo $row['Employee_TimeOutPm'] ?></td>
                             <td>
                                 <a href="report.php?search=<?php echo $row['Employee_ID']; ?>" class="btn btn-primary btn-sm">Print</a>
                             </td>
@@ -154,8 +163,8 @@ if(!isset($_SESSION["username"])) {
             }
         }
     </script>
+</div>
 
-                </div>
                 <!-- /.container-fluid --> 
             </div>
             <!-- Modal Edit -->
