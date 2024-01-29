@@ -75,45 +75,86 @@ if(!isset($_SESSION["username"])) {
                     <h1 class="h3 text-gray-800 mb-4">Daily Logs Lists</h1> 
                     <!-- Content Row -->
                     <div>
-                        <a href="report.php" class="btn btn-primary">Print</a>
-                    </div>
-                    <div class="row pl-1 pr-1"> 
-                        <div class="col col-lg-12">
-                        <table id="dailyLogsTable" class="table table-primary shadow-lg hover" style="width:100%">
-                            <thead class="text-center">
-                                <tr>
-                                    <th>No.</th>
-                                    <th>Username</th>
-                                    <th>Date</th>
-                                    <th>Time</th> 
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody class="text-center">
-                                <?php
-                                    $sql = "SELECT ID, Employee_ID, Employee_Date, Employee_Time, Employee_Status FROM `employee_log`";
-                                    $result = $conn -> query($sql);
+        <a href="report.php" class="btn btn-primary">Print All</a>
+    </div>
+    <div class="row pl-1 pr-1">
+        <div class="col col-lg-12">
+            <!-- Search Bar -->
+            <div class="input-group mb-3">
+                <input type="text" id="searchInput" class="form-control" placeholder="Search by Employee ID">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" onclick="searchTable()">Search</button>
+                </div>
+            </div>
 
-                                    if($result-> num_rows > 0) {
-                                        while ($row = $result -> fetch_assoc()) {
-                                            echo "<tr><td>".$row["ID"].
-                                                "</td><td>".$row["Employee_ID"].
-                                                "</td><td>".$row["Employee_Date"].
-                                                "</td><td>".$row["Employee_Time"].
-                                                "</td><td>".$row["Employee_Status"].
-                                                "</td></td>";
-                                        }
-                                        echo "</table>";
-                                    }
-                                    else{
-                                        echo "0 result"; 
-                                    }
-                                ?>  
-                            </tbody>  
-                        </table>
+            <!-- Table -->
+            <table class="table table-striped table-bordered" id="myTable" style="width: 100%;">
+                <thead>
+                    <tr>
+                        <th class="font-weight-bold">NO.</th>
+                        <th class="font-weight-bold">EMPLOYEE ID</th>
+                        <th class="font-weight-bold">DATE</th>
+                        <th class="font-weight-bold">TIME</th>
+                        <th class="font-weight-bold">STATUS</th>
+                        <th class="font-weight-bold">ACTIONS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    require_once "connection.php"; // Include your database connection file
 
-                        </div>
-                    </div>  
+                    $get_log_details = mysqli_query($conn, "SELECT * FROM employee_log");
+
+                    $counter = 1;
+
+                    while ($row = mysqli_fetch_array($get_log_details)) {
+                        ?>
+                        <tr>
+                            <td class="text-gray-700"><?php echo $counter ?></td>
+                            <td class="text-gray-900"><?php echo $row['Employee_ID'] ?></td>
+                            <td class="text-gray-700"><?php echo $row['Employee_Date'] ?></td>
+                            <td class="text-gray-700"><?php echo $row['Employee_Time'] ?></td>
+                            <td class="text-gray-700"><?php echo $row['Employee_Status'] ?></td>
+                            <td>
+                                <a href="report.php?search=<?php echo $row['Employee_ID']; ?>" class="btn btn-primary btn-sm">Print</a>
+                            </td>
+                        </tr>
+                    <?php
+                        $counter++;
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Include Bootstrap JS (if needed) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        function searchTable() {
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("searchInput");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("myTable");
+            tr = table.getElementsByTagName("tr");
+
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[1]; // Index 1 corresponds to the EMPLOYEE ID column
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
+
                 </div>
                 <!-- /.container-fluid --> 
             </div>

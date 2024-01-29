@@ -95,14 +95,11 @@
         </div>
       </div>
       <div class="row mb-3">
-    <div class="col-lg-12">
-        <button type="button" id="btnTimeIn1" name="btnTimeIn1" class="btn-In buttons">TIME-IN 1</button>
-        <button type="button" id="btnTimeOut1" name="btnTimeOut1" class="btn-Out buttons">TIME-OUT 1</button>
-        <button type="button" id="btnTimeIn2" name="btnTimeIn2" class="btn-In buttons">TIME-IN 2</button>
-        <button type="button" id="btnTimeOut2" name="btnTimeOut2" class="btn-Out buttons">TIME-OUT 2</button>
-    </div>
-</div>
- 
+        <div class="col-lg-12">
+          <button type="button" id="btnTimeIn" name="btnTimeIn" class="btn-In buttons">TIME-IN</button>
+          <button type="button" id="btnTimeOut" name="btnTimeOut" class="btn-Out buttons">TIME-OUT</button> 
+        </div>  
+      </div>  
   </div> 
   <script src="myStyles/JS/indexJS.js"></script>
   <script src="myStyles/JS/dntJS.js"></script>
@@ -123,7 +120,7 @@
     <!-- Add your new script for SweetAlert messages -->
     <script>
       document.addEventListener('DOMContentLoaded', function () {
-        document.getElementById('btnTimeIn1').addEventListener('click', function () {
+        document.getElementById('btnTimeIn').addEventListener('click', function () {
           var userId = document.getElementById('textBoxUserID').value.trim();
           if (userId === '') {
             Swal.fire({
