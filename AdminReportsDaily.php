@@ -74,6 +74,9 @@ if(!isset($_SESSION["username"])) {
                     <!-- Page Heading --> 
                     <h1 class="h3 text-gray-800 mb-4">Daily Logs Lists</h1> 
                     <!-- Content Row -->
+                    <div>
+                        <a href="report.php" class="btn btn-primary">Print</a>
+                    </div>
                     <div class="row pl-1 pr-1"> 
                         <div class="col col-lg-12">
                         <table id="dailyLogsTable" class="table table-primary shadow-lg hover" style="width:100%">
@@ -93,7 +96,12 @@ if(!isset($_SESSION["username"])) {
 
                                     if($result-> num_rows > 0) {
                                         while ($row = $result -> fetch_assoc()) {
-                                            echo "<tr><td>".$row["ID"]."</td><td>".$row["Employee_ID"]."</td><td>".$row["Employee_Date"]."</td><td>".$row["Employee_Time"]."</td><td>".$row["Employee_Status"]."</td></td>";
+                                            echo "<tr><td>".$row["ID"].
+                                                "</td><td>".$row["Employee_ID"].
+                                                "</td><td>".$row["Employee_Date"].
+                                                "</td><td>".$row["Employee_Time"].
+                                                "</td><td>".$row["Employee_Status"].
+                                                "</td></td>";
                                         }
                                         echo "</table>";
                                     }
