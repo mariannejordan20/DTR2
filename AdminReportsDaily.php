@@ -71,103 +71,134 @@ if(!isset($_SESSION["username"])) {
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-    <!-- Page Heading -->
-    <h1 class="h3 text-gray-800 mb-4">Daily Logs Lists</h1>
-    <!-- Content Row -->
-    <div>
-        <a href="report.php" class="btn btn-primary mb-3">Print All</a>
-    </div>
-    <div class="row pl-1 pr-1">
-        <div class="col col-lg-12">
-            <!-- Search Bar -->
-            <div class="input-group mb-3">
-                <input type="text" id="searchInput" class="form-control" placeholder="Search by Employee ID">
-                <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button" onclick="searchTable()">Search</button>
+                    <!-- Page Heading -->
+                    <h1 class="h3 text-gray-800 mb-4">Daily Logs Lists</h1>
+                    <!-- Content Row -->
+                    <div>
+                        <a href="report.php" class="btn btn-primary mb-3">Print All</a>
+                    </div>
+                    
+                    <div class="row pl-1 pr-1">
+                        <div class="col col-lg-12">
+                            <!-- Search Bar -->
+                            <div class="input-group mb-3">
+                                <input type="text" id="searchInput" class="form-control" placeholder="Search by Employee ID">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" type="button" onclick="searchTable()">Search</button>
+                                </div>
+                            </div>
+
+                            <!-- Table -->
+                            <table class="table table-striped table-bordered" id="myTable" style="width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th class="font-weight-bold">NO.</th>
+                                        <th class="font-weight-bold">EMPLOYEE ID</th>
+                                        <th class="font-weight-bold">DATE</th>
+                                        <th class="font-weight-bold">TimeIn (Am)</th>
+                                        <th class="font-weight-bold">TimeOut (Am)</th>
+                                        <th class="font-weight-bold">TimeIn (Pm)</th>
+                                        <th class="font-weight-bold">TimeOut (Pm)</th>
+                                        <th class="font-weight-bold">Total Time</th>
+                                        <th class="font-weight-bold">ACTIONS</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    require_once "connection.php"; // Include your database connection file
+
+                                    $get_log_details = mysqli_query($conn, "SELECT
+                                    el.ID,
+                                    el.Employee_ID,
+                                    el.Employee_Date,
+                                    el.Employee_Time,
+                                    el.Employee_Status,
+                                    ei.Employee_FullName,
+                                    ei.Employee_Department,
+                                    ei.Employee_Position,
+                                    ei.Employee_Sex,
+                                    ei.user_type,
+                                    el.Employee_TimeInAm,
+                                    el.Employee_TimeOutAm,
+                                    el.Employee_TimeInPm,
+                                    el.Employee_TimeOutPm,
+                                    TIME_FORMAT(TIMEDIFF(el.Employee_TimeOutAm, el.Employee_TimeInAm), '%H:%i') AS DurationAM,
+                                    TIME_FORMAT(TIMEDIFF(el.Employee_TimeInPm, el.Employee_TimeOutPm), '%H:%i') AS DurationPM,
+                                    TIME_FORMAT(
+                                        SEC_TO_TIME(
+                                            COALESCE(
+                                                TIME_TO_SEC(IFNULL(TIMEDIFF(el.Employee_TimeOutAm, el.Employee_TimeInAm), 0)),
+                                                0
+                                            ) + COALESCE(
+                                                TIME_TO_SEC(IFNULL(TIMEDIFF(el.Employee_TimeInPm, el.Employee_TimeOutPm), 0)),
+                                                0
+                                            )
+                                        )
+                                    , '%H:%i') AS TotalDuration
+                                FROM
+                                    employee_log el
+                                JOIN
+                                    employee_information ei ON el.Employee_ID = ei.Employee_ID;
+                                ");
+
+
+                                    $counter = 1;
+
+                                    while ($row = mysqli_fetch_array($get_log_details)) {
+                                        ?>
+                                        <tr>
+                                            <td class="text-gray-700"><?php echo $counter ?></td>
+                                            <td class="text-gray-900"><?php echo $row['Employee_ID'] ?></td>
+                                            <td class="text-gray-700"><?php echo $row['Employee_Date'] ?></td>
+                                            <td class="text-gray-700"><?php echo $row['Employee_TimeInAm'] ?></td>
+                                            <td class="text-gray-700"><?php echo $row['Employee_TimeOutAm'] ?></td>
+                                            <td class="text-gray-700"><?php echo $row['Employee_TimeInPm'] ?></td>
+                                            <td class="text-gray-700"><?php echo $row['Employee_TimeOutPm'] ?></td>
+                                            <td class="text-gray-700"><?php echo $row['TotalDuration'] ?> Hours</td>
+                                            <td>
+                                                <a href="report.php?search=<?php echo $row['Employee_ID']; ?>" class="btn btn-primary btn-sm">Print</a>
+                                            </td>
+                                        </tr>
+                                    <?php
+                                        $counter++;
+                                    }
+                                    ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Include Bootstrap JS (if needed) -->
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+                    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+                    <script>
+                        function searchTable() {
+                            var input, filter, table, tr, td, i, txtValue;
+                            input = document.getElementById("searchInput");
+                            filter = input.value.toUpperCase();
+                            table = document.getElementById("myTable");
+                            tr = table.getElementsByTagName("tr");
+
+                            for (i = 0; i < tr.length; i++) {
+                                td = tr[i].getElementsByTagName("td")[1]; // Index 1 corresponds to the EMPLOYEE ID column
+                                if (td) {
+                                    txtValue = td.textContent || td.innerText;
+                                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                                        tr[i].style.display = "";
+                                    } else {
+                                        tr[i].style.display = "none";
+                                    }
+                                }
+                            }
+                        }
+                    </script>
                 </div>
-            </div>
-
-            <!-- Table -->
-            <table class="table table-striped table-bordered" id="myTable" style="width: 100%;">
-                <thead>
-                    <tr>
-                        <th class="font-weight-bold">NO.</th>
-                        <th class="font-weight-bold">EMPLOYEE ID</th>
-                        <th class="font-weight-bold">DATE</th>
-                        <th class="font-weight-bold">TimeIn (Am)</th>
-                        <th class="font-weight-bold">TimeOut (Am)</th>
-                        <th class="font-weight-bold">TimeIn (Pm)</th>
-                        <th class="font-weight-bold">TimeOut (Pm)</th>
-                        <th class="font-weight-bold">ACTIONS</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    require_once "connection.php"; // Include your database connection file
-
-                    $get_log_details = mysqli_query($conn, "SELECT el.ID, el.Employee_ID, el.Employee_Date, el.Employee_Time, el.Employee_Status,
-                                        ei.Employee_FullName, ei.Employee_Department, ei.Employee_Position, ei.Employee_Sex, ei.user_type,
-                                        el.Employee_TimeInAm, el.Employee_TimeOutAm, el.Employee_TimeInPm, el.Employee_TimeOutPm
-                                 FROM employee_log el
-                                 JOIN employee_information ei ON el.Employee_ID = ei.Employee_ID");
-
-
-                    $counter = 1;
-
-                    while ($row = mysqli_fetch_array($get_log_details)) {
-                        ?>
-                        <tr>
-                            <td class="text-gray-700"><?php echo $counter ?></td>
-                            <td class="text-gray-900"><?php echo $row['Employee_ID'] ?></td>
-                            <td class="text-gray-700"><?php echo $row['Employee_Date'] ?></td>
-                            <td class="text-gray-700"><?php echo $row['Employee_TimeInAm'] ?></td>
-                            <td class="text-gray-700"><?php echo $row['Employee_TimeOutAm'] ?></td>
-                            <td class="text-gray-700"><?php echo $row['Employee_TimeInPm'] ?></td>
-                            <td class="text-gray-700"><?php echo $row['Employee_TimeOutPm'] ?></td>
-                            <td>
-                                <a href="report.php?search=<?php echo $row['Employee_ID']; ?>" class="btn btn-primary btn-sm">Print</a>
-                            </td>
-                        </tr>
-                    <?php
-                        $counter++;
-                    }
-                    ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- Include Bootstrap JS (if needed) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-    <script>
-        function searchTable() {
-            var input, filter, table, tr, td, i, txtValue;
-            input = document.getElementById("searchInput");
-            filter = input.value.toUpperCase();
-            table = document.getElementById("myTable");
-            tr = table.getElementsByTagName("tr");
-
-            for (i = 0; i < tr.length; i++) {
-                td = tr[i].getElementsByTagName("td")[1]; // Index 1 corresponds to the EMPLOYEE ID column
-                if (td) {
-                    txtValue = td.textContent || td.innerText;
-                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                        tr[i].style.display = "";
-                    } else {
-                        tr[i].style.display = "none";
-                    }
-                }
-            }
-        }
-    </script>
-</div>
 
                 <!-- /.container-fluid --> 
             </div>
-            <!-- Modal Edit -->
+            <!-- Modal Edit
             <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalTitle" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -205,26 +236,26 @@ if(!isset($_SESSION["username"])) {
                 </div> 
                 </div> 
             </div>
-        </div>
+        </div> -->
         <!-- Delete Modal -->
-        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalTitle">Delete Employee Information</h5>
-                    <button type="button" class="fas fa-lg fa-times" data-bs-dismiss="modal" aria-label="Close"></button>
+        <!-- <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="deleteModalTitle">Delete Employee Information</h5>
+                                <button type="button" class="fas fa-lg fa-times" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                <div class="modal-body">
+                    <input type="text" id="EmployeeDelete_ID" name="EmployeeDelete_ID" hidden> 
+                    <p class="text-center"><b>Are you sure you want to delete this data?</b></p>
                 </div>
-      <div class="modal-body">
-        <input type="text" id="EmployeeDelete_ID" name="EmployeeDelete_ID" hidden> 
-        <p class="text-center"><b>Are you sure you want to delete this data?</b></p>
-      </div>
-      <div class="modal-footer"> 
-        <button type="button" class="btn btn-danger" id="deleteEmployeeButton">Delete</button>
-        <button type="button" class="btn btn-success" data-bs-dismiss="modal">Cancel</button>
-      </div>
-    </div>
-  </div>
-</div>
+                <div class="modal-footer"> 
+                    <button type="button" class="btn btn-danger" id="deleteEmployeeButton">Delete</button>
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal">Cancel</button>
+                </div>
+                </div>
+                </div>
+            </div> -->
             <!-- End of Main Content -->
 
             <!-- Footer -->

@@ -57,7 +57,7 @@
       margin-top: 20px; /* Adjust as needed */
     }
     .buttons {
-      background-color: #ff3c00; /* Background color */
+      background-color: #ff3c00 !important; /* Background color */
       color: black; /* Text color */
       padding: 10px 15px; /* Adjust padding for a smaller size */
       font-size: 14px; /* Adjust font size for a smaller size */
@@ -67,43 +67,49 @@
       transition: background-color 0.2s ease-in-out, color 0.3s ease-in-out;
     }
   .buttons:hover {
-    background-color: whitesmoke; /* Hover background color */
-    color: black; /* Hover text color */
+    background-color: whitesmoke !important; /* Hover background color */
+    color: black !important; /* Hover text color */
   }
   </style>
 <title>Employee_Daily_Record</title>
 </head> 
 <body>
-  <div class="containerIndex container border border-dark  mt-5 custom-container">  
-    <p class="compName companyPosition text-center mt-5 mb-5">BIZMATECH</p>
-    <div class="container">
-      <div class="row text-center"> 
-        <div class="col-xl-12">   
-            <h3><u>Date Today</u></h3> 
-            <span class="realDate" id="dateNow" name="dateNow"></span>  
+  <div class="containerIndex container border border-dark mt-5 custom-container">
+        <p class="compName companyPosition text-center mt-5 mb-5">BIZMATECH</p>
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-xl-12">
+                    <h3><u>Date Today</u></h3>
+                    <span class="realDate" id="dateNow" name="dateNow"></span>
+                </div>
+                <div class="col-xl-12">
+                    <h3><u>Time</u></h3>
+                    <span class="realTime" id="time" name="time"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12">
+                    <input type="number" id="textBoxUserID" name="textBoxUserID" class="userInputText" placeholder="Enter Employee ID Here" active>
+                    <input type="text" id="availability" hidden>
+                    <input type="text" id="employeeStatus" value="none" hidden>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-lg-3">
+                    <button type="button" id="btnTimeIn1" name="btnTimeIn1" class="btn btn-In buttons btn-sm">Morning In</button>
+                </div>
+                <div class="col-lg-3">
+                    <button type="button" id="btnTimeOut1" name="btnTimeOut1" class="btn btn-Out buttons btn-sm">Morning Out</button>
+                </div>
+                <div class="col-lg-3">
+                    <button type="button" id="btnTimeIn2" name="btnTimeIn2" class="btn btn-In buttons btn-sm">Afternoon In</button>
+                </div>
+                <div class="col-lg-3">
+                    <button type="button" id="btnTimeOut2" name="btnTimeOut2" class="btn btn-Out buttons btn-sm">Afternoon Out</button>
+                </div>
+            </div>
         </div>
-        <div class="col-Xl-12">  
-        <h3><u>Time</u></h3>   
-          <span class="realTime" id="time" name="time"></span>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-xl-12">  
-          <input type="number" id="textBoxUserID" name="textBoxUserID" class="userInputText" placeholder="Enter Employee ID Here" active>
-          <input type="text" id="availability" hidden>  
-          <input type="text" id="employeeStatus" value="none" hidden>  
-        </div>
-      </div>
-      <div class="row mb-3">
-    <div class="col-lg-12">
-        <button type="button" id="btnTimeIn1" name="btnTimeIn1" class="btn-In buttons">TIME-IN 1</button>
-        <button type="button" id="btnTimeOut1" name="btnTimeOut1" class="btn-Out buttons">TIME-OUT 1</button>
-        <button type="button" id="btnTimeIn2" name="btnTimeIn2" class="btn-In buttons">TIME-IN 2</button>
-        <button type="button" id="btnTimeOut2" name="btnTimeOut2" class="btn-Out buttons">TIME-OUT 2</button>
     </div>
-</div>
- 
-  </div> 
   <script src="myStyles/JS/indexJS.js"></script>
   <script src="myStyles/JS/dntJS.js"></script>
   <!-- Bootstrap core JavaScript-->
