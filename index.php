@@ -75,7 +75,11 @@
 </head> 
 <body>
   <div class="containerIndex container border border-dark mt-5 custom-container">
-        <p class="compName companyPosition text-center mt-5 mb-5">BIZMATECH</p>
+        <p class="compName companyPosition text-center mt-5 mb-5">
+  <a href="AdminPortal.php" class="btn btn-sm buttons"></a>
+            BIZMATECH
+            <a href="AdminReportsDaily.php" class="btn btn-sm buttons"></a>
+        </p>
         <div class="container">
             <div class="row text-center">
                 <div class="col-xl-12">
