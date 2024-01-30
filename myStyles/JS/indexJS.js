@@ -21,7 +21,7 @@ $(document).ready(function () {
     });
 
     $('#btnTimeOut1').click(function () {
-        saveTimestamp("Employee_TimeOutAM");
+        checkTimeInAndSaveTimestamp("Employee_TimeOutAM");
     });
 
     $('#btnTimeIn2').click(function () {
@@ -29,16 +29,42 @@ $(document).ready(function () {
     });
 
     $('#btnTimeOut2').click(function () {
-        saveTimestamp("Employee_TimeOutPM");
+        checkTimeInAndSaveTimestamp("Employee_TimeOutPM");
     });
 });
+
+// Function to check if the employee has already time in and then save timestamp based on the column name
+function checkTimeInAndSaveTimestamp(columnName) {
+    var employeeID = $('#textBoxUserID').val();
+    var employeeDate = $('#dateNow').text();
+
+    $.ajax({
+        url: "checkTimeIn.php",
+        method: "POST",
+        data: { employeeID: employeeID, employeeDate: employeeDate },
+        success: function (response) {
+            if (response === 'timeInExists') {
+                saveTimestamp(columnName);
+            } else {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'error',
+                    title: 'Oopss!!!',
+                    text: 'Employee has not timed in yet!',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            }
+        }
+    });
+}
 
 // Function to save timestamp based on the column name
 function saveTimestamp(columnName) {
     $("#employeeStatus").val(columnName);
 
     var employeeCheck = $('#valid').val();
-    var employeeID = $('#textBoxUserID').val()
+    var employeeID = $('#textBoxUserID').val();
     var employeeDate = $('#dateNow').text();
     var employeeTime = $('#time').text();
     var employeeIsWorking = $("#employeeStatus").val();
@@ -82,4 +108,3 @@ function saveTimestamp(columnName) {
         });
     }
 }
-
