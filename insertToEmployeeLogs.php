@@ -19,18 +19,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case "Employee_TimeOutAM":
             $columnName = "Employee_TimeOutAM";
             $errorMessage = "You have already timed out in the morning.";
+            $requiredTimeInColumn = "Employee_TimeInAM";
             break;
         case "Employee_TimeInPM":
             $columnName = "Employee_TimeInPM";
             $errorMessage = "You have already timed in in the afternoon.";
+            $requiredTimeInColumn = "Employee_TimeInPM";
             break;
         case "Employee_TimeOutPM":
             $columnName = "Employee_TimeOutPM";
             $errorMessage = "You have already timed out in the afternoon.";
+            $requiredTimeInColumn = "Employee_TimeInPM"; // Assuming afternoon time out requires afternoon time in
             break;
         default:
             // Handle default case or error
             break;
+    }
+
+    // Check if the action requires a time in record to be present
+    if (isset($requiredTimeInColumn)) {
+        $sql_check_timein = "SELECT $requiredTimeInColumn FROM employee_log WHERE Employee_ID = ? AND Employee_Date = ?";
+        $stmt_check_timein = $conn->prepare($sql_check_timein);
+        $stmt_check_timein->bind_param("ss", $employeeID, $employeeDate);
+        $stmt_check_timein->execute();
+        $result_check_timein = $stmt_check_timein->get_result();
+
+        if ($result_check_timein->num_rows == 0) {
+            // If there's no corresponding time in record, send an error response
+            echo "Error: You cannot time out without first timing in.";
+            exit;
+        }
     }
 
     // Check if a record already exists for the specified Employee_ID, Employee_Date, and column
@@ -72,6 +90,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Close the database connections and statements
     $stmt_check_existing->close();
+    if (isset($stmt_check_timein)) {
+        $stmt_check_timein->close();
+    }
     $stmt->close();
     $conn->close();
 } else {
