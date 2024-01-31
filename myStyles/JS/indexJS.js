@@ -21,7 +21,7 @@ $(document).ready(function () {
     });
 
     $('#btnTimeOut1').click(function () {
-        checkTimeInAndSaveTimestamp("Employee_TimeOutAM");
+        saveTimestamp("Employee_TimeOutAM");
     });
 
     $('#btnTimeIn2').click(function () {
@@ -29,42 +29,16 @@ $(document).ready(function () {
     });
 
     $('#btnTimeOut2').click(function () {
-        checkTimeInAndSaveTimestamp("Employee_TimeOutPM");
+        saveTimestamp("Employee_TimeOutPM");
     });
 });
-
-// Function to check if the employee has already time in and then save timestamp based on the column name
-function checkTimeInAndSaveTimestamp(columnName) {
-    var employeeID = $('#textBoxUserID').val();
-    var employeeDate = $('#dateNow').text();
-
-    $.ajax({
-        url: "checkTimeIn.php",
-        method: "POST",
-        data: { employeeID: employeeID, employeeDate: employeeDate },
-        success: function (response) {
-            if (response === 'timeInExists') {
-                saveTimestamp(columnName);
-            } else {
-                Swal.fire({
-                    position: 'center',
-                    icon: 'error',
-                    title: 'Oopss!!!',
-                    text: 'Employee has not timed in yet!',
-                    showConfirmButton: false,
-                    timer: 2000
-                });
-            }
-        }
-    });
-}
 
 // Function to save timestamp based on the column name
 function saveTimestamp(columnName) {
     $("#employeeStatus").val(columnName);
 
     var employeeCheck = $('#valid').val();
-    var employeeID = $('#textBoxUserID').val();
+    var employeeID = $('#textBoxUserID').val()
     var employeeDate = $('#dateNow').text();
     var employeeTime = $('#time').text();
     var employeeIsWorking = $("#employeeStatus").val();
@@ -83,23 +57,36 @@ function saveTimestamp(columnName) {
             method: "POST",
             data: insertInfo,
             success: function (data) {
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: 'Success!!',
-                    text: (columnName.includes("TimeIn") ? 'Logged-In' : 'Logged-Out') + ' Captured!',
-                    showConfirmButton: false,
-                    timer: 3000
-                }).then(() => {
-                    window.location.reload();
-                });
+                if (data.startsWith("Error")) {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'error',
+                        title: 'Oops!',
+                        text: data,
+                        showConfirmButton: false,
+                        timer: 3000
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'Success!!',
+                        text: (columnName.includes("TimeIn") ? 'Logged-In' : 'Logged-Out') + ' Captured!',
+                        showConfirmButton: false,
+                        timer: 3000
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                }
             }
         });
     } else {
         Swal.fire({
             position: 'center',
             icon: 'error',
-            title: 'Oopss!!!',
+            title: 'Oops!!',
             text: 'Employee ID is not registered!',
             showConfirmButton: false,
             timer: 2000
