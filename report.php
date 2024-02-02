@@ -83,7 +83,8 @@
         employee_log el
     JOIN
         employee_information ei ON el.Employee_ID = ei.Employee_ID
-                                                WHERE el.Employee_ID = '$search_input'");
+                                                WHERE el.Employee_ID = '$search_input' ORDER BY
+    el.Employee_Date DESC");
     } else {
         // If 'search' parameter is not set, fetch all rows
         $get_log_details = mysqli_query($conn, "SELECT
@@ -117,7 +118,8 @@
     FROM
         employee_log el
     JOIN
-        employee_information ei ON el.Employee_ID = ei.Employee_ID");
+        employee_information ei ON el.Employee_ID = ei.Employee_ID ORDER BY
+    el.Employee_Date DESC");
     }
 
     $counter = 1;
