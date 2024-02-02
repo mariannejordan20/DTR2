@@ -114,6 +114,21 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Get current time
+            var currentTime = new Date();
+            var currentHour = currentTime.getHours();
+            
+            // Disable Morning In and Morning Out buttons if current time is between 3:00 PM and 12:00 AM
+            if (currentHour >= 0 || currentHour < 12) {
+                document.getElementById("btnTimeIn2").disabled = true;
+                document.getElementById("btnTimeOut2").disabled = true;
+            }
+        });
+    </script>
+
   <script src="myStyles/JS/indexJS.js"></script>
   <script src="myStyles/JS/dntJS.js"></script>
   <!-- Bootstrap core JavaScript-->
@@ -131,5 +146,6 @@
     <script src="myStyles/JS/chart-pie-demo.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
   
+    
 </body>
 </html>
