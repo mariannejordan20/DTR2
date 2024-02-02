@@ -20,11 +20,13 @@
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <style>
     body {
-      background-image: url('Images/bizmatech.png'); /* Replace 'path/to/your/image.jpg' with the actual path to your image */
-      background-size: cover; /* Ensures the image covers the entire background */
+      background-color:#eeeeee;
       background-repeat: no-repeat; /* Prevents the image from repeating */
       background-attachment: fixed; /* Fixes the background when scrolling */
       font-family: 'Nunito', sans-serif; /* Use a suitable font-family for your text */
+      display: flex;
+      align-items: center;
+      min-height: 100vh;
     }
     .compName{
         color: #ff3c00;
@@ -57,8 +59,8 @@
       margin-top: 20px; /* Adjust as needed */
     }
     .buttons {
-      background-color: #ff3c00 !important; /* Background color */
-      color: black; /* Text color */
+      background-color: #09a121 !important; /* Background color */
+      color: white; /* Text color */
       padding: 10px 15px; /* Adjust padding for a smaller size */
       font-size: 14px; /* Adjust font size for a smaller size */
       border: none; /* Remove border */
@@ -69,52 +71,78 @@
   .buttons:hover {
     background-color: whitesmoke !important; /* Hover background color */
     color: black !important; /* Hover text color */
+  }.buttons2 {
+      background-color: #ff3c00 !important; /* Background color */
+      color: white; /* Text color */
+      padding: 10px 15px; /* Adjust padding for a smaller size */
+      font-size: 14px; /* Adjust font size for a smaller size */
+      border: none; /* Remove border */
+      border-radius: 5px; /* Rounded corners */
+      cursor: pointer;
+      transition: background-color 0.2s ease-in-out, color 0.3s ease-in-out;
+    }
+  .buttons2:hover {
+    background-color: whitesmoke !important; /* Hover background color */
+    color: black !important; /* Hover text color */
   }
+  
+
   </style>
 <title>Employee_Daily_Record</title>
 </head> 
 <body>
-  <div class="containerIndex container border border-dark mt-5 custom-container">
-        <p class="compName companyPosition text-center mt-5 mb-5">
-  <a href="AdminPortal.php" class="btn btn-sm buttons"></a>
-            BIZMATECH
-            <a href="AdminReportsDaily.php" class="btn btn-sm buttons"></a>
-        </p>
+    <div class="containerIndex container mt-5 container mx-auto text-center">
+        <div class="compLogo text-center mt-5 mb-5">
+            <img src="Images/logoBizma.png" alt="BIZMATECH Logo" style="width: 40%;">
+        </div>
         <div class="container">
-            <div class="row text-center">
-                <div class="col-xl-12">
-                    <h3><u>Date Today</u></h3>
-                    <span class="realDate" id="dateNow" name="dateNow"></span>
-                </div>
-                <div class="col-xl-12">
-                    <h3><u>Time</u></h3>
-                    <span class="realTime" id="time" name="time"></span>
-                </div>
+        <div class="row text-center">
+            <div class="col-xl-6 mx-auto">
+                <span class="realDate" id="dateNow" name="dateNow" style="font-size: 30px; color: #000000;"></span>
+                <hr>
+                <span class="realTime" id="time" name="time" style="font-size: 30px; color: #000000;"></span>
             </div>
-            <div class="row">
-                <div class="col-xl-12">
+        </div>
+
+            <div class="row text-center">
+                <div class="col-xl-6 mx-auto">
                     <input type="number" id="textBoxUserID" name="textBoxUserID" class="userInputText" placeholder="Enter Employee ID Here" active>
                     <input type="text" id="availability" hidden>
                     <input type="text" id="employeeStatus" value="none" hidden>
                 </div>
             </div>
-            <div class="row mb-3">
-                <div class="col-lg-3">
+           
+            <!-- <div class="row text-center mb-3">
+                <div class="col-lg-3 mx-auto">
                     <button type="button" id="btnTimeIn1" name="btnTimeIn1" class="btn btn-In buttons btn-sm">Morning In</button>
-                </div>
-                <div class="col-lg-3">
+                
                     <button type="button" id="btnTimeOut1" name="btnTimeOut1" class="btn btn-Out buttons btn-sm">Morning Out</button>
-                </div>
-                <div class="col-lg-3">
+                
                     <button type="button" id="btnTimeIn2" name="btnTimeIn2" class="btn btn-In buttons btn-sm">Afternoon In</button>
-                </div>
-                <div class="col-lg-3">
+                
                     <button type="button" id="btnTimeOut2" name="btnTimeOut2" class="btn btn-Out buttons btn-sm">Afternoon Out</button>
                 </div>
+            </div> -->
+        </div>
+    </div>
+    <div class="container mx-auto">
+        <div class="row text-center mb-1" style="margin-left: 32%;">
+            <div class="col-sm-3">
+            <button type="button" id="btnTimeIn1" name="btnTimeIn1" class="btn buttons btn-block">Morning (IN)</button>
+            </div>
+            <div class="col-sm-3">
+            <button type="button" id="btnTimeOut1" name="btnTimeOut1" class="btn buttons2 btn-block">Morning (OUT)</button>
+            </div>
+        </div>
+        <div class="row text-center" style="margin-left: 32%;">
+            <div class="col-sm-3">
+            <button type="button" id="btnTimeIn2" name="btnTimeIn2" class="btn buttons btn-block">Afternoon (IN)</button>
+            </div>
+            <div class="col-sm-3">
+            <button type="button" id="btnTimeOut2" name="btnTimeOut2" class="btn buttons2 btn-block">Afternoon (OUT)</button>
             </div>
         </div>
     </div>
-
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             // Get current time
@@ -152,3 +180,5 @@
     
 </body>
 </html>
+
+
