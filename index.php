@@ -121,10 +121,13 @@
             var currentTime = new Date();
             var currentHour = currentTime.getHours();
             
-            // Disable Morning In and Morning Out buttons if current time is between 3:00 PM and 12:00 AM
-            if (currentHour >= 0 || currentHour < 12) {
+            // Disable Morning In and Morning Out buttons if current time is between 12:00 AM and 12:00 PM
+            if (currentHour >= 0 && currentHour < 12) {
                 document.getElementById("btnTimeIn2").disabled = true;
                 document.getElementById("btnTimeOut2").disabled = true;
+            } else {
+                document.getElementById("btnTimeIn2").disabled = false;
+                document.getElementById("btnTimeOut2").disabled = false;
             }
         });
     </script>
