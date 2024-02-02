@@ -76,7 +76,7 @@ if (isset($_SESSION["username"])) {
                     },
                     success: function(res) {
                         if (res == "1") {
-                            window.location.href = "AdminDashboard.php";
+                            window.location = "AdminDashboard.php";
                         } else {
                             swal({
                                 title: "Error",
