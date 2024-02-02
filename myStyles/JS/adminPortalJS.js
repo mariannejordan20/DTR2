@@ -15,7 +15,7 @@ $(document).ready(function () {
                 cache: false,
                 success: function (data) {
                     if (data) {
-                        window.location.replace("http://localhost/Employee_Attendance/AdminDashboard.php");
+                        window.location.replace("http://localhost/AdminDashboard.php");
                     } else {
                         Swal.fire({
                             position: 'center',
