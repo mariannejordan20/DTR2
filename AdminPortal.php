@@ -40,7 +40,7 @@ if (isset($_SESSION["username"])) {
             <button type="button" id="btnLogin" name="btnLogin" class="col-lg-6 mt-3 mb-4 btn btn-success">Login</button>
         </div>
     </div>
-    <script src="myStyles/JS/adminPortalJS.js"></script>
+   
     <!-- Bootstrap core JavaScript-->
     <script src="myStyles/JS/jquery.min.js"></script>
     <script src="myStyles/JS/bootstrap.bundle.min.js"></script>
