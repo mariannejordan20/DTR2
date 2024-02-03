@@ -89,13 +89,6 @@ if(!isset($_SESSION["username"])) {
                                     <th>ID</th>
                                     <th>Fullname_Name</th>
                                     <th>Branch</th>
-                                    <th>Branch</th>
-                                    <th>Branch</th>
-                                    <th>Branch</th>
-                                    <th>Branch</th>
-                                    <th>Branch</th>
-                                    <th>Branch</th>
-                                    <th>Branch</th>
                                     <th>Department</th>
                                     <th>Position</th>
                                     <th>Sex</th>
@@ -113,13 +106,6 @@ if(!isset($_SESSION["username"])) {
                                             <td>".$row['ID']."</td>
                                             <td>".$row['Employee_ID']."</td>
                                             <td>".$row['Employee_FullName']."</td>
-                                            <td>".$row['Employee_Department']."</td>
-                                            <td>".$row['Employee_Department']."</td>
-                                            <td>".$row['Employee_Department']."</td>
-                                            <td>".$row['Employee_Department']."</td>
-                                            <td>".$row['Employee_Department']."</td>
-                                            <td>".$row['Employee_Department']."</td>
-                                            <td>".$row['Employee_Department']."</td>
                                             <td>".$row['Employee_Department']."</td>
                                             <td>".$row['Employee_Department']."</td>
                                             <td>".$row['Employee_Position']."</td>
