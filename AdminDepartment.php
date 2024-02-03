@@ -103,8 +103,12 @@ if(!isset($_SESSION["username"])) {
                                             <td>".$rowNumber."</td>
                                             <td>".$row["Department"]."</td>  
                                             <td>
-                                                <button type='button' class='btn btn-primary editModalBtn'><i class='fas fa-pen'></i></button>
-                                                <button type='button' class='btn btn-danger deleteModalBtn'><i class='fas fa-trash'></i></button>
+                                                <button type=\"button\" class=\"btn btn-primary btn-sm edit-dept-btn\" data-toggle=\"modal\" data-target=\"#editDeptModal\" data-dept-id=\"".$row["ID"]."\" data-dept-name=\"".$row["Department"]."\">
+                                                <i class='fas fa-pen'></i>
+                                                </button>
+                                                <button type=\"button\" class=\"btn btn-danger btn-sm delete-dept-btn\" data-toggle=\"modal\" data-target=\"#deleteDeptModal\" data-dept-id=\"".$row["ID"]."\">
+                                                <i class='fas fa-trash'></i>
+                                                </button>
                                             </td>
                                         </tr>";
                                     $rowNumber++; // Increment row number
@@ -114,6 +118,7 @@ if(!isset($_SESSION["username"])) {
                                 echo "0 result";
                             }
                             ?> 
+
                             </tbody>  
                         </table>
                         </div>
@@ -121,64 +126,7 @@ if(!isset($_SESSION["username"])) {
                 </div>
                 <!-- /.container-fluid --> 
             </div>
-            <!-- Modal Edit -->
-            <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalTitle" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editModalTitle">Edit Employee Information</h5>
-                    <button type="button" class="fas fa-lg fa-times" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                <div class="row was-validated"> 
-                        <div class="col">
-                        <div class="card shadow-lg h-100% py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col">  
-                                        <input type="text" id="userType" name="userType" class="form-control is-valid" value="admin" hidden required>
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Admin Username</div> 
-                                            <div class="h2 mb-3 pl-1">
-                                                <input type="text" id="AdminUser" name="AdminUser" class="form-control is-valid" placeholder="Type Admin Username" required readonly>
-                                            </div>
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Admin Password</div>
-                                            <div class="h2 mb-3 pl-1">
-                                                <input type="text" id="AdminPassword" name="AdminPassword" class="form-control" placeholder="Type Admin Password" required> 
-                                            </div> 
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Admin Fullname</div>
-                                            <div class="h2 mb-3 pl-1">
-                                                <input type="text" id="AdminFullname" name="AdminFullname" class="form-control" placeholder="Type Admin Fullname" required>
-                                            </div>
-                                            <button type="button" id="submitEditAccount" name="submitEditAccount" class="col-lg-12 mt-2 btn btn-success">Update Account</button> 
-                                        </div> 
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>  
-                </div> 
-                </div> 
-            </div>
-        </div>
-        <!-- Delete Modal -->
-        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalTitle">Delete Employee Information</h5>
-                    <button type="button" class="fas fa-lg fa-times" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-      <div class="modal-body">
-        <input type="text" id="EmployeeDelete_ID" name="EmployeeDelete_ID" hidden> 
-        <p class="text-center"><b>Are you sure you want to delete this data?</b></p>
-      </div>
-      <div class="modal-footer"> 
-        <button type="button" class="btn btn-danger" id="deleteEmployeeButton">Delete</button>
-        <button type="button" class="btn btn-success" data-bs-dismiss="modal">Cancel</button>
-      </div>
-    </div>
-  </div>
-</div>
+
             <!-- End of Main Content -->
 
 <!-- Add New Department Modal -->
@@ -208,6 +156,57 @@ if(!isset($_SESSION["username"])) {
 </div>
 
         <!-- End Add New Department Modal -->
+
+                <!-- Edit Department Modal -->
+                <div class="modal fade" id="editDeptModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" style="background-color: #007bff; color: white">
+                        <h5 class="modal-title" id="exampleModalLabel">Edit Department</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form id="editDeptForm" action="departmenteditsave.php" method="post">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="edit_dept_name">Department Name:</label>
+                                <input type="text" name="edit_dept_name" id="edit_dept_name" class="form-control" required>
+                                <input type="hidden" name="edit_dept_id" id="edit_dept_id">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- End of Edit Department Modal -->
+
+        <!-- Delete Department Modal -->
+        <div class="modal fade" id="deleteDeptModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" style="background-color: #dc3545; color: white">
+                        <h5 class="modal-title" id="exampleModalLabel">Delete Department</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete this department?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-danger confirm-delete-btn">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End of Delete Department Modal -->
 
             <!-- Footer -->
             <footer class="sticky-footer bg-white">
@@ -244,6 +243,8 @@ if(!isset($_SESSION["username"])) {
             </div>
         </div>
     </div>  
+    <!-- End of Logout Modal -->
+
     <!-- start of page loader -->
     <div class="loader-wrapper">
     <h2 id="description">
@@ -256,7 +257,7 @@ if(!isset($_SESSION["username"])) {
         <div class="loadingBar" id="loadingBar4"></div> 
     </div>
     </div> 
-    <script>
+        <script>
               <?php
                     if (isset($_SESSION['status'])) {
                         echo "Swal.fire({
@@ -291,5 +292,41 @@ if(!isset($_SESSION["username"])) {
  
     <script src="myStyles/JS/adminlistJS.js"></script> 
     <script src="myStyles/JS/loader.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.edit-dept-btn').click(function() {
+                var deptId = $(this).data('dept-id');
+                var deptName = $(this).data('dept-name');
+
+                $('#edit_dept_id').val(deptId);
+                $('#edit_dept_name').val(deptName);
+            });
+
+            $('.delete-dept-btn').click(function() {
+                var deptId = $(this).data('dept-id');
+                $('#deleteDeptModal').find('.confirm-delete-btn').data('dept-id', deptId);
+            });
+
+            $('.confirm-delete-btn').click(function() {
+                var deptId = $(this).data('dept-id');
+                // AJAX request to delete the department
+                $.ajax({
+                    url: 'departmentdelete.php',
+                    type: 'POST',
+                    data: {deptId: deptId},
+                    success: function(response) {
+                        // Handle success, like updating the table
+                        $('#deleteDeptModal').modal('hide');
+                        // You might want to reload the table or remove the deleted row
+                        location.reload();
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle error
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+        });
+    </script>
     </body> 
 </html>
