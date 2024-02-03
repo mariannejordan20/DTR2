@@ -19,6 +19,12 @@ if(!isset($_SESSION["username"])) {
 <!-- alert plugin sweetalert2  -->
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <title>Admin_Page</title>
+<style>
+        #employeeTable th,
+        #employeeTable td {
+            font-size: 12px; /* Fixed font size in pixels */
+        }
+    </style>
 </head> 
 <body id="page-top">
 
@@ -81,10 +87,18 @@ if(!isset($_SESSION["username"])) {
                                 <tr>
                                     <th>No.</th>
                                     <th>ID</th>
-                                    <th>Fullname</th>
-                                    <th>Sex</th>
-                                    <th>Position</th>
+                                    <th>Fullname_Name</th>
+                                    <th>Branch</th>
+                                    <th>Branch</th>
+                                    <th>Branch</th>
+                                    <th>Branch</th>
+                                    <th>Branch</th>
+                                    <th>Branch</th>
+                                    <th>Branch</th>
+                                    <th>Branch</th>
                                     <th>Department</th>
+                                    <th>Position</th>
+                                    <th>Sex</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -99,6 +113,14 @@ if(!isset($_SESSION["username"])) {
                                             <td>".$row['ID']."</td>
                                             <td>".$row['Employee_ID']."</td>
                                             <td>".$row['Employee_FullName']."</td>
+                                            <td>".$row['Employee_Department']."</td>
+                                            <td>".$row['Employee_Department']."</td>
+                                            <td>".$row['Employee_Department']."</td>
+                                            <td>".$row['Employee_Department']."</td>
+                                            <td>".$row['Employee_Department']."</td>
+                                            <td>".$row['Employee_Department']."</td>
+                                            <td>".$row['Employee_Department']."</td>
+                                            <td>".$row['Employee_Department']."</td>
                                             <td>".$row['Employee_Department']."</td>
                                             <td>".$row['Employee_Position']."</td>
                                             <td>".$row['Employee_Sex']."</td>
