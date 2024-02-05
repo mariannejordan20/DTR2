@@ -94,22 +94,31 @@ if(!isset($_SESSION["username"])) {
                                                 <div class="h2 mb-3 pl-1">
                                                     <select class="form-control" id="employeeDepartment" name="employeeDepartment" aria-label="Default select example" required>  
                                                         <option value="" selected disabled>Select Department</option>
-                                                        <option value="Programming">Programming</option>
-                                                        <option value="Sales">Sales</option>
-                                                        <option value="FrontDesk">FrontDesk</option>
-                                                        <option value="Technical">Technical</option> 
+                                                        <?php
+                                                                $sqlDepartments = "SELECT ID, Department FROM departments";
+                                                                $resultDepartments = $conn->query($sqlDepartments);
+
+                                                                if ($resultDepartments->num_rows > 0) {
+                                                                    while ($rowDepartments = $resultDepartments->fetch_assoc()) {
+                                                                        echo '<option value="' . $rowDepartments['Department'] . '">' . $rowDepartments['Department'] . '</option>';
+                                                                    }
+                                                                } else {
+                                                                    echo '<option value="" disabled>No Departments available</option>';
+                                                                }
+                                                        ?>
                                                     </select>
                                                 </div>
                                                 <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Employee Branch (Select)</div>
                                                     <div class="h2 mb-3 pl-1">
-                                                        <select class="form-control" id="employeeBranch" name="Employee_Branch" aria-label="Default select example" required>  
+                                                        <select class="form-control" id="employeeBranch" name="employeeBranch" aria-label="Default select example" required>  
+                                                            <option value="" selected disabled style="color:white;">Select Branch</option>
                                                             <?php
                                                                 $sqlBranch = "SELECT ID, Branch FROM branches";
                                                                 $resultBranch = $conn->query($sqlBranch);
 
                                                                 if ($resultBranch->num_rows > 0) {
                                                                     while ($rowBranch = $resultBranch->fetch_assoc()) {
-                                                                        echo '<option value="' . $rowBranch['ID'] . '">' . $rowBranch['Branch'] . '</option>';
+                                                                        echo '<option value="' . $rowBranch['Branch'] . '">' . $rowBranch['Branch'] . '</option>';
                                                                     }
                                                                 } else {
                                                                     echo '<option value="" disabled>No Branch available</option>';
