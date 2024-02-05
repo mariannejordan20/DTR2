@@ -2,7 +2,7 @@ $(document).ready(function () {
     $("#submitNewAccount").click(function () {
         var employeeNumber = $("#employeeNumber").val();
         var employeeFullName = $("#employeeFullName").val();
-        var employeeDepartment = $("#employeeDepartment").val();
+        var employeeDepartment = $("#employeeDepartment").val();z
         var employeePosition = $("#employeePosition").val();
         var employeeSex = $("#employeeSex").val();
         var userType = $("#userType").val();

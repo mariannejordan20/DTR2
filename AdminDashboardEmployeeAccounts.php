@@ -97,7 +97,7 @@ if(!isset($_SESSION["username"])) {
                             </thead>
                             <tbody class="text-center">
                                 <?php
-                                    $sql = "SELECT ID, Employee_ID, Employee_FullName, Employee_Department, Employee_Position, Employee_Sex FROM `employee_information`";
+                                    $sql = "SELECT ID, Employee_ID, Employee_FullName,Employee_Branch, Employee_Department, Employee_Position, Employee_Sex FROM `employee_information`";
                                     $result = $conn -> query($sql);
 
                                     if($result-> num_rows > 0) {
@@ -106,7 +106,7 @@ if(!isset($_SESSION["username"])) {
                                             <td>".$row['ID']."</td>
                                             <td>".$row['Employee_ID']."</td>
                                             <td>".$row['Employee_FullName']."</td>
-                                            <td>".$row['Employee_Department']."</td>
+                                            <td>".$row['Employee_Branch']."</td>
                                             <td>".$row['Employee_Department']."</td>
                                             <td>".$row['Employee_Position']."</td>
                                             <td>".$row['Employee_Sex']."</td>

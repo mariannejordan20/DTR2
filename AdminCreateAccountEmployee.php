@@ -78,47 +78,68 @@ if(!isset($_SESSION["username"])) {
                             <div class="card shadow-lg h-100% py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
-                                        <div class="col">  
-                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Employee Number</div>
-                                            <!-- m mean margin, p mean padding, l is left, r is right, t is top, b is bottom -->
-                                            <div class="h2 mb-3 pl-1">
-                                            <input type="text" id="userType" name="userType" class="form-control is-valid" value="employee" required hidden>
-                                                <input type="number" id="employeeNumber" name="employeeNumber" class="form-control is-valid" placeholder="Type Employee Number" required>
-                                            </div>
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Employee Fullname</div>
-                                            <div class="h2 mb-3 pl-1">
-                                                <input type="text" id="employeeFullName" name="employeeFullName" class="form-control" placeholder="Type Employee Fullname" required>
-                                            </div>
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Employee Department (Select)</div>
+                                        <form action="createEmployeeAddSave.php" method="post">
+                                            <div class="col">  
+                                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Employee Number</div>
+                                                <!-- m mean margin, p mean padding, l is left, r is right, t is top, b is bottom -->
                                                 <div class="h2 mb-3 pl-1">
-                                                <select class="form-control" id="employeeDepartment" name="employeeDepartment" aria-label="Default select example" required>  
-                                                    <option value="" selected disable>Select Department</option>
-                                                    <option value="Mandaue">Mandaue</option>
-                                                    <option value="Sto. Niño">Sto. Niño</option>
-                                                    <option value="Ibabao">Ibabao</option>
-                                                    <option value="Lapu-Lapu">Lapu Lapu</option> 
+                                                <input type="text" id="userType" name="userType" class="form-control is-valid" value="employee" required hidden>
+                                                    <input type="number" id="employeeNumber" name="employeeNumber" class="form-control is-valid" placeholder="Type Employee Number" required>
+                                                </div>
+                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Employee Fullname</div>
+                                                <div class="h2 mb-3 pl-1">
+                                                    <input type="text" id="employeeFullName" name="employeeFullName" class="form-control" placeholder="Type Employee Fullname" required>
+                                                </div>
+                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Employee Department (Select)</div>
+                                                <div class="h2 mb-3 pl-1">
+                                                    <select class="form-control" id="employeeDepartment" name="employeeDepartment" aria-label="Default select example" required>  
+                                                        <option value="" selected disabled>Select Department</option>
+                                                        <option value="Programming">Programming</option>
+                                                        <option value="Sales">Sales</option>
+                                                        <option value="FrontDesk">FrontDesk</option>
+                                                        <option value="Technical">Technical</option> 
+                                                    </select>
+                                                </div>
+                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Employee Branch (Select)</div>
+                                                    <div class="h2 mb-3 pl-1">
+                                                        <select class="form-control" id="employeeBranch" name="Employee_Branch" aria-label="Default select example" required>  
+                                                            <?php
+                                                                $sqlBranch = "SELECT ID, Branch FROM branches";
+                                                                $resultBranch = $conn->query($sqlBranch);
+
+                                                                if ($resultBranch->num_rows > 0) {
+                                                                    while ($rowBranch = $resultBranch->fetch_assoc()) {
+                                                                        echo '<option value="' . $rowBranch['ID'] . '">' . $rowBranch['Branch'] . '</option>';
+                                                                    }
+                                                                } else {
+                                                                    echo '<option value="" disabled>No Branch available</option>';
+                                                                }
+                                                            ?>
+                                                        </select>
+                                                    </div>
+
+                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Employee Position (Select)</div>
+                                                <div class="h2 mb-3 pl-1">
+                                                    <select class="form-control" id="employeePosition" name="employeePosition" aria-label="Default select example" required> 
+                                                        <option value="" selected disable>Select Position</option> 
+                                                        <option value="Staff">Staff</option>
+                                                        <option value="Driver">Driver</option>
+                                                        <option value="Intern">Intern</option> 
+                                                    </select>
+                                                </div>
+                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Employee Sex (Select)</div>
+                                                <div class="h2 mb-3 pl-1">
+                                                <select class="form-control" id="employeeSex" name="employeeSex" aria-label="Default select example" required>
+                                                    <option value="" selected disable>Select Sex</option> 
+                                                    <option value="Male">Male</option>
+                                                    <option value="Female">Female</option> 
                                                 </select>
+                                                </div>  
+                                                <!-- <input type="submit" id="submitNewAccount" name="submitNewAccount" class="col-lg-12 mt-2 btn btn-success" value="Create Account">  -->
+                                                <button type="submit" class="col-lg-12 mt-2 btn btn-success">Create Account</button>
+                                                <!-- <button type="submit" class="btn" style="background-color: #2ca125; color:white">Save</button> -->
                                             </div>
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Employee Position (Select)</div>
-                                            <div class="h2 mb-3 pl-1">
-                                            <select class="form-control" id="employeePosition" name="employeePosition" aria-label="Default select example" required> 
-                                                <option value="" selected disable>Select Position</option> 
-                                                <option value="Staff">Staff</option>
-                                                <option value="Driver">Driver</option>
-                                                <option value="Intern">Intern</option> 
-                                            </select>
-                                            </div>
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Employee Sex (Select)</div>
-                                            <div class="h2 mb-3 pl-1">
-                                            <select class="form-control" id="employeeSex" name="employeeSex" aria-label="Default select example" required>
-                                                <option value="" selected disable>Select Sex</option> 
-                                                <option value="Male">Male</option>
-                                                <option value="Female">Female</option> 
-                                            </select>
-                                            </div>  
-                                            <!-- <input type="submit" id="submitNewAccount" name="submitNewAccount" class="col-lg-12 mt-2 btn btn-success" value="Create Account">  -->
-                                            <button type="button" id="submitNewAccount" name="submitNewAccount" class="col-lg-12 mt-2 btn btn-success">Create Account</button> 
-                                        </div> 
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -175,9 +196,23 @@ if(!isset($_SESSION["username"])) {
         <div class="loadingBar" id="loadingBar4"></div> 
     </div>
     </div> 
+    <script>
+    <?php
+    if (isset($_SESSION['status'])) {
+        echo "Swal.fire({
+                            icon: '" . ($_SESSION['status_code'] == 'success' ? 'success' : 'error') . "',
+                            title: '" . $_SESSION['status'] . "',
+                            showConfirmButton: false,
+                            timer: 1000
+                        });";
+        unset($_SESSION['status']); // Clear the session variable
+        unset($_SESSION['status_code']); // Clear the session variable
+    }
+    ?>
+</script>
     <!-- end of page loader -->
     <script src="myStyles/JS/loader.js"></script>
-    <script src="myStyles/JS/adminCreateAccountEmployeeJS.js"></script>
+    
     <!-- Bootstrap core JavaScript-->
     <script src="myStyles/JS/jquery.min.js"></script>
     <script src="myStyles/JS/bootstrap.bundle.min.js"></script>  
