@@ -150,13 +150,14 @@ if(!isset($_SESSION["username"])) {
                                             <td class="text-gray-700"><?php echo $counter ?></td>
                                             <td class="text-gray-900"><?php echo $row['Employee_ID'] ?></td>
                                             <td class="text-gray-700"><?php echo $row['Employee_Date'] ?></td>
-                                            <td class="text-gray-700"><?php echo $row['Employee_TimeInAm'] ?></td>
-                                            <td class="text-gray-700"><?php echo $row['Employee_TimeOutAm'] ?></td>
-                                            <td class="text-gray-700"><?php echo $row['Employee_TimeInPm'] ?></td>
-                                            <td class="text-gray-700"><?php echo $row['Employee_TimeOutPm'] ?></td>
+                                            <td class="text-gray-700 time-in-am"><?php echo $row['Employee_TimeInAm'] ?></td>
+                                            <td class="text-gray-700 time-out-am"><?php echo $row['Employee_TimeOutAm'] ?></td>
+                                            <td class="text-gray-700 time-in-pm"><?php echo $row['Employee_TimeInPm'] ?></td>
+                                            <td class="text-gray-700 time-out-pm"><?php echo $row['Employee_TimeOutPm'] ?></td>
                                             <td class="text-gray-700"><?php echo $row['TotalDuration'] ?> Hours</td>
                                             <td>
-                                                <a href="report.php?search=<?php echo $row['Employee_ID']; ?>" class="btn btn-primary btn-sm">Print</a>
+                                                <button class="btn btn-info btn-sm edit-btn" data-toggle="modal" data-target="#editModal" data-employee-id="<?php echo $row['ID']; ?>"><i class='fas fa-pen'></i></button>
+                                                <a href="report.php?search=<?php echo $row['Employee_ID']; ?>" class="btn btn-primary btn-sm" style="height: 24px;"><i class='fas fa-print'></i></a>
                                             </td>
                                         </tr>
                                     <?php
@@ -198,64 +199,7 @@ if(!isset($_SESSION["username"])) {
 
                 <!-- /.container-fluid --> 
             </div>
-            <!-- Modal Edit
-            <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalTitle" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editModalTitle">Edit Employee Information</h5>
-                    <button type="button" class="fas fa-lg fa-times" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                <div class="row was-validated"> 
-                        <div class="col">
-                        <div class="card shadow-lg h-100% py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col">  
-                                        <input type="text" id="userType" name="userType" class="form-control is-valid" value="admin" hidden required>
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Admin Username</div> 
-                                            <div class="h2 mb-3 pl-1">
-                                                <input type="text" id="AdminUser" name="AdminUser" class="form-control is-valid" placeholder="Type Admin Username" required readonly>
-                                            </div>
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Admin Password</div>
-                                            <div class="h2 mb-3 pl-1">
-                                                <input type="text" id="AdminPassword" name="AdminPassword" class="form-control" placeholder="Type Admin Password" required> 
-                                            </div> 
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Admin Fullname</div>
-                                            <div class="h2 mb-3 pl-1">
-                                                <input type="text" id="AdminFullname" name="AdminFullname" class="form-control" placeholder="Type Admin Fullname" required>
-                                            </div>
-                                            <button type="button" id="submitEditAccount" name="submitEditAccount" class="col-lg-12 mt-2 btn btn-success">Update Account</button> 
-                                        </div> 
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>  
-                </div> 
-                </div> 
-            </div>
-        </div> -->
-        <!-- Delete Modal -->
-        <!-- <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="deleteModalTitle">Delete Employee Information</h5>
-                                <button type="button" class="fas fa-lg fa-times" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                <div class="modal-body">
-                    <input type="text" id="EmployeeDelete_ID" name="EmployeeDelete_ID" hidden> 
-                    <p class="text-center"><b>Are you sure you want to delete this data?</b></p>
-                </div>
-                <div class="modal-footer"> 
-                    <button type="button" class="btn btn-danger" id="deleteEmployeeButton">Delete</button>
-                    <button type="button" class="btn btn-success" data-bs-dismiss="modal">Cancel</button>
-                </div>
-                </div>
-                </div>
-            </div> -->
+      
             <!-- End of Main Content -->
 
             <!-- Footer -->
@@ -273,7 +217,46 @@ if(!isset($_SESSION["username"])) {
 
     </div>
     <!-- End of Page Wrapper -->
- 
+
+     <!-- Edit Modal -->   
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Edit Time Records</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="editForm">
+                <div class="modal-body">
+                <input type="hidden" id="employeeId" name="employeeId">
+                    <div class="form-group">
+                        <label for="timeInAm">Time In (AM)</label>
+                        <input type="text" class="form-control" id="timeInAm" name="timeInAm">
+                    </div>
+                    <div class="form-group">
+                        <label for="timeOutAm">Time Out (AM)</label>
+                        <input type="text" class="form-control" id="timeOutAm" name="timeOutAm">
+                    </div>
+                    <div class="form-group">
+                        <label for="timeInPm">Time In (PM)</label>
+                        <input type="text" class="form-control" id="timeInPm" name="timeInPm">
+                    </div>
+                    <div class="form-group">
+                        <label for="timeOutPm">Time Out (PM)</label>
+                        <input type="text" class="form-control" id="timeOutPm" name="timeOutPm">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
     <!-- Logout Modal-->
     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
@@ -325,5 +308,79 @@ if(!isset($_SESSION["username"])) {
     <script src="myStyles/JS/sb-admin-2.min.js"></script> 
     <script src="myStyles/JS/dailyLogs.js"></script> 
     <script src="myStyles/JS/loader.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.edit-btn').click(function() {
+                var employeeId = $(this).data('employee-id');
+                var timeInAm = $(this).closest('tr').find('.time-in-am').text();
+                var timeOutAm = $(this).closest('tr').find('.time-out-am').text();
+                var timeInPm = $(this).closest('tr').find('.time-in-pm').text();
+                var timeOutPm = $(this).closest('tr').find('.time-out-pm').text();
+                
+                $('#employeeId').val(employeeId);
+                $('#timeInAm').val(timeInAm);
+                $('#timeOutAm').val(timeOutAm);
+                $('#timeInPm').val(timeInPm);
+                $('#timeOutPm').val(timeOutPm);
+            });
+
+            // JavaScript code in your HTML file
+
+                   
+            $('#editForm').submit(function(e) {
+                e.preventDefault(); // Prevent the default form submission
+
+                // Serialize form data
+                var formData = $(this).serialize();
+
+                // Send AJAX request
+                $.ajax({
+                    type: 'POST',
+                    url: 'reportedit.php',
+                    data: formData,
+                    success: function(response) {
+                        // Parse the JSON response
+                        var data = JSON.parse(response);
+
+                        // Check the status of the response
+                        if (data.status === 'success') {
+                            // Display success message using SweetAlert
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success!',
+                                text: data.message,
+                                confirmButtonText: 'OK'
+                            }).then((result) => {
+                                // Redirect to AdminReportsDaily.php
+                                window.location.href = 'AdminReportsDaily.php';
+                            });
+                        } else {
+                            // Display error message using SweetAlert
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error!',
+                                text: 'Error: ' + data.message,
+                                confirmButtonText: 'OK'
+                            });
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle errors
+                        console.error('AJAX Error:', error);
+                        // Display a generic error message to the user
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: 'An error occurred while processing your request. Please try again later.',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                });
+            });
+
+
+        });
+
+        </script>
     </body>  
 </html>
