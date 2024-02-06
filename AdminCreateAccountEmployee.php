@@ -79,7 +79,7 @@ if(!isset($_SESSION["username"])) {
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <form action="createEmployeeAddSave.php" method="post">
-                                            <div class="col">  
+                                            <div class="col-12">  
                                                     <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Employee Number</div>
                                                 <!-- m mean margin, p mean padding, l is left, r is right, t is top, b is bottom -->
                                                 <div class="h2 mb-3 pl-1">

@@ -74,17 +74,17 @@ if(!isset($_SESSION["username"])) {
                     <!-- Page Heading -->
                     <h1 class="h3 text-gray-800 mb-4">Daily Logs Lists</h1>
                     <!-- Content Row -->
-                    <div>
+                    <!-- <div>
                         <a href="report.php" class="btn btn-primary mb-3">Print All</a>
-                    </div>
+                    </div> -->
                     
                     <div class="row pl-1 pr-1">
                         <div class="col col-lg-12">
                             <!-- Search Bar -->
                             <div class="input-group mb-3">
-                                <input type="text" id="searchInput" class="form-control" placeholder="Search by Employee ID">
+                                <input type="text" id="searchInput" class="form-control" placeholder="Search by Employee Name">
                                 <div class="input-group-append">
-                                    <button class="btn btn-outline-secondary" type="button" onclick="searchTable()">Search</button>
+                                    <button class="btn btn-outline-secondary" type="button">Search</button>
                                 </div>
                             </div>
 

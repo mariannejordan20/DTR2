@@ -82,7 +82,7 @@ if ($branchResult) {
             <?php
             // Loop through each branch
             while ($branchRow = mysqli_fetch_assoc($branchResult)) {
-                $department = $branchRow['Branch'];
+                $branch = $branchRow['Branch'];
                 ?>
                 <div class="col-xl-3 col-md-6 mb-4">
                     <div class="card border-left-info shadow-lg h-100 py-2">
@@ -90,11 +90,11 @@ if ($branchResult) {
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                        <?php echo $department . " Interns"; ?>
+                                        <?php echo $branch . " Interns"; ?>
                                     </div>
                                     <div class="h1 ml-1 font-weight-bold text-gray-800">
                                         <?php
-                                        $query = "SELECT ID FROM `employee_information` WHERE `Employee_Department`= '$department'";
+                                        $query = "SELECT ID FROM `employee_information` WHERE `Employee_Branch`= '$branch'";
                                         $result = mysqli_query($conn, $query);
                                         $rowCount = mysqli_num_rows($result);
                                         echo "<h2>$rowCount</h2>";

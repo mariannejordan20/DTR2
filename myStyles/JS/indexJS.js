@@ -64,7 +64,7 @@ function saveTimestamp(columnName) {
                         title: 'Oops!',
                         text: data,
                         showConfirmButton: false,
-                        timer: 3000
+                        timer: 1000
                     }).then(() => {
                         window.location.reload();
                     });
@@ -75,7 +75,7 @@ function saveTimestamp(columnName) {
                         title: 'Success!!',
                         text: (columnName.includes("TimeIn") ? 'Logged-In' : 'Logged-Out') + ' Captured!',
                         showConfirmButton: false,
-                        timer: 3000
+                        timer: 500
                     }).then(() => {
                         window.location.reload();
                     });
@@ -89,7 +89,7 @@ function saveTimestamp(columnName) {
             title: 'Oops!!',
             text: 'Employee ID is not registered!',
             showConfirmButton: false,
-            timer: 2000
+            timer: 500
         }).then(() => {
             window.location.reload();
         });
