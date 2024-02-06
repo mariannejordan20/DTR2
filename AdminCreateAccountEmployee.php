@@ -19,6 +19,15 @@ if(!isset($_SESSION["username"])) {
 <!-- alert plugin sweetalert2  -->
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <title>Admin_Page</title>
+<style>
+    .bigform,
+    .input-xxlarge,
+    .form-control {
+        width: 100% !important;
+    }
+</style>
+
+
 </head> 
 <body id="page-top">
 
@@ -82,9 +91,9 @@ if(!isset($_SESSION["username"])) {
                                             <div class="col-12">  
                                                     <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Employee Number</div>
                                                 <!-- m mean margin, p mean padding, l is left, r is right, t is top, b is bottom -->
-                                                <div class="h2 mb-3 pl-1">
-                                                <input type="text" id="userType" name="userType" class="form-control is-valid" value="employee" required hidden>
-                                                    <input type="number" id="employeeNumber" name="employeeNumber" class="form-control is-valid" placeholder="Type Employee Number" required>
+                                                <div class=" mb-3 ">
+                                                <input type="text" id="userType" name="userType" class="form-control is-valid input-xxlarge" value="employee" required hidden>
+                                                    <input type="number" id="employeeNumber" name="employeeNumber" class="bigform form-control is-valid" placeholder="Type Employee Number" required>
                                                 </div>
                                                 <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Employee Fullname</div>
                                                 <div class="h2 mb-3 pl-1">

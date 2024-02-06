@@ -73,13 +73,12 @@ if(!isset($_SESSION["username"])) {
                 <!-- Page Heading -->
                 <h1 class="h3 text-gray-800">List of Employee</h1>
                 <!-- Search Bar -->
-                <!-- Search Bar -->
-<div class="input-group mb-3">
-    <input type="text" id="searchInput" class="form-control" placeholder="Search by Employee Name" oninput="searchTable()">
-    <div class="input-group-append">
-        <button class="btn btn-outline-secondary" type="button">Search</button>
-    </div>
-</div>
+                <div class="input-group mb-3">
+                    <input type="text" id="searchInput" class="form-control" placeholder="Search by Employee Name" oninput="searchTable()">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button">Search</button>
+                    </div>
+                </div>
                 <!-- Content Row -->
                 <div class="row pl-1 pr-1">
                     <div class="col col-lg-12">
