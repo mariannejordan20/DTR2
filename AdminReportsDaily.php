@@ -122,19 +122,31 @@ if(!isset($_SESSION["username"])) {
                                     el.Employee_TimeOutAm,
                                     el.Employee_TimeInPm,
                                     el.Employee_TimeOutPm,
-                                    TIME_FORMAT(TIMEDIFF(el.Employee_TimeOutAm, el.Employee_TimeInAm), '%H:%i') AS DurationAM,
-                                    TIME_FORMAT(TIMEDIFF(el.Employee_TimeInPm, el.Employee_TimeOutPm), '%H:%i') AS DurationPM,
+                                    TIME_FORMAT(
+                                        TIMEDIFF(
+                                            IF(el.Employee_TimeOutAm >= el.Employee_TimeInAm, el.Employee_TimeOutAm, ADDTIME(el.Employee_TimeOutAm, '12:00:00')),
+                                            el.Employee_TimeInAm
+                                        ), '%H:%i') AS DurationAM,
+                                    TIME_FORMAT(
+                                        TIMEDIFF(
+                                            IF(el.Employee_TimeOutPm >= el.Employee_TimeInPm, el.Employee_TimeOutPm, ADDTIME(el.Employee_TimeOutPm, '12:00:00')),
+                                            el.Employee_TimeInPm
+                                        ), '%H:%i') AS DurationPM,
                                     TIME_FORMAT(
                                         SEC_TO_TIME(
-                                            COALESCE(
-                                                TIME_TO_SEC(IFNULL(TIMEDIFF(el.Employee_TimeOutAm, el.Employee_TimeInAm), 0)),
-                                                0
-                                            ) + COALESCE(
-                                                TIME_TO_SEC(IFNULL(TIMEDIFF(el.Employee_TimeInPm, el.Employee_TimeOutPm), 0)),
-                                                0
+                                            TIME_TO_SEC(
+                                                TIMEDIFF(
+                                                    IF(el.Employee_TimeOutAm >= el.Employee_TimeInAm, el.Employee_TimeOutAm, ADDTIME(el.Employee_TimeOutAm, '12:00:00')),
+                                                    el.Employee_TimeInAm
+                                                )
+                                            ) +
+                                            TIME_TO_SEC(
+                                                TIMEDIFF(
+                                                    IF(el.Employee_TimeOutPm >= el.Employee_TimeInPm, el.Employee_TimeOutPm, ADDTIME(el.Employee_TimeOutPm, '12:00:00')),
+                                                    el.Employee_TimeInPm
+                                                )
                                             )
-                                        )
-                                    , '%H:%i') AS TotalDuration
+                                        ), '%H:%i') AS TotalDuration
                                 FROM
                                     employee_log el
                                 JOIN
