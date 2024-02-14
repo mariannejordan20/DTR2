@@ -91,7 +91,7 @@ if (isset($_GET['search'])) {
                     <div class="row pl-1 pr-1">
                         <div class="col col-lg-12">
                             <!-- Search Bar with Date Filters -->
-                            <div class="input-group mb-3">
+                            <div class="input-group mb-3 col-md-8">
                                 <input type="text" id="searchInput" class="form-control" placeholder="Search by Employee ID" oninput="searchTable()">
                                 
                                 <!-- Date From -->
@@ -100,9 +100,9 @@ if (isset($_GET['search'])) {
                                 <!-- Date To -->
                                 <input type="date" id="dateTo" class="form-control" placeholder="To" onchange="searchTable()">
                                 
-                                <div class="input-group-append">
+                                <!-- <div class="input-group-append">
                                     <button class="btn btn-outline-secondary" type="button" onclick="searchTable()">Search</button>
-                                </div>
+                                </div> -->
                                 <!-- Print Button -->
                                 <button class="btn btn-outline-secondary" type="button" onclick="printTable()">Print</button>
                             </div>
@@ -453,7 +453,8 @@ if (isset($_GET['search'])) {
     bodyRows.forEach(function (row) {
         row.removeChild(row.lastElementChild);
     });
-    
+    var employeeId = "<?php echo isset($_SESSION['employeeId']) ? $_SESSION['employeeId'] : '' ?>";
+    var employeeFullName = "<?php echo isset($_SESSION['employeeFullName']) ? $_SESSION['employeeFullName'] : '' ?>";
 
     var printWindow = window.open('', '_blank');
     printWindow.document.write('<html><head><title>Daily Time Record</title>');
