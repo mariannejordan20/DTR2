@@ -3,16 +3,6 @@ session_start();
 if(!isset($_SESSION["username"])) {
   header("location: AdminPortal.php");
 }
-if (isset($_GET['search'])) {
-    // ... (your existing code)
-
-    // Store the filtered data in a session variable
-    $_SESSION["filteredData"] = $filteredData;
-
-    // Store Employee_ID and Employee_FullName in session
-    $_SESSION["employeeId"] = $row['Employee_ID'];
-    $_SESSION["employeeFullName"] = $row['Employee_FullName'];
-}
 ?>
 <html>  
 <head>   
@@ -90,25 +80,16 @@ if (isset($_GET['search'])) {
                     
                     <div class="row pl-1 pr-1">
                         <div class="col col-lg-12">
-                            <!-- Search Bar with Date Filters -->
+                            <!-- Search Bar -->
                             <div class="input-group mb-3">
                                 <input type="text" id="searchInput" class="form-control" placeholder="Search by Employee ID" oninput="searchTable()">
-                                
-                                <!-- Date From -->
-                                <input type="date" id="dateFrom" class="form-control" placeholder="From" onchange="searchTable()">
-                                
-                                <!-- Date To -->
-                                <input type="date" id="dateTo" class="form-control" placeholder="To" onchange="searchTable()">
-                                
                                 <div class="input-group-append">
-                                    <button class="btn btn-outline-secondary" type="button" onclick="searchTable()">Search</button>
+                                    <button class="btn btn-outline-secondary" type="button">Search</button>
                                 </div>
-                                <!-- Print Button -->
-                                <button class="btn btn-outline-secondary" type="button" onclick="printTable()">Print</button>
                             </div>
                             
                             <!-- Table -->
-                            <table class="table table-striped table-bordered" id="myTable" style="width: 100%;">    
+                            <table class="table table-striped table-bordered" id="myTable" style="width: 100%;">
                                 <thead>
                                     <tr>
                                         <th class="font-weight-bold">NO.</th>
@@ -124,6 +105,7 @@ if (isset($_GET['search'])) {
                                 </thead>
                                 <tbody>
                                     <?php
+                                    require_once "connection.php"; // Include your database connection file
 
                                     $get_log_details = mysqli_query($conn, "SELECT
                                     el.ID,
@@ -179,7 +161,7 @@ if (isset($_GET['search'])) {
                                         <tr>
                                             <td class="text-gray-700"><?php echo $counter ?></td>
                                             <td class="text-gray-900"><?php echo $row['Employee_ID'] ?></td>
-                                            <td class="text-gray-700"><?php echo date('Y-m-d', strtotime($row['Employee_Date'])); ?></td>
+                                            <td class="text-gray-700"><?php echo $row['Employee_Date'] ?></td>
                                             <td class="text-gray-700 time-in-am"><?php echo $row['Employee_TimeInAm'] ?></td>
                                             <td class="text-gray-700 time-out-am"><?php echo $row['Employee_TimeOutAm'] ?></td>
                                             <td class="text-gray-700 time-in-pm"><?php echo $row['Employee_TimeInPm'] ?></td>
@@ -187,6 +169,7 @@ if (isset($_GET['search'])) {
                                             <td class="text-gray-700"><?php echo $row['TotalDuration'] ?> Hours</td>
                                             <td>
                                                 <button class="btn btn-info btn-sm edit-btn" data-toggle="modal" data-target="#editModal" data-employee-id="<?php echo $row['ID']; ?>"><i class='fas fa-pen'></i></button>
+                                                <a href="report.php?search=<?php echo $row['Employee_ID']; ?>" class="btn btn-primary btn-sm" style="height: 24px;"><i class='fas fa-print'></i></a>
                                             </td>
                                         </tr>
                                     <?php
@@ -388,100 +371,26 @@ if (isset($_GET['search'])) {
 
         });
         function searchTable() {
-            var input, filter, table, tr, td, i, fromDate, toDate;
-            input = document.getElementById("searchInput");
-            fromDate = document.getElementById("dateFrom").value;
-            toDate = document.getElementById("dateTo").value;
+        var input, filter, table, tr, td1, td2, i, txtValue1, txtValue2;
+        input = document.getElementById("searchInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
 
-            table = document.getElementById("myTable"); // Assuming your table has ID "myTable"
-            tr = table.getElementsByTagName("tr");
-
-            var filteredData = [];
-
-            for (i = 0; i < tr.length; i++) {
-                td = tr[i].getElementsByTagName("td")[1]; // Assuming the employee ID is in the second column, adjust if needed
-                var dateCell = tr[i].getElementsByTagName("td")[2]; // Assuming the date is in the third column, adjust if needed
-
-                if (td && dateCell) {
-                    filter = input.value.toUpperCase();
-                    var date = new Date(dateCell.innerHTML); // Parse the date from the cell content
-
-                    // Adjust toDate by adding one day to include the entire selected day
-                    var adjustedToDate = new Date(toDate);
-                    adjustedToDate.setDate(adjustedToDate.getDate() + 1);
-
-                    if (
-                        (td.innerHTML.toUpperCase().indexOf(filter) > -1) &&
-                        (!fromDate || date >= new Date(fromDate)) &&
-                        (!toDate || date < adjustedToDate)
-                    ) {
-                        tr[i].style.display = "";
-                        // Collect the filtered data
-                        filteredData.push({
-                            EmployeeID: td.innerHTML,
-                            Date: dateCell.innerHTML,
-                            // Add other fields as needed
-                        });
-                    } else {
-                        tr[i].style.display = "none";
-                    }
+        for (i = 0; i < tr.length; i++) {
+            td1 = tr[i].getElementsByTagName("td")[1]; // Index 1 corresponds to the Employee_ID column
+            td2 = tr[i].getElementsByTagName("td")[2]; // Index 2 corresponds to the Employee_FullName column
+            if (td1 && td2) {
+                txtValue1 = td1.textContent || td1.innerText;
+                txtValue2 = td2.textContent || td2.innerText;
+                if (txtValue1.toUpperCase().indexOf(filter) > -1 || txtValue2.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
                 }
             }
-
-            // Log or print the filtered data
-            console.log(filteredData);
-            // You can use this data to further process or display it as needed
         }
-
-        function printTable() {
-    var table = document.getElementById('myTable').cloneNode(true);
-
-    // Remove the first column (entire column) from the cloned table
-    var headerRow = table.querySelector('thead tr');
-    headerRow.removeChild(headerRow.firstElementChild);
-
-    var bodyRows = table.querySelectorAll('tbody tr');
-    bodyRows.forEach(function (row) {
-        row.removeChild(row.firstElementChild);
-    });
-
-    // Remove the "ACTIONS" column (last column) from the header
-    var lastHeaderCell = headerRow.lastElementChild;
-    headerRow.removeChild(lastHeaderCell);
-
-    // Remove the "ACTIONS" column (last column) from each body row
-    bodyRows.forEach(function (row) {
-        row.removeChild(row.lastElementChild);
-    });
-    
-
-    var printWindow = window.open('', '_blank');
-    printWindow.document.write('<html><head><title>Daily Time Record</title>');
-    printWindow.document.write('<style>body { font-family: Arial, sans-serif; font-size: 10px; padding: 20px; }</style>');
-    printWindow.document.write('<style>table { border-collapse: collapse; width: 100%; }</style>');
-    printWindow.document.write('<style>table, th, td { border: 1px solid black; }</style>');
-    printWindow.document.write('<style>tbody { font-size: 10px; }</style>');
-    printWindow.document.write('</head><body>');
-    printWindow.document.write('<div style="position: absolute; top: 20px; right: 20px;"><img src="logoBizma.png" alt="Logo" style="max-width: 100px; max-height: 100px;"></div>');
-    printWindow.document.write('<h1>Daily Time Record</h1>');
-    printWindow.document.write('<p>Date and time printed: ' + getCurrentDateTime() + '</p>');
-    printWindow.document.write('<p>Employee ID: ' + employeeId + '</p>');
-    printWindow.document.write('<p>Full Name: ' + employeeFullName + '</p>');
-    printWindow.document.write(table.outerHTML);
-    printWindow.document.write('</body></html>');
-    printWindow.document.close();
-    printWindow.print();
-}
-
-function getCurrentDateTime() {
-    var currentDate = new Date();
-    var formattedDate = currentDate.toLocaleDateString();
-    var formattedTime = currentDate.toLocaleTimeString();
-    return formattedDate + ' ' + formattedTime;
-}
-
+    }
         </script>
-
     </body>  
 </html>
-
