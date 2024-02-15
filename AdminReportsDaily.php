@@ -94,8 +94,8 @@ if (isset($_GET['search'])) {
                     <div class="row pl-1 pr-1">
                         <div class="col col-lg-12">
                             <!-- Search Bar with Date Filters -->
-                            <div class="input-group mb-3 col-md-8">
-                                <input type="text" id="searchInput" class="form-control" placeholder="Search by Employee ID" oninput="searchTable()">
+                            <div class="input-group mb-3">
+                                <input type="text" id="searchInput" class="form-control" placeholder="Search by Employee ID/Employee Name" oninput="searchTable()">
                                 
                                 <!-- Date From -->
                                 <input type="date" id="dateFrom" class="form-control" placeholder="From" onchange="searchTable()">
@@ -107,7 +107,7 @@ if (isset($_GET['search'])) {
                                     <button class="btn btn-outline-secondary" type="button" onclick="searchTable()">Search</button>
                                 </div> -->
                                 <!-- Print Button -->
-                                <button class="btn btn-outline-secondary" type="button" onclick="printTable()">Print</button>
+                                <button class="btn btn-success" type="button" onclick="printTable()">Print</button>
                             </div>
                             <!-- Add these hidden input fields to store employee details -->
 
@@ -193,6 +193,7 @@ if (isset($_GET['search'])) {
                                             <td class="text-gray-700"><?php echo $row['TotalDuration'] ?> Hours</td>
                                             <td>
                                                 <button class="btn btn-info btn-sm edit-btn" data-toggle="modal" data-target="#editModal" data-employee-id="<?php echo $row['ID']; ?>"><i class='fas fa-pen'></i></button>
+                                                <button class="btn btn-danger btn-sm delete-btn" onclick="confirmDelete(this)" data-employee-id="<?php echo $row['ID']; ?>"><i class='fas fa-trash'></i></button>
                                             </td>
                                         </tr>
                                     <?php
@@ -269,6 +270,98 @@ if (isset($_GET['search'])) {
         </div>
     </div>
 </div>
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <!-- ... (existing modal content) -->
+    <div class="modal-body">
+        <p>Are you sure you want to delete this record? Enter your password to confirm:</p>
+        <input type="password" class="form-control" id="deletePassword" placeholder="Your Password">
+    </div>
+    <!-- ... (existing modal content) -->
+</div>
+<script>
+    function confirmDelete(button) {
+    var employeeId = $(button).data('employee-id');
+    var password = prompt("Please enter your password to delete the record:");
+
+    if (password !== null && password !== "") {
+        // Perform AJAX request to validate the password and delete the record
+        $.ajax({
+            type: 'POST',
+            url: 'AdminReportsDelete.php',
+            data: { employeeId: employeeId, password: password },
+            success: function (response) {
+                var data = JSON.parse(response);
+
+                if (data.status === 'success') {
+                    // Password is correct, proceed with deletion
+                    deleteRecord(employeeId);
+                } else {
+                    // Display error message using SweetAlert for incorrect password
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Invalid Password!',
+                        text: 'Please enter a valid password to delete the record.',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle errors    
+                console.error('AJAX Error:', error);
+                // Display a generic error message to the user
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'An error occurred while processing your request. Please try again later.',
+                    confirmButtonText: 'OK'
+                });
+            }
+        });
+    }
+}
+
+
+// Function to delete record
+function deleteRecord(employeeId) {
+    // Send AJAX request to delete.php
+    $.ajax({
+        type: 'POST',
+        url: 'AdminReportsDelete.php',
+        data: { employeeId: employeeId },
+        success: function (response) {
+            var data = JSON.parse(response);
+
+            if (data.status === 'success') {
+                // Reload the page or update the table as needed
+                location.reload();
+            } else {
+                // Display error message using SweetAlert
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'Error: ' + data.message,
+                    confirmButtonText: 'OK'
+                });
+            }
+        },
+        error: function (xhr, status, error) {
+            // Handle errors
+            console.error('AJAX Error:', error);
+            // Display a generic error message to the user
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: 'An error occurred while processing your request. Please try again later.',
+                confirmButtonText: 'OK'
+            });
+        }
+    });
+}
+
+</script>
+
+
 
     <!-- Logout Modal-->
     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -394,50 +487,53 @@ if (isset($_GET['search'])) {
 
         });
         function searchTable() {
-            var input, filter, table, tr, td, i, fromDate, toDate;
-            input = document.getElementById("searchInput");
-            fromDate = document.getElementById("dateFrom").value;
-            toDate = document.getElementById("dateTo").value;
+    var input, filter, table, tr, tdEmployeeID, tdFullName, i, fromDate, toDate;
+    input = document.getElementById("searchInput");
+    fromDate = document.getElementById("dateFrom").value;
+    toDate = document.getElementById("dateTo").value;
 
-            table = document.getElementById("myTable"); // Assuming your table has ID "myTable"
-            tr = table.getElementsByTagName("tr");
+    table = document.getElementById("myTable"); // Assuming your table has ID "myTable"
+    tr = table.getElementsByTagName("tr");
 
-            var filteredData = [];
+    var filteredData = [];
 
-            for (i = 0; i < tr.length; i++) {
-                td = tr[i].getElementsByTagName("td")[1]; // Assuming the employee ID is in the second column, adjust if needed
-                var dateCell = tr[i].getElementsByTagName("td")[3]; // Assuming the date is in the third column, adjust if needed
+    for (i = 0; i < tr.length; i++) {
+        tdEmployeeID = tr[i].getElementsByTagName("td")[1]; // Assuming the employee ID is in the second column, adjust if needed
+        tdFullName = tr[i].getElementsByTagName("td")[2]; // Assuming the full name is in the third column, adjust if needed
+        var dateCell = tr[i].getElementsByTagName("td")[3]; // Assuming the date is in the fourth column, adjust if needed
 
-                if (td && dateCell) {
-                    filter = input.value.toUpperCase();
-                    var date = new Date(dateCell.innerHTML); // Parse the date from the cell content
+        if (tdEmployeeID && tdFullName && dateCell) {
+            filter = input.value.toUpperCase();
+            var date = new Date(dateCell.innerHTML); // Parse the date from the cell content
 
-                    // Adjust toDate by adding one day to include the entire selected day
-                    var adjustedToDate = new Date(toDate);
-                    adjustedToDate.setDate(adjustedToDate.getDate() + 1);
+            // Adjust toDate by adding one day to include the entire selected day
+            var adjustedToDate = new Date(toDate);
+            adjustedToDate.setDate(adjustedToDate.getDate() + 1);
 
-                    if (
-                        (td.innerHTML.toUpperCase().indexOf(filter) > -1) &&
-                        (!fromDate || date >= new Date(fromDate)) &&
-                        (!toDate || date < adjustedToDate)
-                    ) {
-                        tr[i].style.display = "";
-                        // Collect the filtered data
-                        filteredData.push({
-                            EmployeeID: td.innerHTML,
-                            Date: dateCell.innerHTML,
-                            // Add other fields as needed
-                        });
-                    } else {
-                        tr[i].style.display = "none";
-                    }
-                }
+            if (
+                (tdEmployeeID.innerHTML.toUpperCase().indexOf(filter) > -1 || tdFullName.innerHTML.toUpperCase().indexOf(filter) > -1) &&
+                (!fromDate || date >= new Date(fromDate)) &&
+                (!toDate || date < adjustedToDate)
+            ) {
+                tr[i].style.display = "";
+                // Collect the filtered data
+                filteredData.push({
+                    EmployeeID: tdEmployeeID.innerHTML,
+                    FullName: tdFullName.innerHTML,
+                    Date: dateCell.innerHTML,
+                    // Add other fields as needed
+                });
+            } else {
+                tr[i].style.display = "none";
             }
-
-            // Log or print the filtered data
-            console.log(filteredData);
-            // You can use this data to further process or display it as needed
         }
+    }
+
+    // Log or print the filtered data
+    console.log(filteredData);
+    // You can use this data to further process or display it as needed
+}
+
 
         function printTable() {
     var table = document.getElementById('myTable').cloneNode(true);
@@ -478,7 +574,7 @@ printWindow.document.write('<p>Date and time printed: ' + getCurrentDateTime() +
 // printWindow.document.write('<p>Employee ID: ' + employeeId + '</p>');
 // printWindow.document.write('<p>Full Name: ' + employeeFullName + '</p>');
 // printWindow.document.write('<p>Employee ID: 20104331</p>');
-printWindow.document.write('<p>Full Name: CRISTOBAL LERIOS PARAON</p>');
+// printWindow.document.write('<p>Full Name: CRISTOBAL LERIOS PARAON</p>');
 printWindow.document.write(table.outerHTML);
 printWindow.document.write('</body></html>');
 printWindow.document.close();
@@ -498,7 +594,6 @@ function getCurrentDateTime() {
 
 
         </script>
-
     </body>  
 </html>
 
