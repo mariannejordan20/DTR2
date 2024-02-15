@@ -93,7 +93,7 @@
 <body>
     <div class="containerIndex container mt-5 container mx-auto text-center">
         <div class="compLogo text-center mt-5 mb-5">
-            <img src="Images/logoBizma.png" alt="BIZMATECH Logo" style="width: 40%;">
+            <img src="Images/circlelogo.png" alt="BIZMATECH Logo" style="width: 20%;">
         </div>
         <div class="container">
         <div class="row text-center">

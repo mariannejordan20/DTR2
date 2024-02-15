@@ -116,13 +116,14 @@ if (isset($_GET['search'])) {
                                 <thead>
                                     <tr>
                                         <th class="font-weight-bold">NO.</th>
-                                        <th class="font-weight-bold">EMPLOYEE ID</th>
+                                        <th class="font-weight-bold">ID</th>
+                                        <th class="font-weight-bold">NAME</th>
                                         <th class="font-weight-bold">DATE</th>
-                                        <th class="font-weight-bold">TimeIn (Am)</th>
-                                        <th class="font-weight-bold">TimeOut (Am)</th>
-                                        <th class="font-weight-bold">TimeIn (Pm)</th>
-                                        <th class="font-weight-bold">TimeOut (Pm)</th>
-                                        <th class="font-weight-bold">Total Time</th>
+                                        <th class="font-weight-bold">TIMEIN (Am)</th>
+                                        <th class="font-weight-bold">TIMEOUT (Am)</th>
+                                        <th class="font-weight-bold">TIMEIN (Pm)</th>
+                                        <th class="font-weight-bold">TIMEOUT (Pm)</th>
+                                        <th class="font-weight-bold">TOTAL</th>
                                         <th class="font-weight-bold">ACTIONS</th>
                                     </tr>
                                 </thead>
@@ -183,6 +184,7 @@ if (isset($_GET['search'])) {
                                         <tr>
                                             <td class="text-gray-700"><?php echo $counter ?></td>
                                             <td class="text-gray-900"><?php echo $row['Employee_ID'] ?></td>
+                                            <td class="text-gray-900"><?php echo $row['Employee_FullName'] ?></td>
                                             <td class="text-gray-700"><?php echo date('Y-m-d', strtotime($row['Employee_Date'])); ?></td>
                                             <td class="text-gray-700 time-in-am"><?php echo $row['Employee_TimeInAm'] ?></td>
                                             <td class="text-gray-700 time-out-am"><?php echo $row['Employee_TimeOutAm'] ?></td>
@@ -404,7 +406,7 @@ if (isset($_GET['search'])) {
 
             for (i = 0; i < tr.length; i++) {
                 td = tr[i].getElementsByTagName("td")[1]; // Assuming the employee ID is in the second column, adjust if needed
-                var dateCell = tr[i].getElementsByTagName("td")[2]; // Assuming the date is in the third column, adjust if needed
+                var dateCell = tr[i].getElementsByTagName("td")[3]; // Assuming the date is in the third column, adjust if needed
 
                 if (td && dateCell) {
                     filter = input.value.toUpperCase();
@@ -460,25 +462,29 @@ if (isset($_GET['search'])) {
 
     var employeeId = '<?php echo isset($_SESSION['employeeId']) ? $_SESSION['employeeId'] : ''; ?>';
     var employeeFullName = '<?php echo isset($_SESSION['employeeFullName']) ? $_SESSION['employeeFullName'] : ''; ?>';
-
+  
+ 
     var printWindow = window.open('', '_blank');
-    printWindow.document.write('<html><head><title>Daily Time Record</title>');
-    printWindow.document.write('<style>body { font-family: Arial, sans-serif; font-size: 10px; padding: 20px; }</style>');
-    printWindow.document.write('<style>table { border-collapse: collapse; width: 100%; }</style>');
-    printWindow.document.write('<style>table, th, td { border: 1px solid black; }</style>');
-    printWindow.document.write('<style>tbody { font-size: 10px; }</style>');
-    printWindow.document.write('</head><body>');
-    printWindow.document.write('<div style="position: absolute; top: 20px; right: 20px;"><img src="logoBizma.png" alt="Logo" style="max-width: 100px; max-height: 100px;"></div>');
-    printWindow.document.write('<h1>Daily Time Record</h1>');
-    printWindow.document.write('<p>Date and time printed: ' + getCurrentDateTime() + '</p>');
-    // printWindow.document.write('<p>Employee ID: ' + employeeId + '</p>');
-    // printWindow.document.write('<p>Full Name: ' + employeeFullName + '</p>');
-    printWindow.document.write('<p>Employee ID: 20104331</p>');
-    printWindow.document.write('<p>Full Name: CRISTOBAL LERIOS PARAON</p>');
-    printWindow.document.write(table.outerHTML);
-    printWindow.document.write('</body></html>');
-    printWindow.document.close();
-    printWindow.print();
+printWindow.document.write('<html><head><title>Daily Time Record</title>');
+printWindow.document.write('<style>body { font-family: Arial, sans-serif; font-size: 10px; padding: 20px; }</style>');
+printWindow.document.write('<style>table { border-collapse: collapse; width: 100%; }</style>');
+printWindow.document.write('<style>table, td { border: 1px solid black; }</style>');
+printWindow.document.write('<style>th { border: 1px solid black; font-size: 10px; }</style>');
+printWindow.document.write('<style>tbody { font-size: 10px; }</style>');
+printWindow.document.write('</head><body>');
+printWindow.document.write('<div style="position: absolute; top: 20px; right: 20px;"><img src="logoBizma.png" alt="Logo" style="max-width: 100px; max-height: 100px;"></div>');
+printWindow.document.write('<h1>Daily Time Record</h1>');
+printWindow.document.write('<p>Date and time printed: ' + getCurrentDateTime() + '</p>');
+// printWindow.document.write('<p>Employee ID: ' + employeeId + '</p>');
+// printWindow.document.write('<p>Full Name: ' + employeeFullName + '</p>');
+// printWindow.document.write('<p>Employee ID: 20104331</p>');
+printWindow.document.write('<p>Full Name: CRISTOBAL LERIOS PARAON</p>');
+printWindow.document.write(table.outerHTML);
+printWindow.document.write('</body></html>');
+printWindow.document.close();
+printWindow.print();
+
+   
 }
 
 
@@ -488,6 +494,8 @@ function getCurrentDateTime() {
     var formattedTime = currentDate.toLocaleTimeString();
     return formattedDate + ' ' + formattedTime;
 }
+
+
 
         </script>
 
