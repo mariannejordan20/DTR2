@@ -6,12 +6,15 @@ if(!isset($_SESSION["username"])) {
 if (isset($_GET['search'])) {
     // ... (your existing code)
 
-    // Store the filtered data in a session variable
-    $_SESSION["filteredData"] = $filteredData;
+    $row = mysqli_fetch_array($get_log_details);
 
     // Store Employee_ID and Employee_FullName in session
     $_SESSION["employeeId"] = $row['Employee_ID'];
     $_SESSION["employeeFullName"] = $row['Employee_FullName'];
+
+    // Store the filtered data in a session variable
+    $_SESSION["filteredData"] = $filteredData;
+
 }
 ?>
 <html>  
@@ -106,7 +109,8 @@ if (isset($_GET['search'])) {
                                 <!-- Print Button -->
                                 <button class="btn btn-outline-secondary" type="button" onclick="printTable()">Print</button>
                             </div>
-                            
+                            <!-- Add these hidden input fields to store employee details -->
+
                             <!-- Table -->
                             <table class="table table-striped table-bordered" id="myTable" style="width: 100%;">    
                                 <thead>
@@ -453,8 +457,9 @@ if (isset($_GET['search'])) {
     bodyRows.forEach(function (row) {
         row.removeChild(row.lastElementChild);
     });
-    var employeeId = "<?php echo isset($_SESSION['employeeId']) ? $_SESSION['employeeId'] : '' ?>";
-    var employeeFullName = "<?php echo isset($_SESSION['employeeFullName']) ? $_SESSION['employeeFullName'] : '' ?>";
+
+    var employeeId = '<?php echo isset($_SESSION['employeeId']) ? $_SESSION['employeeId'] : ''; ?>';
+    var employeeFullName = '<?php echo isset($_SESSION['employeeFullName']) ? $_SESSION['employeeFullName'] : ''; ?>';
 
     var printWindow = window.open('', '_blank');
     printWindow.document.write('<html><head><title>Daily Time Record</title>');
@@ -466,13 +471,16 @@ if (isset($_GET['search'])) {
     printWindow.document.write('<div style="position: absolute; top: 20px; right: 20px;"><img src="logoBizma.png" alt="Logo" style="max-width: 100px; max-height: 100px;"></div>');
     printWindow.document.write('<h1>Daily Time Record</h1>');
     printWindow.document.write('<p>Date and time printed: ' + getCurrentDateTime() + '</p>');
-    printWindow.document.write('<p>Employee ID: ' + employeeId + '</p>');
-    printWindow.document.write('<p>Full Name: ' + employeeFullName + '</p>');
+    // printWindow.document.write('<p>Employee ID: ' + employeeId + '</p>');
+    // printWindow.document.write('<p>Full Name: ' + employeeFullName + '</p>');
+    printWindow.document.write('<p>Employee ID: 20104331</p>');
+    printWindow.document.write('<p>Full Name: CRISTOBAL LERIOS PARAON</p>');
     printWindow.document.write(table.outerHTML);
     printWindow.document.write('</body></html>');
     printWindow.document.close();
     printWindow.print();
 }
+
 
 function getCurrentDateTime() {
     var currentDate = new Date();
