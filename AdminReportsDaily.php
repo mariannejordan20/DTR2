@@ -486,7 +486,7 @@ function deleteRecord(employeeId) {
 
 
         });
-        function searchTable() {
+    function searchTable() {
     var input, filter, table, tr, tdEmployeeID, tdFullName, i, fromDate, toDate;
     input = document.getElementById("searchInput");
     fromDate = document.getElementById("dateFrom").value;
@@ -535,7 +535,7 @@ function deleteRecord(employeeId) {
 }
 
 
-        function printTable() {
+    function printTable() {
     var table = document.getElementById('myTable').cloneNode(true);
 
     // Remove the first column (entire column) from the cloned table
@@ -560,39 +560,32 @@ function deleteRecord(employeeId) {
     var employeeFullName = '<?php echo isset($_SESSION['employeeFullName']) ? $_SESSION['employeeFullName'] : ''; ?>';
   
  
-    var printWindow = window.open('', '_blank');
-printWindow.document.write('<html><head><title>Daily Time Record</title>');
-printWindow.document.write('<style>body { font-family: Arial, sans-serif; font-size: 10px; padding: 20px; }</style>');
-printWindow.document.write('<style>table { border-collapse: collapse; width: 100%; }</style>');
-printWindow.document.write('<style>table, td { border: 1px solid black; }</style>');
-printWindow.document.write('<style>th { border: 1px solid black; font-size: 10px; }</style>');
-printWindow.document.write('<style>tbody { font-size: 10px; }</style>');
-printWindow.document.write('</head><body>');
-printWindow.document.write('<div style="position: absolute; top: 20px; right: 20px;"><img src="logoBizma.png" alt="Logo" style="max-width: 100px; max-height: 100px;"></div>');
-printWindow.document.write('<h1>Daily Time Record</h1>');
-printWindow.document.write('<p>Date and time printed: ' + getCurrentDateTime() + '</p>');
-// printWindow.document.write('<p>Employee ID: ' + employeeId + '</p>');
-// printWindow.document.write('<p>Full Name: ' + employeeFullName + '</p>');
-// printWindow.document.write('<p>Employee ID: 20104331</p>');
-// printWindow.document.write('<p>Full Name: CRISTOBAL LERIOS PARAON</p>');
-printWindow.document.write(table.outerHTML);
-printWindow.document.write('</body></html>');
-printWindow.document.close();
-printWindow.print();
-
-   
-}
-
-
-function getCurrentDateTime() {
-    var currentDate = new Date();
-    var formattedDate = currentDate.toLocaleDateString();
-    var formattedTime = currentDate.toLocaleTimeString();
-    return formattedDate + ' ' + formattedTime;
-}
-
-
-
+        var printWindow = window.open('', '_blank');
+            printWindow.document.write('<html><head><title>Daily Time Record</title>');
+            printWindow.document.write('<style>body { font-family: Arial, sans-serif; font-size: 10px; padding: 20px; }</style>');
+            printWindow.document.write('<style>table { border-collapse: collapse; width: 100%; }</style>');
+            printWindow.document.write('<style>table, td { border: 1px solid black; }</style>');
+            printWindow.document.write('<style>th { border: 1px solid black; font-size: 10px; }</style>');
+            printWindow.document.write('<style>tbody { font-size: 10px; }</style>');
+            printWindow.document.write('</head><body>');
+            printWindow.document.write('<div style="position: absolute; top: 20px; right: 20px;"><img src="logoBizma.png" alt="Logo" style="max-width: 100px; max-height: 100px;"></div>');
+            printWindow.document.write('<h1>Daily Time Record</h1>');
+            printWindow.document.write('<p>Date and time printed: ' + getCurrentDateTime() + '</p>');
+            // printWindow.document.write('<p>Employee ID: ' + employeeId + '</p>');
+            // printWindow.document.write('<p>Full Name: ' + employeeFullName + '</p>');
+            // printWindow.document.write('<p>Employee ID: 20104331</p>');
+            // printWindow.document.write('<p>Full Name: CRISTOBAL LERIOS PARAON</p>');
+            printWindow.document.write(table.outerHTML);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.print();
+        }
+        function getCurrentDateTime() {
+            var currentDate = new Date();
+            var formattedDate = currentDate.toLocaleDateString();
+            var formattedTime = currentDate.toLocaleTimeString();
+            return formattedDate + ' ' + formattedTime;
+        }
         </script>
     </body>  
 </html>
