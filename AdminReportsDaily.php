@@ -173,7 +173,9 @@ if (isset($_GET['search'])) {
                                 FROM
                                     employee_log el
                                 JOIN
-                                    employee_information ei ON el.Employee_ID = ei.Employee_ID;
+                                    employee_information ei ON el.Employee_ID = ei.Employee_ID
+                                ORDER BY
+                                    el.Employee_Date DESC;
                                 ");
 
 
@@ -193,7 +195,7 @@ if (isset($_GET['search'])) {
                                             <td class="text-gray-700"><?php echo $row['TotalDuration'] ?> Hours</td>
                                             <td>
                                                 <button class="btn btn-info btn-sm edit-btn" data-toggle="modal" data-target="#editModal" data-employee-id="<?php echo $row['ID']; ?>"><i class='fas fa-pen'></i></button>
-                                                <button class="btn btn-danger btn-sm delete-btn" onclick="confirmDelete(this)" data-employee-id="<?php echo $row['ID']; ?>"><i class='fas fa-trash'></i></button>
+                                                <button class="btn btn-danger btn-sm delete-btn" data-toggle="modal" data-target="#deleteModal" data-employee-id="<?php echo $row['ID']; ?>"><i class='fas fa-trash'></i></button>
                                             </td>
                                         </tr>
                                     <?php
@@ -234,134 +236,93 @@ if (isset($_GET['search'])) {
 
      <!-- Edit Modal -->   
     <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editModalLabel">Edit Time Records</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Edit Time Records</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="editForm">
+                    <div class="modal-body">
+                    <input type="hidden" id="employeeId" name="employeeId">
+                        <div class="form-group">
+                            <label for="timeInAm">Time In (AM)</label>
+                            <input type="text" class="form-control" id="timeInAm" name="timeInAm">
+                        </div>
+                        <div class="form-group">
+                            <label for="timeOutAm">Time Out (AM)</label>
+                            <input type="text" class="form-control" id="timeOutAm" name="timeOutAm">
+                        </div>
+                        <div class="form-group">
+                            <label for="timeInPm">Time In (PM)</label>
+                            <input type="text" class="form-control" id="timeInPm" name="timeInPm">
+                        </div>
+                        <div class="form-group">
+                            <label for="timeOutPm">Time Out (PM)</label>
+                            <input type="text" class="form-control" id="timeOutPm" name="timeOutPm">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
             </div>
-            <form id="editForm">
-                <div class="modal-body">
-                <input type="hidden" id="employeeId" name="employeeId">
-                    <div class="form-group">
-                        <label for="timeInAm">Time In (AM)</label>
-                        <input type="text" class="form-control" id="timeInAm" name="timeInAm">
-                    </div>
-                    <div class="form-group">
-                        <label for="timeOutAm">Time Out (AM)</label>
-                        <input type="text" class="form-control" id="timeOutAm" name="timeOutAm">
-                    </div>
-                    <div class="form-group">
-                        <label for="timeInPm">Time In (PM)</label>
-                        <input type="text" class="form-control" id="timeInPm" name="timeInPm">
-                    </div>
-                    <div class="form-group">
-                        <label for="timeOutPm">Time Out (PM)</label>
-                        <input type="text" class="form-control" id="timeOutPm" name="timeOutPm">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
-                </div>
-            </form>
+        </div>
+    </div>
+    <!-- MODAL FOR THE DELETE BUTTON -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="deleteModalLabel">Delete Log</h5>
+                <button type="button" class="btn-close btn-close-white" data-dismiss="modal" aria-label="Close">x</button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-0">Are you sure you want to delete the Log?</p>
+                <!-- Add the password input field -->
+                <input type="password" class="form-control" id="adminPassword" placeholder="Enter Admin Password">
+            </div>
+            <div class="modal-footer">
+                <form id="deleteForm" action="AdminReportsDelete.php" method="post">
+                    <input type="hidden" name="idToDelete" id="idToDelete" value="">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" onclick="checkAdminPassword()">Delete</button>
+                </form>
+            </div>
         </div>
     </div>
 </div>
-<!-- Delete Modal -->
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
-    <!-- ... (existing modal content) -->
-    <div class="modal-body">
-        <p>Are you sure you want to delete this record? Enter your password to confirm:</p>
-        <input type="password" class="form-control" id="deletePassword" placeholder="Your Password">
-    </div>
-    <!-- ... (existing modal content) -->
-</div>
+<!-- END MODAL FOR THE DELETE BUTTON -->
+
 <script>
-    function confirmDelete(button) {
-    var employeeId = $(button).data('employee-id');
-    var password = prompt("Please enter your password to delete the record:");
+    function checkAdminPassword() {
+        // Get the entered password
+        var enteredPassword = document.getElementById("adminPassword").value;
 
-    if (password !== null && password !== "") {
-        // Perform AJAX request to validate the password and delete the record
-        $.ajax({
-            type: 'POST',
-            url: 'AdminReportsDelete.php',
-            data: { employeeId: employeeId, password: password },
-            success: function (response) {
-                var data = JSON.parse(response);
+        // Perform your password check here
+        // For demonstration purposes, I'll assume the correct password is "admin123"
+        var correctPassword = "admin123";
 
-                if (data.status === 'success') {
-                    // Password is correct, proceed with deletion
-                    deleteRecord(employeeId);
-                } else {
-                    // Display error message using SweetAlert for incorrect password
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Invalid Password!',
-                        text: 'Please enter a valid password to delete the record.',
-                        confirmButtonText: 'OK'
-                    });
-                }
-            },
-            error: function (xhr, status, error) {
-                // Handle errors    
-                console.error('AJAX Error:', error);
-                // Display a generic error message to the user
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: 'An error occurred while processing your request. Please try again later.',
-                    confirmButtonText: 'OK'
-                });
-            }
-        });
-    }
-}
-
-
-// Function to delete record
-function deleteRecord(employeeId) {
-    // Send AJAX request to delete.php
-    $.ajax({
-        type: 'POST',
-        url: 'AdminReportsDelete.php',
-        data: { employeeId: employeeId },
-        success: function (response) {
-            var data = JSON.parse(response);
-
-            if (data.status === 'success') {
-                // Reload the page or update the table as needed
-                location.reload();
-            } else {
-                // Display error message using SweetAlert
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: 'Error: ' + data.message,
-                    confirmButtonText: 'OK'
-                });
-            }
-        },
-        error: function (xhr, status, error) {
-            // Handle errors
-            console.error('AJAX Error:', error);
-            // Display a generic error message to the user
-            Swal.fire({
-                icon: 'error',
-                title: 'Error!',
-                text: 'An error occurred while processing your request. Please try again later.',
-                confirmButtonText: 'OK'
-            });
+        if (enteredPassword === correctPassword) {
+            // If the password is correct, submit the delete form
+            document.getElementById("deleteForm").submit();
+        } else {
+            // If the password is incorrect, show an error message (you can use a modal or other UI)
+            alert("Incorrect password. Please try again.");
         }
-    });
-}
-
+    }
 </script>
 
+<script>
+    $('.delete-btn').click(function() {
+    var employeeIdToDelete = $(this).data('employee-id');
+    $('#idToDelete').val(employeeIdToDelete);
+});
 
+</script>
 
     <!-- Logout Modal-->
     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -535,7 +496,7 @@ function deleteRecord(employeeId) {
 }
 
 
-        function printTable() {
+function printTable() {
     var table = document.getElementById('myTable').cloneNode(true);
 
     // Remove the first column (entire column) from the cloned table
@@ -556,43 +517,39 @@ function deleteRecord(employeeId) {
         row.removeChild(row.lastElementChild);
     });
 
+    var fromDate = document.getElementById("dateFrom").value;
+    var toDate = document.getElementById("dateTo").value;
+
     var employeeId = '<?php echo isset($_SESSION['employeeId']) ? $_SESSION['employeeId'] : ''; ?>';
     var employeeFullName = '<?php echo isset($_SESSION['employeeFullName']) ? $_SESSION['employeeFullName'] : ''; ?>';
-  
- 
+
+    var printContent = table.outerHTML;
+
     var printWindow = window.open('', '_blank');
-printWindow.document.write('<html><head><title>Daily Time Record</title>');
-printWindow.document.write('<style>body { font-family: Arial, sans-serif; font-size: 10px; padding: 20px; }</style>');
-printWindow.document.write('<style>table { border-collapse: collapse; width: 100%; }</style>');
-printWindow.document.write('<style>table, td { border: 1px solid black; }</style>');
-printWindow.document.write('<style>th { border: 1px solid black; font-size: 10px; }</style>');
-printWindow.document.write('<style>tbody { font-size: 10px; }</style>');
-printWindow.document.write('</head><body>');
-printWindow.document.write('<div style="position: absolute; top: 20px; right: 20px;"><img src="logoBizma.png" alt="Logo" style="max-width: 100px; max-height: 100px;"></div>');
-printWindow.document.write('<h1>Daily Time Record</h1>');
-printWindow.document.write('<p>Date and time printed: ' + getCurrentDateTime() + '</p>');
-// printWindow.document.write('<p>Employee ID: ' + employeeId + '</p>');
-// printWindow.document.write('<p>Full Name: ' + employeeFullName + '</p>');
-// printWindow.document.write('<p>Employee ID: 20104331</p>');
-// printWindow.document.write('<p>Full Name: CRISTOBAL LERIOS PARAON</p>');
-printWindow.document.write(table.outerHTML);
-printWindow.document.write('</body></html>');
-printWindow.document.close();
-printWindow.print();
-
-   
+    printWindow.document.write('<html><head><title>Daily Time Record</title>');
+    printWindow.document.write('<style>body { font-family: Arial, sans-serif; font-size: 10px; padding: 20px; }</style>');
+    printWindow.document.write('<style>table { border-collapse: collapse; width: 100%; }</style>');
+    printWindow.document.write('<style>table, td { border: 1px solid black; }</style>');
+    printWindow.document.write('<style>th { border: 1px solid black; font-size: 10px; }</style>');
+    printWindow.document.write('<style>tbody { font-size: 10px; }</style>');
+    printWindow.document.write('</head><body>');
+    printWindow.document.write('<div style="position: relative; left: 80%; top: 20px;"><img src="https://1.bp.blogspot.com/-FfwzJE3UAIc/XQhohjACUEI/AAAAAAAABVU/hb30KuNRod4a0c2uCqWrL-VK8SkgxL0VQCLcBGAs/s1600/bizma.png" alt="Logo" style="max-width: 100px; max-height: 100px;"></div>');
+    printWindow.document.write('<h1>Daily Time Record</h1>');
+    printWindow.document.write('<p>Date Range: From: ' + fromDate + ' To: ' + toDate + '</p>');
+    printWindow.document.write('<p>Date and time printed: ' + getCurrentDateTime() + '</p>');
+    printWindow.document.write(printContent);
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+    printWindow.print();
 }
 
-
-function getCurrentDateTime() {
-    var currentDate = new Date();
-    var formattedDate = currentDate.toLocaleDateString();
-    var formattedTime = currentDate.toLocaleTimeString();
-    return formattedDate + ' ' + formattedTime;
-}
-
-
-
+    
+    function getCurrentDateTime() {
+        var currentDate = new Date();
+        var formattedDate = currentDate.toLocaleDateString();
+        var formattedTime = currentDate.toLocaleTimeString();
+        return formattedDate + ' ' + formattedTime;
+    }
         </script>
     </body>  
 </html>

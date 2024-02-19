@@ -18,6 +18,9 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <!-- alert plugin sweetalert2  -->
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<!-- Add this script in the head of your HTML document -->
+
+
 <style>
     body {
       background-color:#eeeeee;
@@ -96,14 +99,13 @@
             <img src="Images/circlelogo.png" alt="BIZMATECH Logo" style="width: 20%;">
         </div>
         <div class="container">
-        <div class="row text-center">
-            <div class="col-xl-6 mx-auto">
-                <span class="realDate" id="dateNow" name="dateNow" style="font-size: 30px; color: #000000;"></span>
-                <hr>
-                <span class="realTime" id="time" name="time" style="font-size: 30px; color: #000000;"></span>
+            <div class="row text-center">
+                <div class="col-xl-6 mx-auto">
+                    <span class="realDate" id="dateNow" name="dateNow" style="font-size: 30px; color: #000000;"></span>
+                    <hr>
+                    <span class="realTime" id="time" name="time" style="font-size: 30px; color: #000000;"></span>
+                </div>
             </div>
-        </div>
-
             <div class="row text-center">
                 <div class="col-xl-6 mx-auto">
                     <input type="number" id="textBoxUserID" name="textBoxUserID" class="userInputText" placeholder="Enter Employee ID Here" active>
@@ -111,18 +113,6 @@
                     <input type="text" id="employeeStatus" value="none" hidden>
                 </div>
             </div>
-           
-            <!-- <div class="row text-center mb-3">
-                <div class="col-lg-3 mx-auto">
-                    <button type="button" id="btnTimeIn1" name="btnTimeIn1" class="btn btn-In buttons btn-sm">Morning In</button>
-                
-                    <button type="button" id="btnTimeOut1" name="btnTimeOut1" class="btn btn-Out buttons btn-sm">Morning Out</button>
-                
-                    <button type="button" id="btnTimeIn2" name="btnTimeIn2" class="btn btn-In buttons btn-sm">Afternoon In</button>
-                
-                    <button type="button" id="btnTimeOut2" name="btnTimeOut2" class="btn btn-Out buttons btn-sm">Afternoon Out</button>
-                </div>
-            </div> -->
         </div>
     </div>
     <div class="container mx-auto">
@@ -144,21 +134,33 @@
         </div>
     </div>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Get current time
-            var currentTime = new Date();
-            var currentHour = currentTime.getHours();
-            
-            // Disable Morning In and Morning Out buttons if current time is between 12:00 AM and 12:00 PM
-            if (currentHour >= 0 && currentHour < 12) {
-                document.getElementById("btnTimeIn2").disabled = true;
-                document.getElementById("btnTimeOut2").disabled = true;
-            } else {
-                document.getElementById("btnTimeIn2").disabled = false;
-                document.getElementById("btnTimeOut2").disabled = false;
-            }
-        });
-    </script>
+    // Declare userAgent globally
+    var userAgent;
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // Get user agent string
+        userAgent = navigator.userAgent;
+
+        // Log the user agent string to the console (you can use this information as needed)
+        console.log("User Agent:", userAgent);
+
+        // Get current time
+        var currentTime = new Date();
+        var currentHour = currentTime.getHours();
+
+        // Disable Morning In and Morning Out buttons if current time is between 12:00 AM and 12:00 PM
+        if (currentHour >= 0 && currentHour < 12) {
+            document.getElementById("btnTimeIn2").disabled = true;
+            document.getElementById("btnTimeOut2").disabled = true;
+        } else {
+            document.getElementById("btnTimeIn2").disabled = false;
+            document.getElementById("btnTimeOut2").disabled = false;
+        }
+    });
+
+    // ... rest of your script
+</script>
+
 
   <script src="myStyles/JS/indexJS.js"></script>
   <script src="myStyles/JS/dntJS.js"></script>

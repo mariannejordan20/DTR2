@@ -1,27 +1,39 @@
 <?php
+// AdminReportsDelete.php
+
 include 'connection.php';
 
-// Check if it's a POST request and if the employeeId is set
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['employeeId'])) {
-    $employeeId = $_POST['employeeId'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Assuming your primary key field is named 'ID'
+    $idToDelete = $_POST['idToDelete'];
 
-    // Delete from employee_log table
-    $queryEmployeeLog = "DELETE FROM employee_log WHERE ID = '$employeeId'";
-    $resultEmployeeLog = mysqli_query($conn, $queryEmployeeLog);
+    // Validate or sanitize $idToDelete if needed
 
-    // Delete from employee_information table
-    $queryEmployeeInfo = "DELETE FROM employee_information WHERE Employee_ID = '$employeeId'";
-    $resultEmployeeInfo = mysqli_query($conn, $queryEmployeeInfo);
+    // Perform the delete operation
+    $deleteQuery = "DELETE FROM employee_log WHERE ID = ?";
+    $stmt = mysqli_prepare($conn, $deleteQuery);
 
-    if ($resultEmployeeLog && $resultEmployeeInfo) {
-        $response = ['status' => 'success', 'message' => 'Records deleted successfully'];
-        echo json_encode($response);
+    if ($stmt) {
+        mysqli_stmt_bind_param($stmt, 'i', $idToDelete);
+        mysqli_stmt_execute($stmt);
+
+        // Check if the deletion was successful
+        if (mysqli_affected_rows($conn) > 0) {
+            // Redirect or send a success response accordingly
+            header("Location: AdminReportsDaily.php");
+            exit();
+        } else {
+            // Handle deletion failure
+            echo "Error: Unable to delete record.";
+        }
+
+        mysqli_stmt_close($stmt);
     } else {
-        $response = ['status' => 'error', 'message' => 'Failed to delete records: ' . mysqli_error($conn)];
-        echo json_encode($response);
+        // Handle query preparation failure
+        echo "Error: Unable to prepare delete statement.";
     }
-} else {
-    // Handle invalid requests
-    echo json_encode(['status' => 'error', 'message' => 'Invalid request']);
+
+    // Close database connection if needed
+    mysqli_close($conn);
 }
 ?>
