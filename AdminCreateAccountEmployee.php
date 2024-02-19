@@ -160,7 +160,7 @@ if(!isset($_SESSION["username"])) {
                                                 </div>
                                             </form>
                                         </div>
-                                    </div>
+                                    </div>  
                                 </div>
                             </div>
                         </div>
