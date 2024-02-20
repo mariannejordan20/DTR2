@@ -1,4 +1,5 @@
-<ul style="background-color: #152039;" class="navbar-nav  sidebar sidebar-dark accordion" id="accordionSidebar">
+</style>
+<ul style="background-color: #152039;" class="stickys navbar-nav  sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="AdminDashboard.php">
