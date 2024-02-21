@@ -36,48 +36,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             break;
     }
 
-    // Check if the action requires a time in record to be present
-    if (isset($requiredTimeInColumn)) {
-        $sql_check_timein = "SELECT $requiredTimeInColumn FROM employee_log WHERE Employee_ID = ? AND Employee_Date = ?";
-        $stmt_check_timein = $conn->prepare($sql_check_timein);
-        $stmt_check_timein->bind_param("ss", $employeeID, $employeeDate);
-        $stmt_check_timein->execute();
-        $result_check_timein = $stmt_check_timein->get_result();
-
-        if ($result_check_timein->num_rows == 0) {
-            // If there's no corresponding time in record, send an error response
-            echo "Error: You cannot time out without first timing in.";
-            exit;
-        }
-    }
-
     // Check if a record already exists for the specified Employee_ID, Employee_Date, and column
-    $sql_check_existing = "SELECT * FROM employee_log WHERE Employee_ID = ? AND Employee_Date = ?";
-    $stmt_check_existing = $conn->prepare($sql_check_existing);
-    $stmt_check_existing->bind_param("ss", $employeeID, $employeeDate);
-    $stmt_check_existing->execute();
-    $result_check_existing = $stmt_check_existing->get_result();
+$sql_check_existing = "SELECT $columnName FROM employee_log WHERE Employee_ID = ? AND Employee_Date = ?";
+$stmt_check_existing = $conn->prepare($sql_check_existing);
+$stmt_check_existing->bind_param("ss", $employeeID, $employeeDate);
+$stmt_check_existing->execute();
+$result_check_existing = $stmt_check_existing->get_result();
 
-    if ($result_check_existing->num_rows > 0) {
-        // If a record exists for the employee and date, check if the timestamp for the specific type already exists
-        $existing_row = $result_check_existing->fetch_assoc();
-        $existing_timestamp = $existing_row[$columnName];
-        if (!empty($existing_timestamp)) {
+if ($result_check_existing->num_rows > 0) {
+    // If a record exists for the employee and date, check if the timestamp for the specific type already exists
+    $existing_row = $result_check_existing->fetch_assoc();
+    $existing_timestamp = $existing_row[$columnName];
+
+    if ($columnName == "Employee_TimeInAM" || $columnName == "Employee_TimeOutAM" ||
+        $columnName == "Employee_TimeInPM" || $columnName == "Employee_TimeOutPM") {
+        // For all cases, check if the timestamp is empty
+        if (empty($existing_timestamp)) {
+            // If timestamp does not exist, update the existing record with the new timestamp
+            $sql = "UPDATE employee_log SET $columnName = CURRENT_TIMESTAMP WHERE Employee_ID = ? AND Employee_Date = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("ss", $employeeID, $employeeDate);
+        } else {
             // If timestamp already exists, send an error response with descriptive message
             echo "Error: " . $errorMessage;
             exit;
-        } else {
-            // If timestamp does not exist, update the existing record with the new timestamp
-            $sql = "UPDATE employee_log SET $columnName = ? WHERE Employee_ID = ? AND Employee_Date = ?";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("sss", $employeeTime, $employeeID, $employeeDate);
         }
-    } else {
-        // If no record exists, perform an insert
-        $sql = "INSERT INTO employee_log (Employee_ID, Employee_Date, $columnName) VALUES (?, ?, ?)";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("sss", $employeeID, $employeeDate, $employeeTime);
     }
+} else {
+    // If no record exists, perform an insert
+    $sql = "INSERT INTO employee_log (Employee_ID, Employee_Date, $columnName) VALUES (?, ?, CURRENT_TIMESTAMP)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ss", $employeeID, $employeeDate);
+}
 
     // Execute the SQL query
     if ($stmt->execute()) {
