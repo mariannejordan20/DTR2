@@ -66,7 +66,6 @@ if (isset($_SESSION["username"])) {
                     });
                     return false;
                 }
-
                 $.ajax({
                     url: "checkAdminValid.php",
                     method: "post",
