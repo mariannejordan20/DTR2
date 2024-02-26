@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="myStyles/CSS/sb-admin-2.min.css"> 
 <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 <link href="myStyles/CSS/css/all.min.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="myStyles/CSS/index_reviseCSS.css">
 <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">  
@@ -20,77 +21,6 @@
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <!-- Add this script in the head of your HTML document -->
 
-
-<style>
-    body {
-      background-color:#eeeeee;
-      background-repeat: no-repeat; /* Prevents the image from repeating */
-      background-attachment: fixed; /* Fixes the background when scrolling */
-      font-family: 'Nunito', sans-serif; /* Use a suitable font-family for your text */
-      display: flex;
-      align-items: center;
-      min-height: 100vh;
-    }
-    .compName{
-        color: #ff3c00;
-    }
-    h3{
-        color: aliceblue;
-    }
-    .realDate{
-        color: aliceblue;
-    }
-    .realTime{
-        color: aliceblue;
-    }
-    .userInputText {
-      width: 80%;
-      padding: 8px; /* Adjust padding for a smaller size */
-      margin-bottom: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      outline: none;
-      font-size: 14px; /* Adjust font size for a smaller size */
-      transition: border-color 0.3s ease-in-out;
-      box-sizing: border-box; /* Include padding and border in the total width/height */
-    }
-    .custom-container {
-      background-color: rgba(0, 0, 0, 0.5); /* White background with 0.8 opacity */
-      border: 1px solid #dc3545; /* Red border color */
-      border-radius: 10px; /* Rounded corners */
-      padding: 20px; /* Padding around the container */
-      margin-top: 20px; /* Adjust as needed */
-    }
-    .buttons {
-      background-color: #09a121 !important; /* Background color */
-      color: white; /* Text color */
-      padding: 10px 15px; /* Adjust padding for a smaller size */
-      font-size: 14px; /* Adjust font size for a smaller size */
-      border: none; /* Remove border */
-      border-radius: 5px; /* Rounded corners */
-      cursor: pointer;
-      transition: background-color 0.2s ease-in-out, color 0.3s ease-in-out;
-    }
-  .buttons:hover {
-    background-color: whitesmoke !important; /* Hover background color */
-    color: black !important; /* Hover text color */
-  }.buttons2 {
-      background-color: #ff3c00 !important; /* Background color */
-      color: white; /* Text color */
-      padding: 10px 15px; /* Adjust padding for a smaller size */
-      font-size: 14px; /* Adjust font size for a smaller size */
-      border: none; /* Remove border */
-      border-radius: 5px; /* Rounded corners */
-      cursor: pointer;
-      transition: background-color 0.2s ease-in-out, color 0.3s ease-in-out;
-    }
-  .buttons2:hover {
-    background-color: whitesmoke !important; /* Hover background color */
-    color: black !important; /* Hover text color */
-  }
-  
-
-  </style>
 <title>Employee_Daily_Record</title>
 </head> 
 <body>
@@ -101,16 +31,14 @@
         <div class="container">
             <div class="row text-center">
                 <div class="col-xl-6 mx-auto">
-                    <span class="realDate" id="dateNow" name="dateNow" style="font-size: 30px; color: #000000;"></span>
+                    <span class="realDate" id="dateNow" style="font-size: 20px; color: #000000;"></span>
                     <hr>
-                    <span class="realTime" id="time" name="time" style="font-size: 30px; color: #000000;"></span>
+                    <span class="realTime" id="time" style="font-size: 30px; color: #000000;"></span>
                 </div>
             </div>
             <div class="row text-center">
                 <div class="col-xl-6 mx-auto">
-                    <input type="number" id="textBoxUserID" name="textBoxUserID" class="userInputText" placeholder="Enter Employee ID Here" active>
-                    <input type="text" id="availability" hidden>
-                    <input type="text" id="employeeStatus" value="none" hidden>
+                    <input type="number" id="textBoxUserID" class="userInputText" placeholder="Enter Employee ID Here" active>
                 </div>
             </div>
         </div>
@@ -118,52 +46,87 @@
     <div class="container mx-auto">
         <div class="row text-center mb-1" style="margin-left: 32%;">
             <div class="col-sm-3">
-            <button type="button" id="btnTimeIn1" name="btnTimeIn1" class="btn buttons btn-block">Morning (IN)</button>
+            <button type="button" id="btnTimeIn1" name="" class="btn buttons btn-block">Morning (IN)</button>
             </div>
             <div class="col-sm-3">
-            <button type="button" id="btnTimeOut1" name="btnTimeOut1" class="btn buttons2 btn-block">Morning (OUT)</button>
+            <button type="button" id="btnTimeOut1" name="" class="btn buttons2 btn-block">Morning (OUT)</button>
             </div>
         </div>
         <div class="row text-center" style="margin-left: 32%;">
             <div class="col-sm-3">
-            <button type="button" id="btnTimeIn2" name="btnTimeIn2" class="btn buttons btn-block">Afternoon (IN)</button>
+            <button type="button" id="btnTimeIn2" name="" class="btn buttons btn-block">Afternoon (IN)</button>
             </div>
             <div class="col-sm-3">
-            <button type="button" id="btnTimeOut2" name="btnTimeOut2" class="btn buttons2 btn-block">Afternoon (OUT)</button>
+            <button type="button" id="btnTimeOut2" name="" class="btn buttons2 btn-block">Afternoon (OUT)</button>
             </div>
         </div>
     </div>
     <script>
-    // Declare userAgent globally
-    var userAgent;
+    function updateTime() {
+            var dateNowElement = document.getElementById('dateNow');
+            var timeElement = document.getElementById('time');
 
-    document.addEventListener("DOMContentLoaded", function() {
-        // Get user agent string
-        userAgent = navigator.userAgent;
+            var currentDate = new Date();
+            var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            dateNowElement.innerText = currentDate.toLocaleDateString('en-US', options);
 
-        // Log the user agent string to the console (you can use this information as needed)
-        console.log("User Agent:", userAgent);
+            var hours = currentDate.getHours();
+            var ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12 || 12; // Convert 24-hour time to 12-hour time
 
-        // Get current time
-        var currentTime = new Date();
-        var currentHour = currentTime.getHours();
+            var minutes = currentDate.getMinutes();
+            var seconds = currentDate.getSeconds();
 
-        // Disable Morning In and Morning Out buttons if current time is between 12:00 AM and 12:00 PM
-        if (currentHour >= 0 && currentHour < 12) {
-            document.getElementById("btnTimeIn2").disabled = true;
-            document.getElementById("btnTimeOut2").disabled = true;
-        } else {
-            document.getElementById("btnTimeIn2").disabled = false;
-            document.getElementById("btnTimeOut2").disabled = false;
+            var formattedTime = `${padZero(hours)}:${padZero(minutes)}:${padZero(seconds)} ${ampm}`;
+            timeElement.innerText = formattedTime;
         }
-    });
 
-    // ... rest of your script
+        function padZero(number) {
+            return number < 10 ? '0' + number : number;
+        }
+
+        // Update the time every second
+        setInterval(updateTime, 1000);
+
+
+    function submitData(btnId) {
+    var employeeID = document.getElementById("textBoxUserID").value;
+    var xhr = new XMLHttpRequest();
+    var url = "submit_data.php";
+    var params = "textBoxUserID=" + employeeID + "&btnId=" + btnId; // Include btnId in the params
+
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            alert(xhr.responseText);
+        }
+    };
+
+    xhr.send(params);
+}
+
+document.getElementById("btnTimeIn1").addEventListener("click", function () {
+    submitData("btnTimeIn1");
+});
+
+document.getElementById("btnTimeOut1").addEventListener("click", function () {
+    submitData("btnTimeOut1");
+});
+
+document.getElementById("btnTimeIn2").addEventListener("click", function () {
+    submitData("btnTimeIn2");
+});
+
+document.getElementById("btnTimeOut2").addEventListener("click", function () {
+    submitData("btnTimeOut2");
+});
+
+
 </script>
 
 
-  <script src="myStyles/JS/indexJS.js"></script>
-  <script src="myStyles/JS/dntJS.js"></script>
   <!-- Bootstrap core JavaScript-->
   <script src="myStyles/JS/jquery.min.js"></script>
     <script src="myStyles/JS/bootstrap.bundle.min.js"></script>  
@@ -172,11 +135,7 @@
     <!-- Custom scripts for all pages-->
     <script src="myStyles/JS/sb-admin-2.min.js"></script> 
     <!-- Page level plugins -->
-    <script src="myStyles/JS/Chart.min.js"></script>
-    <script src="myStyles/JS/all.min.js"></script> 
     <!-- Page level custom scripts -->
-    <script src="myStyles/JS/chart-area-demo.js"></script>
-    <script src="myStyles/JS/chart-pie-demo.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
   
     
