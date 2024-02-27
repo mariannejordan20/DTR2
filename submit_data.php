@@ -24,73 +24,74 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         die("Connection failed: " . $conn->connect_error);
     }
 
-    // Determine the TimeLog and DateLog columns
-    $timeLogColumn = '';
-    $dateLogColumn = 'DateLog'; // Assuming DateLog is the new column name
-    switch ($btnId) {
-        case 'btnTimeIn1':
-            $timeLogColumn = 'TimeLog1';
-            break;
-        case 'btnTimeOut1':
-            $timeLogColumn = 'TimeLog2';
-            break;
-        case 'btnTimeIn2':
-            $timeLogColumn = 'TimeLog3';
-            break;
-        case 'btnTimeOut2':
-            $timeLogColumn = 'TimeLog4';
-            break;
-        default:
-            echo "Invalid button click";
-            exit;
-    }
+    // Check if the employee_id is registered in the employee_information table
+    $checkEmployeeInfo = "SELECT Employee_ID, Employee_FullName FROM $employeeInfoTableName WHERE Employee_ID = '$employeeID'";
+    $resultEmployeeInfo = $conn->query($checkEmployeeInfo);
 
-    // Check if the employee_id already exists in the logs table
-    $checkIfExists = "SELECT $timeLogColumn FROM $logsTableName WHERE Employee_ID = '$employeeID'";
-    $resultCheck = $conn->query($checkIfExists);
+    if ($resultEmployeeInfo !== false) {
+        if ($resultEmployeeInfo->num_rows > 0) {
+            $employeeInfo = $resultEmployeeInfo->fetch_assoc();
+            $employeeFullName = $employeeInfo['Employee_FullName'];
 
-    if ($resultCheck !== false) {
-        $row = $resultCheck->fetch_assoc();
-        $existingTimeLog = $row[$timeLogColumn] ?? null;
+            // Determine the TimeLog and DateLog columns
+            $timeLogColumn = '';
+            $dateLogColumn = 'DateLog'; // Assuming DateLog is the new column name
+            switch ($btnId) {
+                case 'btnTimeIn1':
+                    $timeLogColumn = 'TimeLog1';
+                    break;
+                case 'btnTimeOut1':
+                    $timeLogColumn = 'TimeLog2';
+                    break;
+                case 'btnTimeIn2':
+                    $timeLogColumn = 'TimeLog3';
+                    break;
+                case 'btnTimeOut2':
+                    $timeLogColumn = 'TimeLog4';
+                    break;
+                default:
+                    echo "Invalid button click";
+                    exit;
+            }
 
-        if ($existingTimeLog !== null) {
-            // The TimeLog column is already filled, indicating the employee has already performed this action
-            echo "You already log this!";
-        } else {
-            // The TimeLog column is empty, allowing the employee to perform the action
-            // Check if the employee_id exists in the employee_information table
-            $checkEmployeeInfo = "SELECT Employee_ID FROM $employeeInfoTableName WHERE Employee_ID = '$employeeID'";
-            $resultEmployeeInfo = $conn->query($checkEmployeeInfo);
+            // Check if the employee_id already has any record for the current day
+            $checkIfExists = "SELECT Employee_ID, $timeLogColumn, $dateLogColumn FROM $logsTableName WHERE Employee_ID = '$employeeID' AND $dateLogColumn = CURDATE()";
+            $resultCheck = $conn->query($checkIfExists);
 
-            if ($resultEmployeeInfo->num_rows > 0) {
-                // Employee_id exists in employee_information table
-                // Check if the employee_id already exists in the logs table
-                $checkIfExists = "SELECT Employee_ID FROM $logsTableName WHERE Employee_ID = '$employeeID'";
-                $resultCheck = $conn->query($checkIfExists);
-
+            if ($resultCheck !== false) {
                 if ($resultCheck->num_rows > 0) {
-                    // Employee_id exists in logs table, perform UPDATE
-                    $sqlUpdate = "UPDATE $logsTableName SET $timeLogColumn = '$timestamp', $dateLogColumn = CURDATE() WHERE Employee_ID = '$employeeID'";
-                    
-                    if ($conn->query($sqlUpdate) === TRUE) {
-                        echo "Your data has been recorded!";
+                    $existingEntry = $resultCheck->fetch_assoc();
+
+                    // Check if the time-log column is empty
+                    if (empty($existingEntry[$timeLogColumn])) {
+                        // Update the existing row
+                        $sql = "UPDATE $logsTableName SET $timeLogColumn = '$timestamp' WHERE Employee_ID = '$employeeID' AND $dateLogColumn = CURDATE()";
+
+                        if ($conn->query($sql) === TRUE) {
+                            echo "$employeeFullName! YOUR DATA HAS BEEN RECORDED! HEHEHEHE";
+                        } else {
+                            echo "Error updating data: " . $conn->error;
+                        }
                     } else {
-                        echo "Error updating data: " . $conn->error;
+                        echo "You already have a record for this time period!";
                     }
                 } else {
-                    // Employee_id does not exist in logs table, perform INSERT
-                    $sqlInsert = "INSERT INTO $logsTableName (Employee_ID, $timeLogColumn, $dateLogColumn) VALUES ('$employeeID', '$timestamp', CURDATE())";
-                    
-                    if ($conn->query($sqlInsert) === TRUE) {
-                        echo "Your data has been recorded!";
+                    // No previous entries for the employee on the current day
+                    // Create a new row for the new day
+                    $sql = "INSERT INTO $logsTableName (Employee_ID, $timeLogColumn, $dateLogColumn) VALUES ('$employeeID', '$timestamp', CURDATE())";
+
+                    if ($conn->query($sql) === TRUE) {
+                        echo "$employeeFullName! YOUR DATA HAS BEEN RECORDED!";
                     } else {
                         echo "Error inserting data: " . $conn->error;
                     }
                 }
             } else {
-                // Employee_id does not exist in employee_information table
-                echo "Employee ID not registered!.";
+                // The query result is null, handle accordingly (e.g., log an error)
+                echo "Error querying data: " . $conn->error;
             }
+        } else {
+            echo "Employee ID not registered!";
         }
     } else {
         // The query result is null, handle accordingly (e.g., log an error)
