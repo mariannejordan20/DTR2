@@ -130,52 +130,20 @@ if (isset($_GET['search'])) {
                                 <tbody>
                                     <?php
 
-                                    $get_log_details = mysqli_query($conn, "SELECT
-                                    el.ID,
-                                    el.Employee_ID,
-                                    el.Employee_Date,
-                                    el.Employee_Time,
-                                    el.Employee_Status,
-                                    ei.Employee_FullName,
-                                    ei.Employee_Department,
-                                    ei.Employee_Position,
-                                    ei.Employee_Sex,
-                                    ei.user_type,
-                                    el.Employee_TimeInAm,
-                                    el.Employee_TimeOutAm,
-                                    el.Employee_TimeInPm,
-                                    el.Employee_TimeOutPm,
-                                    TIME_FORMAT(
-                                        TIMEDIFF(
-                                            GREATEST(el.Employee_TimeOutAm, el.Employee_TimeInAm),
-                                            LEAST(el.Employee_TimeOutAm, el.Employee_TimeInAm)
-                                        ), '%H:%i'
-                                    ) AS DurationAM,
-                                    TIME_FORMAT(
-                                        TIMEDIFF(
-                                            GREATEST(el.Employee_TimeOutPm, el.Employee_TimeInPm),
-                                            LEAST(el.Employee_TimeOutPm, el.Employee_TimeInPm)
-                                        ), '%H:%i'
-                                    ) AS DurationPM,
+                                    $get_log_details = mysqli_query($conn, 
+                                    " SELECT logs.id, logs.Employee_ID, logs.DateLog,
+                                    logs.TimeLog1, logs.TimeLog2, logs.TimeLog3, logs.TimeLog4,
+                                    employee_information.Employee_FullName, employee_information.Employee_Department, employee_information.Employee_Position,
+                                    employee_information.Employee_Sex, employee_information.user_type, employee_information.Employee_Branch,
                                     TIME_FORMAT(
                                         SEC_TO_TIME(
-                                            TIME_TO_SEC(
-                                                IFNULL(TIMEDIFF(GREATEST(el.Employee_TimeOutAm, el.Employee_TimeInAm), LEAST(el.Employee_TimeOutAm, el.Employee_TimeInAm)), 0)
-                                            ) +
-                                            TIME_TO_SEC(
-                                                IFNULL(TIMEDIFF(GREATEST(el.Employee_TimeOutPm, el.Employee_TimeInPm), LEAST(el.Employee_TimeOutPm, el.Employee_TimeInPm)), 0)
-                                            )
-                                        ), '%H:%i'
-                                    ) AS TotalDuration
-                                    FROM
-                                    employee_log el
-                                    JOIN
-                                    employee_information ei ON el.Employee_ID = ei.Employee_ID
-                                    ORDER BY
-                                    el.Employee_Date DESC;
-                                    ");
-
-
+                                            TIME_TO_SEC(TIMEDIFF(logs.TimeLog2, logs.TimeLog1)) +
+                                            TIME_TO_SEC(TIMEDIFF(logs.TimeLog4, logs.TimeLog3))
+                                        ), '%H:%i') AS TotalDuration
+                                    FROM LOGS
+                                    INNER JOIN employee_information ON logs.Employee_ID = employee_information.Employee_ID
+                                    ORDER BY logs.DateLog DESC;
+                                    ;");
 
                                     $counter = 1;
 
@@ -185,15 +153,15 @@ if (isset($_GET['search'])) {
                                             <td class="text-gray-700"><?php echo $counter ?></td>
                                             <td class="text-gray-900"><?php echo $row['Employee_ID'] ?></td>
                                             <td class="text-gray-900"><?php echo $row['Employee_FullName'] ?></td>
-                                            <td class="text-gray-700"><?php echo date('Y-m-d', strtotime($row['Employee_Date'])); ?></td>
-                                            <td class="text-gray-700 time-in-am"><?php echo $row['Employee_TimeInAm'] ?></td>
-                                            <td class="text-gray-700 time-out-am"><?php echo $row['Employee_TimeOutAm'] ?></td>
-                                            <td class="text-gray-700 time-in-pm"><?php echo $row['Employee_TimeInPm'] ?></td>
-                                            <td class="text-gray-700 time-out-pm"><?php echo $row['Employee_TimeOutPm'] ?></td>
+                                            <td class="text-gray-700"><?php echo date('Y-m-d', strtotime($row['DateLog'])); ?></td>
+                                            <td class="text-gray-700 time-in-am"><?php echo $row['TimeLog1'] ?></td>
+                                            <td class="text-gray-700 time-out-am"><?php echo $row['TimeLog2'] ?></td>
+                                            <td class="text-gray-700 time-in-pm"><?php echo $row['TimeLog3'] ?></td>
+                                            <td class="text-gray-700 time-out-pm"><?php echo $row['TimeLog4'] ?></td>
                                             <td class="text-gray-700"><?php echo $row['TotalDuration'] ?> Hours</td>
                                             <td>
-                                                <button class="btn btn-info btn-sm edit-btn" data-toggle="modal" data-target="#editModal" data-employee-id="<?php echo $row['ID']; ?>"><i class='fas fa-pen'></i></button>
-                                                <button class="btn btn-danger btn-sm delete-btn" data-toggle="modal" data-target="#deleteModal" data-employee-id="<?php echo $row['ID']; ?>"><i class='fas fa-trash'></i></button>
+                                                <button class="btn btn-info btn-sm edit-btn" data-toggle="modal" data-target="#editModal" data-employee-id="<?php echo $row['id']; ?>"><i class='fas fa-pen'></i></button>
+                                                <button class="btn btn-danger btn-sm delete-btn" data-toggle="modal" data-target="#deleteModal" data-employee-id="<?php echo $row['id']; ?>"><i class='fas fa-trash'></i></button>
                                             </td>
                                         </tr>
                                     <?php
@@ -220,7 +188,7 @@ if (isset($_GET['search'])) {
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Company 2021</span>
+                        <span>Copyright &copy; BizMaTech 2024</span>
                     </div>
                 </div>
             </footer>
@@ -302,7 +270,7 @@ if (isset($_GET['search'])) {
 
         // Perform your password check here
         // For demonstration purposes, I'll assume the correct password is "admin123"
-        var correctPassword = "admin123";
+        var correctPassword = "sirB";
 
         if (enteredPassword === correctPassword) {
             // If the password is correct, submit the delete form

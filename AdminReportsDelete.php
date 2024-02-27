@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validate or sanitize $idToDelete if needed
 
     // Perform the delete operation
-    $deleteQuery = "DELETE FROM employee_log WHERE ID = ?";
+    $deleteQuery = "DELETE FROM logs WHERE id = ?";
     $stmt = mysqli_prepare($conn, $deleteQuery);
 
     if ($stmt) {

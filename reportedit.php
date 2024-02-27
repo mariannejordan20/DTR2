@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // You can add more validation logic here, such as checking if the input values are not empty or are in the correct format
 
     // Update the database
-    $updateQuery = "UPDATE employee_log SET Employee_TimeInAm = '$timeInAm', Employee_TimeOutAm = '$timeOutAm', Employee_TimeInPm = '$timeInPm', Employee_TimeOutPm = '$timeOutPm' WHERE ID = $employeeId";
+    $updateQuery = "UPDATE logs SET TimeLog1 = '$timeInAm', TimeLog2 = '$timeOutAm', TimeLog3 = '$timeInPm', TimeLog4 = '$timeOutPm' WHERE id = $employeeId";
 
     if (mysqli_query($conn, $updateQuery)) {
         // If the update query was successful
