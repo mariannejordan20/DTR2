@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $sql = "UPDATE $logsTableName SET $timeLogColumn = '$timestamp' WHERE Employee_ID = '$employeeID' AND $dateLogColumn = CURDATE()";
 
                         if ($conn->query($sql) === TRUE) {
-                            echo "$employeeFullName! YOUR DATA HAS BEEN RECORDED! HEHEHEHE";
+                            echo "$employeeFullName! YOUR DATA HAS BEEN RECORDED!";
                         } else {
                             echo "Error updating data: " . $conn->error;
                         }

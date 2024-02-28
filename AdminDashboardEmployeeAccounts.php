@@ -401,17 +401,7 @@ if(!isset($_SESSION["username"])) {
             }
         }
     }
-    $(document).ready(function() {
-        $('#myTable').DataTable({
-            "paging": true,
-            "lengthChange": false,
-            "searching": false,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false,
-            "pageLength": 10 // Set the number of rows per page
-        });
-    });
+    
 </script>
 
 </body>
