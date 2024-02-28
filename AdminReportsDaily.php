@@ -270,7 +270,7 @@ if (isset($_GET['search'])) {
 
         // Perform your password check here
         // For demonstration purposes, I'll assume the correct password is "admin123"
-        var correctPassword = "sirB";
+        var correctPassword = "sirbaluca123";
 
         if (enteredPassword === correctPassword) {
             // If the password is correct, submit the delete form

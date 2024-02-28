@@ -60,7 +60,7 @@ if ($result) {
 <body>
     <div class="containerIndex container mt-5 container mx-auto text-center">
         <div class="compLogo text-center mt-5 mb-5">
-            <img src="Images/circlelogo.png" alt="BIZMATECH Logo" style="width: 20%;">
+            <img src="Images/logofinal.png" alt="BIZMATECH Logo" style="width: 20%;">
         </div>
         <div class="container">
             <div class="row text-center">
