@@ -1,39 +1,33 @@
 <?php
-// AdminReportsDelete.php
-
 include 'connection.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Assuming your primary key field is named 'ID'
-    $idToDelete = $_POST['idToDelete'];
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST['edit_employee_Id'])) {
+        $edit_employee_Id = $_POST['edit_employee_Id'];
 
-    // Validate or sanitize $idToDelete if needed
+        // Delete log from database
+        $sql = "DELETE FROM logs WHERE id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $edit_employee_Id);
 
-    // Perform the delete operation
-    $deleteQuery = "DELETE FROM logs WHERE id = ?";
-    $stmt = mysqli_prepare($conn, $deleteQuery);
+        if ($stmt->execute()) {
+            // Success
+            echo "Log report deleted successfully";
 
-    if ($stmt) {
-        mysqli_stmt_bind_param($stmt, 'i', $idToDelete);
-        mysqli_stmt_execute($stmt);
-
-        // Check if the deletion was successful
-        if (mysqli_affected_rows($conn) > 0) {
-            // Redirect or send a success response accordingly
-            header("Location: AdminReportsDaily.php");
-            exit();
+            // You can add an alert here
+            echo "<script>alert('Log report deleted successfully');</script>";
         } else {
-            // Handle deletion failure
-            echo "Error: Unable to delete record.";
+            // Error
+            echo "Error deleting log report: " . $conn->error;
+
+            // You can add an alert here
+            echo "<script>alert('Error deleting log report: " . $conn->error . "');</script>";
         }
 
-        mysqli_stmt_close($stmt);
-    } else {
-        // Handle query preparation failure
-        echo "Error: Unable to prepare delete statement.";
+        $stmt->close();
     }
-
-    // Close database connection if needed
-    mysqli_close($conn);
+} else {
+    // Request method is not POST
+    echo "Invalid request";
 }
 ?>

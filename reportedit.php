@@ -1,46 +1,30 @@
 <?php
-// Include the database connection file
-require_once "connection.php";
+include 'connection.php';
+session_start();
 
-// Check if the form data has been submitted via POST
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Retrieve the form data
-    $employeeId = $_POST['employeeId'];
-    $timeInAm = $_POST['timeInAm'];
-    $timeOutAm = $_POST['timeOutAm'];
-    $timeInPm = $_POST['timeInPm'];
-    $timeOutPm = $_POST['timeOutPm'];
+    $edit_employee_Id = $_POST['edit_employee_Id'];
+    $edit_employee_log1 = $_POST['edit_employee_log1'];
+    $edit_employee_log2 = $_POST['edit_employee_log2'];
+    $edit_employee_log3 = $_POST['edit_employee_log3'];
+    $edit_employee_log4 = $_POST['edit_employee_log4'];
 
-    // Perform validation if needed
-    // You can add more validation logic here, such as checking if the input values are not empty or are in the correct format
+    $sql = "UPDATE logs SET TimeLog1 = '$edit_employee_log1', TimeLog2 = '$edit_employee_log2', TimeLog3 = '$edit_employee_log3', TimeLog4 = '$edit_employee_log4' WHERE id = $edit_employee_Id";
 
-    // Update the database
-    $updateQuery = "UPDATE logs SET TimeLog1 = '$timeInAm', TimeLog2 = '$timeOutAm', TimeLog3 = '$timeInPm', TimeLog4 = '$timeOutPm' WHERE id = $employeeId";
-
-    if (mysqli_query($conn, $updateQuery)) {
-        // If the update query was successful
-        $response = array(
-            'status' => 'success',
-            'message' => 'Time records updated successfully.'
-        );
-        echo json_encode($response);
+    if ($conn->query($sql) === TRUE) {
+        header("Location: ipAddress.php");
+        $_SESSION['status'] = "Log updated successfully";
+        $_SESSION['status_code'] = "success";
     } else {
-        // If there was an error executing the query
-        $response = array(
-            'status' => 'error',
-            'message' => 'Error updating time records: ' . mysqli_error($conn)
-        );
-        echo json_encode($response);
+        $_SESSION['status'] = "Error: " . $sql . "<br>" . $conn->error;
+        $_SESSION['status_code'] = "error";
     }
-} else {
-    // If the request method is not POST
-    $response = array(
-        'status' => 'error',
-        'message' => 'Invalid request method.'
-    );
-    echo json_encode($response);
-}
 
-// Close the database connection
-mysqli_close($conn);
+    $conn->close();
+    header("Location: try.php");
+    exit();
+} else {
+    header("Location: try.php");
+    exit();
+}
 ?>

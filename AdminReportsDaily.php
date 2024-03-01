@@ -140,7 +140,7 @@ if (isset($_GET['search'])) {
                                             TIME_TO_SEC(TIMEDIFF(logs.TimeLog2, logs.TimeLog1)) +
                                             TIME_TO_SEC(TIMEDIFF(logs.TimeLog4, logs.TimeLog3))
                                         ), '%H:%i') AS TotalDuration
-                                    FROM LOGS
+                                    FROM logs
                                     INNER JOIN employee_information ON logs.Employee_ID = employee_information.Employee_ID
                                     ORDER BY logs.DateLog DESC;
                                     ;");

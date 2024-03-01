@@ -7,9 +7,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Convert the ip to uppercase
     $ip_name = $_POST['ip_name'];
+    $ip_location = $_POST['ip_location'];
 
     // Check if the ip already exists
-    $sqlCheckExist = "SELECT ID FROM allowed_ips WHERE ip_address = '$ip_name'";
+    $sqlCheckExist = "SELECT ID FROM allowed_ips WHERE ip_address = '$ip_name' AND branch_loc = '$ip_location'";
     $resultExist = $conn->query($sqlCheckExist);
 
     if ($resultExist->num_rows > 0) {
@@ -22,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // IP does not exist, proceed with insertion
 
         // Insert the uppercase IP into the database
-        $sqlInsert = "INSERT INTO allowed_ips (ip_address) VALUES ('$ip_name')";
+        $sqlInsert = "INSERT INTO allowed_ips (ip_address, branch_loc) VALUES ('$ip_name','$ip_location')";
         if ($conn->query($sqlInsert) === TRUE) {
             header("Location: ipAddress.php");
             $_SESSION['status'] = 'IP added successfully';

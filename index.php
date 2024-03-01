@@ -22,6 +22,7 @@ if ($result) {
     if (!in_array($visitorIpAddress, $allowedIpAddresses)) {
         http_response_code(403);
         include 'denied.php';
+        
         exit;
     }
 } else {
@@ -93,6 +94,7 @@ if ($result) {
             <div class="col-sm-3">
             <button type="button" id="btnTimeOut2" name="" class="btn buttons2 btn-block">Afternoon (OUT)</button>
             </div>
+            <?php echo $visitorIpAddress; ?>
         </div>
     </div>
     <script>
@@ -133,10 +135,27 @@ if ($result) {
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
     xhr.onreadystatechange = function () {
-        if (xhr.readyState == 4 && xhr.status == 200) {
-            alert(xhr.responseText);
+    if (xhr.readyState == 4) {
+        if (xhr.status == 200) {
+            // Success: Use SweetAlert for a custom popup
+            Swal.fire({
+                title: 'Success',
+                text: xhr.responseText,
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+        } else {
+            // Error: Use SweetAlert for an error popup
+            Swal.fire({
+                title: 'Error',
+                text: 'An error occurred while processing your request.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
         }
-    };
+    }
+};
+
 
     xhr.send(params);
 }

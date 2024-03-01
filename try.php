@@ -71,29 +71,40 @@ if(!isset($_SESSION["username"])) {
             <!-- Begin Page Content -->
             <div class="container-fluid">
                 <!-- Page Heading -->
-                <h1 class="h3 text-gray-800">List of Ip Address</h1>
+                <h1 class="h3 text-gray-800">This is trial adminreportsdaily</h1>
 
                 <!-- Content Row -->
                 <div class="row pl-1 pr-1">
                     <div class="col col-lg-12">
-                        <div class="d-flex">
-                            <button type="button" class="btn mt-3 mb-3" style="background-color: #45d43d; color: white;"
-                                    data-toggle="modal" data-target="#addIpModal">
-                                <i class="ml-1 fas fa-fw fa-plus"></i> Add IP Address
-                            </button>
-                        </div>
-                        <table id="adminTable" class="table table-success shadow-lg hover" style="width:100%; border:none">
+                        <table id="" class="table table shadow-lg hover" style="width:100%; border:none">
                             <thead class="text-center">
                             <tr>
-                                <th>No.</th>
-                                <th>IP</th>
-                                <th>Location</th>
-                                <th>Actions</th>
+                                <th class="font-weight-bold">NO.</th>
+                                <th class="font-weight-bold">ID</th>
+                                <th class="font-weight-bold">NAME</th>
+                                <th class="font-weight-bold">DATE</th>
+                                <th class="font-weight-bold">TIMEIN (Am)</th>
+                                <th class="font-weight-bold">TIMEOUT (Am)</th>
+                                <th class="font-weight-bold">TIMEIN (Pm)</th>
+                                <th class="font-weight-bold">TIMEOUT (Pm)</th>
+                                <th class="font-weight-bold">TOTAL</th>
+                                <th class="font-weight-bold">ACTIONS</th>
                             </tr>
                             </thead>
                             <tbody class="text-center" style="color: black">
                             <?php
-                            $sql = "SELECT * FROM `allowed_ips`";
+                            $sql = "SELECT logs.id, logs.Employee_ID, logs.DateLog,
+                            logs.TimeLog1, logs.TimeLog2, logs.TimeLog3, logs.TimeLog4,
+                            employee_information.Employee_FullName, employee_information.Employee_Department, employee_information.Employee_Position,
+                            employee_information.Employee_Sex, employee_information.user_type, employee_information.Employee_Branch,
+                            TIME_FORMAT(
+                                SEC_TO_TIME(
+                                    TIME_TO_SEC(TIMEDIFF(logs.TimeLog2, logs.TimeLog1)) +
+                                    TIME_TO_SEC(TIMEDIFF(logs.TimeLog4, logs.TimeLog3))
+                                ), '%H:%i') AS TotalDuration
+                            FROM logs
+                            INNER JOIN employee_information ON logs.Employee_ID = employee_information.Employee_ID
+                            ORDER BY logs.DateLog DESC";
                             $result = $conn -> query($sql);
 
                             $count = 1; // Initialize count variable
@@ -102,13 +113,24 @@ if(!isset($_SESSION["username"])) {
                                 while ($row = $result -> fetch_assoc()) {
                                     echo "<tr>
                                             <td>".$count."</td>
-                                            <td>".$row["ip_address"]."</td>
-                                            <td>".$row["branch_loc"]."</td>
+                                            <td>".$row["Employee_ID"]."</td>
+                                            <td>".$row["Employee_FullName"]."</td>
+                                            <td>".$row["DateLog"]."</td>
+                                            <td>".$row["TimeLog1"]."</td>
+                                            <td>".$row["TimeLog2"]."</td>
+                                            <td>".$row["TimeLog3"]."</td>
+                                            <td>".$row["TimeLog4"]."</td>
+                                            <td>".$row["TotalDuration"]." hrs</td>
                                             <td>
-                                                <button type=\"button\" class=\"btn btn-primary btn-sm edit-ip-btn\" data-toggle=\"modal\" data-target=\"#editIpModal\" data-Ip-id=\"".$row["ID"]."\" data-ip-name=\"".$row["ip_address"]."\" data-ip-location=\"".$row["branch_loc"]."\">
+                                                <button type=\"button\" class=\"btn btn-primary btn-sm edit-ip-btn\" data-toggle=\"modal\" data-target=\"#editIpModal\" 
+                                                    data-id=\"".$row["id"]."\" 
+                                                    data-log1=\"".$row["TimeLog1"]."\" 
+                                                    data-log2=\"".$row["TimeLog2"]."\" 
+                                                    data-log3=\"".$row["TimeLog3"]."\"
+                                                    data-log4=\"".$row["TimeLog4"]."\">
                                                 <i class='fas fa-pen'></i>
                                                 </button>
-                                                <button type=\"button\" class=\"btn btn-danger btn-sm delete-Ip-btn\" data-toggle=\"modal\" data-target=\"#deleteIpModal\" data-Ip-id=\"".$row["id"]."\">
+                                                <button type=\"button\" class=\"btn btn-danger btn-sm delete-Ip-btn\" data-toggle=\"modal\" data-target=\"#deleteIpModal\" data-id=\"".$row["id"]."\">
                                                 <i class='fas fa-trash'></i>
                                                 </button>
                                             </td>
@@ -131,39 +153,7 @@ if(!isset($_SESSION["username"])) {
 
         <!-- End of Main Content -->
 
-        <!-- Add New Ip Modal -->
-        <div class="modal fade" id="addIpModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header" style="background-color:#4dd145; color:white">
-                        <h5 class="modal-title" id="exampleModalLabel">Add New Ip</h5>
-                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <form action="ipaddsave.php" method="post"> <!-- Move the form tag here -->
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <label for="ip">Ip Address:</label>
-                                <input type="text" name="ip_name" class="form-control" required />
-                            </div>
-                        </div>
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <label for="location">Branch Location:</label>
-                                <input type="text" name="ip_location" class="form-control" required />
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn" style="background-color: #2ca125; color:white">Save</button>
-                            <button class="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
-                        </div>
-                    </form> <!-- Move the form tag here -->
-                </div>
-            </div>
-        </div>
 
-        <!-- End Add New Ip Modal -->
 
         <!-- Edit Ip Modal -->
         <div class="modal fade" id="editIpModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -171,19 +161,23 @@ if(!isset($_SESSION["username"])) {
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header" style="background-color: #007bff; color: white">
-                        <h5 class="modal-title" id="exampleModalLabel">Edit Ip</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Edit employee logs!</h5>
                         <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form id="editIpForm" action="ipeditsave.php" method="post">
+                    <form id="editIpForm" action="reportedit.php" method="post">
                         <div class="modal-body">
                             <div class="form-group">
-                                <label for="edit_ip_name">Ip Address:</label>
-                                <input type="text" name="edit_ip_name" id="edit_ip_name" class="form-control mb-3" required>
-                                <label for="edit_ip_name">Branch Location:</label>
-                                <input type="text" name="edit_ip_location" id="edit_ip_location" class="form-control mb-3" required>
-                                <input type="hidden" name="edit_ip_id" id="edit_ip_id">
+                                <label for="edit_ip_name">TIMEIN (Am):</label>
+                                <input type="text" name="edit_employee_log1" id="edit_employee_log1" class="form-control" >
+                                <label for="edit_ip_name">TIMEOUT (Am):</label>
+                                <input type="text" name="edit_employee_log2" id="edit_employee_log2" class="form-control" >
+                                <label for="edit_ip_name">TIMEIN (Pm):</label>
+                                <input type="text" name="edit_employee_log3" id="edit_employee_log3" class="form-control" >
+                                <label for="edit_ip_name">TIMEOUT (Pm):</label>
+                                <input type="text" name="edit_employee_log4" id="edit_employee_log4" class="form-control" >
+                                <input type="hidden" name="edit_employee_Id" id="edit_employee_Id">
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -207,7 +201,7 @@ if(!isset($_SESSION["username"])) {
                         </button>
                     </div>
                     <div class="modal-body">
-                        Are you sure you want to delete this IP?
+                        Are you sure you want to delete this Log report?
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
@@ -305,41 +299,45 @@ if(!isset($_SESSION["username"])) {
 <script>
     $(document).ready(function() {
         $('.edit-ip-btn').click(function() {
-            var ipId = $(this).data('ip-id');
-            var ipName = $(this).data('ip-name');
-            var ipLocation = $(this).data('ip-location');
+            var employeeId = $(this).data('id');
+            var employeelog1 = $(this).data('log1');
+            var employeelog2 = $(this).data('log2');
+            var employeelog3 = $(this).data('log3');
+            var employeelog4 = $(this).data('log4');
 
 
-            $('#edit_ip_id').val(ipId);
-            $('#edit_ip_name').val(ipName);
-            $('#edit_ip_location').val(ipLocation);
+            $('#edit_employee_Id').val(employeeId);
+            $('#edit_employee_log1').val(employeelog1);
+            $('#edit_employee_log2').val(employeelog2);
+            $('#edit_employee_log3').val(employeelog3);
+            $('#edit_employee_log4').val(employeelog4);
         });
 
-        $('.delete-ip-btn').click(function() {
-            var ipId = $(this).data('ip-id');
-            $('#deleteIpModal').find('.confirm-delete-btn').data('ip-id', ipId);
-        });
+        $('.delete-Ip-btn').click(function() {
+        var employeeId = $(this).data('id');
+        $('#deleteIpModal').find('.confirm-delete-btn').data('id', employeeId);
+    });
 
-        $('.confirm-delete-btn').click(function() {
-            var ipId = $(this).data('ip-id');
-            // AJAX request to delete the ip
-            $.ajax({
-                url: 'ipdelete.php',
-                type: 'POST',
-                data: {ipId: ipId},
-                success: function(response) {
-                    // Handle success, like updating the table
-                    $('#deleteIpModal').modal('hide');
-                    // You might want to reload the table or remove the deleted row
-                    location.reload();
-                },
-                error: function(xhr, status, error) {
-                    // Handle error
-                    console.error(xhr.responseText);
-                }
-            });
+    $('.confirm-delete-btn').click(function() {
+        var employeeId = $(this).data('id');
+        // AJAX request to delete the log
+        $.ajax({
+            url: 'AdminReportsDelete.php',
+            type: 'POST',
+            data: { edit_employee_Id: employeeId }, // Correct variable name
+            success: function(response) {
+                // Handle success, like updating the table
+                $('#deleteIpModal').modal('hide');
+                // You might want to reload the table or remove the deleted row
+                location.reload();
+            },
+            error: function(xhr, status, error) {
+                // Handle error
+                console.error(xhr.responseText);
+            }
         });
     });
+});
 </script>
 </body>
 </html>
