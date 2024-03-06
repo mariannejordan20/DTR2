@@ -21,10 +21,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     $conn->close();
-    header("Location: try.php");
+    header("Location: AdminReportsDaily.php");
     exit();
 } else {
-    header("Location: try.php");
+    header("Location: AdminReportsDaily.php");
     exit();
 }
 ?>

@@ -108,7 +108,7 @@ if(!isset($_SESSION["username"])) {
                                                 <button type=\"button\" class=\"btn btn-primary btn-sm edit-ip-btn\" data-toggle=\"modal\" data-target=\"#editIpModal\" data-Ip-id=\"".$row["ID"]."\" data-ip-name=\"".$row["ip_address"]."\" data-ip-location=\"".$row["branch_loc"]."\">
                                                 <i class='fas fa-pen'></i>
                                                 </button>
-                                                <button type=\"button\" class=\"btn btn-danger btn-sm delete-Ip-btn\" data-toggle=\"modal\" data-target=\"#deleteIpModal\" data-Ip-id=\"".$row["id"]."\">
+                                                <button type=\"button\" class=\"btn btn-danger btn-sm delete-Ip-btn\" data-toggle=\"modal\" data-target=\"#deleteIpModal\" data-Ip-id=\"".$row["ID"]."\">
                                                 <i class='fas fa-trash'></i>
                                                 </button>
                                             </td>

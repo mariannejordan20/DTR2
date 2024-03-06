@@ -17,7 +17,11 @@ if ($result) {
 
     // Get the visitor's IP address
     $visitorIpAddress = $_SERVER['REMOTE_ADDR'];
-
+    // if (!filter_var($visitorIpAddress, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
+    //     http_response_code(403);
+    //     include 'try2.php';
+    //     exit;
+    // }
     // Check if the visitor's IP address is in the allowed IP addresses array
     if (!in_array($visitorIpAddress, $allowedIpAddresses)) {
         http_response_code(403);
