@@ -190,7 +190,7 @@ if(!isset($_SESSION["username"])) {
                         <div class="modal-body">
                             <div class="form-group">
                                 <label for="edit_ip_name">INPUT PASSWORD FIRST!</label>
-                                <input style="font-weight: bold;" type="text" name="passwordlog" id="passwordlog" class="form-control border-danger" placeholder="Enter Password" >
+                                <input style="font-weight: bold;" type="password" name="passwordlog" id="passwordlog" class="form-control border-danger" placeholder="Enter Password" >
                                 <label for="edit_ip_name">First (in):</label>
                                 <input type="text" name="edit_employee_log1" id="edit_employee_log1" class="form-control" >
                                 <label for="edit_ip_name">First (out):</label>
@@ -212,7 +212,7 @@ if(!isset($_SESSION["username"])) {
         </div>
         <!-- End of Edit Logs Modal -->
 
-        <!-- Delete Ip Modal -->
+        <!-- Delete Logs Modal -->
         <div class="modal fade" id="deleteIpModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -222,17 +222,25 @@ if(!isset($_SESSION["username"])) {
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body">
-                        Are you sure you want to delete this Log report?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-danger confirm-delete-btn">Delete</button>
-                    </div>
+                    <form id="deleteIpForm" action="AdminReportsDelete.php" method="post">
+                        <div class="modal-body">
+                            <p>Are you sure you want to delete this Log report?</p>
+                            <div class="form-group">
+                                <label for="passwordlog">Enter Admin Password:</label>
+                                <input style="font-weight: bold;" type="password" name="passwordlog" id="passwordlog" class="form-control border-danger" placeholder="Enter Password" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-danger confirm-delete-btn">Delete</button>
+                        </div>
+                        <input type="hidden" name="edit_employee_Id" id="edit_employee_Id">
+                    </form>
                 </div>
             </div>
         </div>
-        <!-- End of Delete Ip Modal -->
+
+        <!-- End of Delete Logs Modal -->
 
         <!-- Footer -->
         <footer class="sticky-footer bg-white">
