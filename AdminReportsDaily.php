@@ -40,34 +40,8 @@ if(!isset($_SESSION["username"])) {
         <div id="content">
 
             <!-- Topbar -->
-            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
-                <!-- Sidebar Toggle (Topbar) -->
-                <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                    <i class="fa fa-bars"></i>
-                </button>
-                <!-- Topbar Navbar -->
-                <ul class="navbar-nav ml-auto">
-                    <div class="topbar-divider d-none d-sm-block"></div>
-
-                    <!-- Nav Item - User Information -->
-                    <li class="nav-item dropdown no-arrow">
-                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="mr-2 d-none d-lg-inline text-gray-700 small "><h5><i class="fas fa-user"></i>  <?php echo ''.$_SESSION["username"].'';?></h5></span>
-                        </a>
-                        <!-- Dropdown - User Information -->
-                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                             aria-labelledby="userDropdown">
-                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                Logout
-                            </a>
-                        </div>
-                    </li>
-                </ul>
-            </nav>
-            <!-- End of Topbar -->
+       <?php include ('topbar.php');?>
+        <!-- End of Topbar -->
 
             <!-- Begin Page Content -->
             <div class="container-fluid">
@@ -201,7 +175,7 @@ if(!isset($_SESSION["username"])) {
 
 
 
-        <!-- Edit Ip Modal -->
+        <!-- Edit Logs Modal -->
         <div class="modal fade" id="editIpModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
              aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -215,13 +189,15 @@ if(!isset($_SESSION["username"])) {
                     <form id="editIpForm" action="reportedit.php" method="post">
                         <div class="modal-body">
                             <div class="form-group">
-                                <label for="edit_ip_name">TIMEIN (Am):</label>
+                                <label for="edit_ip_name">INPUT PASSWORD FIRST!</label>
+                                <input style="font-weight: bold;" type="text" name="passwordlog" id="passwordlog" class="form-control border-danger" placeholder="Enter Password" >
+                                <label for="edit_ip_name">First (in):</label>
                                 <input type="text" name="edit_employee_log1" id="edit_employee_log1" class="form-control" >
-                                <label for="edit_ip_name">TIMEOUT (Am):</label>
+                                <label for="edit_ip_name">First (out):</label>
                                 <input type="text" name="edit_employee_log2" id="edit_employee_log2" class="form-control" >
-                                <label for="edit_ip_name">TIMEIN (Pm):</label>
+                                <label for="edit_ip_name">Second (in):</label>
                                 <input type="text" name="edit_employee_log3" id="edit_employee_log3" class="form-control" >
-                                <label for="edit_ip_name">TIMEOUT (Pm):</label>
+                                <label for="edit_ip_name">Second (out):</label>
                                 <input type="text" name="edit_employee_log4" id="edit_employee_log4" class="form-control" >
                                 <input type="hidden" name="edit_employee_Id" id="edit_employee_Id">
                             </div>
@@ -234,7 +210,7 @@ if(!isset($_SESSION["username"])) {
                 </div>
             </div>
         </div>
-        <!-- End of Edit Ip Modal -->
+        <!-- End of Edit Logs Modal -->
 
         <!-- Delete Ip Modal -->
         <div class="modal fade" id="deleteIpModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
