@@ -19,6 +19,7 @@ if(!isset($_SESSION["username"])) {
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
     <!-- alert plugin sweetalert2 -->
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <link rel="icon" href="Images/logofinal.png" type="image/png">
     <title>Admin_Page</title>
 </head>
 <body id="page-top">
@@ -99,59 +100,88 @@ if(!isset($_SESSION["username"])) {
                                 <th class="font-weight-bold">ID</th>
                                 <th class="font-weight-bold">NAME</th>
                                 <th class="font-weight-bold">DATE</th>
-                                <th class="font-weight-bold">TIMEIN (Am)</th>
-                                <th class="font-weight-bold">TIMEOUT (Am)</th>
-                                <th class="font-weight-bold">TIMEIN (Pm)</th>
-                                <th class="font-weight-bold">TIMEOUT (Pm)</th>
+                                <th class="font-weight-bold">FIRST (in)</th>
+                                <th class="font-weight-bold">FIRST (out)</th>
+                                <th class="font-weight-bold">SECOND (in)</th>
+                                <th class="font-weight-bold">SECOND (out)</th>
                                 <th class="font-weight-bold">TOTAL</th>
                                 <th class="font-weight-bold">ACTIONS</th>
                             </tr>
                             </thead>
                             <tbody class="text-center" style="color: black">
                             <?php
-                            $sql = "SELECT logs.id, logs.Employee_ID, logs.DateLog,
-                            logs.TimeLog1, logs.TimeLog2, logs.TimeLog3, logs.TimeLog4,
-                            employee_information.Employee_FullName, employee_information.Employee_Department, employee_information.Employee_Position,
-                            employee_information.Employee_Sex, employee_information.user_type, employee_information.Employee_Branch,
+                            $sql = "SELECT
+                            logs.id,
+                            logs.Employee_ID,
+                            logs.DateLog,
+                            logs.TimeLog1,
+                            logs.TimeLog2,
+                            logs.TimeLog3,
+                            logs.TimeLog4,
+                            employee_information.Employee_FullName,
+                            employee_information.Employee_Department,
+                            employee_information.Employee_Position,
+                            employee_information.Employee_Sex,
+                            employee_information.user_type,
+                            employee_information.Employee_Branch,
+                            TIME_FORMAT(TIMEDIFF(logs.TimeLog2, logs.TimeLog1), '%H:%i') AS FirstTimeLog,
+                            TIME_FORMAT(TIMEDIFF(logs.TimeLog4, logs.TimeLog3), '%H:%i') AS SecondTimeLog,
                             TIME_FORMAT(
                                 SEC_TO_TIME(
                                     TIME_TO_SEC(TIMEDIFF(logs.TimeLog2, logs.TimeLog1)) +
                                     TIME_TO_SEC(TIMEDIFF(logs.TimeLog4, logs.TimeLog3))
-                                ), '%H:%i') AS TotalDuration
-                            FROM logs
-                            INNER JOIN employee_information ON logs.Employee_ID = employee_information.Employee_ID
-                            ORDER BY logs.DateLog DESC";
+                                ), '%H:%i'
+                            ) AS TotalDuration
+                        FROM
+                            LOGS
+                        INNER JOIN
+                            employee_information ON logs.Employee_ID = employee_information.Employee_ID
+                        ORDER BY
+                            logs.DateLog DESC";
                             $result = $conn -> query($sql);
 
                             $count = 1; // Initialize count variable
 
-                            if($result-> num_rows > 0) {
-                                while ($row = $result -> fetch_assoc()) {
+                            if ($result->num_rows > 0) {
+                                while ($row = $result->fetch_assoc()) {
                                     echo "<tr>
-                                            <td>".$count."</td>
-                                            <td>".$row["Employee_ID"]."</td>
-                                            <td>".$row["Employee_FullName"]."</td>
-                                            <td>".$row["DateLog"]."</td>
-                                            <td>".$row["TimeLog1"]."</td>
-                                            <td>".$row["TimeLog2"]."</td>
-                                            <td>".$row["TimeLog3"]."</td>
-                                            <td>".$row["TimeLog4"]."</td>
-                                            <td>".$row["TotalDuration"]." hrs</td>
+                                            <td>" . $count . "</td>
+                                            <td>" . $row["Employee_ID"] . "</td>
+                                            <td>" . $row["Employee_FullName"] . "</td>
+                                            <td>" . $row["DateLog"] . "</td>
+                                            <td>" . $row["TimeLog1"] . "</td>
+                                            <td>" . $row["TimeLog2"] . "</td>
+                                            <td>" . $row["TimeLog3"] . "</td>
+                                            <td>" . $row["TimeLog4"] . "</td>
+                                            <td>";
+                        
+                                    // Display TotalDuration if available
+                                    if (!empty($row["TotalDuration"])) {
+                                        echo $row["TotalDuration"];
+                                    } elseif (!empty($row["SecondTimeLog"])) {
+                                        // Display SecondTimeLog if available and if the record is only in TimeLog3 and TimeLog4
+                                        echo $row["SecondTimeLog"];
+                                    } else {
+                                        // Display FirstTimeLog if the record is not only in TimeLog3 and TimeLog4
+                                        echo $row["FirstTimeLog"];
+                                    }
+                        
+                                    echo " Hrs</td>
                                             <td>
                                                 <button type=\"button\" class=\"btn btn-primary btn-sm edit-ip-btn\" data-toggle=\"modal\" data-target=\"#editIpModal\" 
-                                                    data-id=\"".$row["id"]."\" 
-                                                    data-log1=\"".$row["TimeLog1"]."\" 
-                                                    data-log2=\"".$row["TimeLog2"]."\" 
-                                                    data-log3=\"".$row["TimeLog3"]."\"
-                                                    data-log4=\"".$row["TimeLog4"]."\">
+                                                    data-id=\"" . $row["id"] . "\" 
+                                                    data-log1=\"" . $row["TimeLog1"] . "\" 
+                                                    data-log2=\"" . $row["TimeLog2"] . "\" 
+                                                    data-log3=\"" . $row["TimeLog3"] . "\"
+                                                    data-log4=\"" . $row["TimeLog4"] . "\">
                                                 <i class='fas fa-pen'></i>
                                                 </button>
-                                                <button type=\"button\" class=\"btn btn-danger btn-sm delete-Ip-btn\" data-toggle=\"modal\" data-target=\"#deleteIpModal\" data-id=\"".$row["id"]."\">
+                                                <button type=\"button\" class=\"btn btn-danger btn-sm delete-Ip-btn\" data-toggle=\"modal\" data-target=\"#deleteIpModal\" data-id=\"" . $row["id"] . "\">
                                                 <i class='fas fa-trash'></i>
                                                 </button>
                                             </td>
                                         </tr>";
-                                    $count++; // Increment count for next row
+                                    $count++; // Increment count for the next row
                                 }
                                 echo "</table>";
                             } else {

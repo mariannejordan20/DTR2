@@ -53,7 +53,8 @@ if (isset($_SESSION["username"])) {
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <!-- alert plugin sweetalert2 -->
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <title>Admin_Portal</title>
+    <link rel="icon" href="Images/logofinal.png" type="image/png">
+    <title>BizMaTechPortal</title>
 </head>
 
 <body>
@@ -61,7 +62,7 @@ if (isset($_SESSION["username"])) {
         <div id="formContent">
             <!-- Icon -->
             <p class="companyName mt-5">
-                <h1>BIZMATECH</h1>
+                <h1>BizMaTech</h1>
             </p>
             <!-- Login Form -->
             <input type="text" id="txtBoxUserName" name="txtBoxUserName" placeholder="Username">

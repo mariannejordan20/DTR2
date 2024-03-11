@@ -2,38 +2,38 @@
 // Include your database connection file here
 include 'connection.php';
 
-// Fetch allowed IP addresses from the database
-$sql = "SELECT ip_address FROM allowed_ips";
-$result = mysqli_query($conn, $sql);
+// // Fetch allowed IP addresses from the database
+// $sql = "SELECT ip_address FROM allowed_ips";
+// $result = mysqli_query($conn, $sql);
 
-// Check if there are results
-if ($result) {
-    $allowedIpAddresses = array();
+// // Check if there are results
+// if ($result) {
+//     $allowedIpAddresses = array();
 
-    // Fetch IP addresses into an array
-    while ($row = mysqli_fetch_assoc($result)) {
-        $allowedIpAddresses[] = $row['ip_address'];
-    }
+//     // Fetch IP addresses into an array
+//     while ($row = mysqli_fetch_assoc($result)) {
+//         $allowedIpAddresses[] = $row['ip_address'];
+//     }
 
-    // Get the visitor's IP address
-    $visitorIpAddress = $_SERVER['REMOTE_ADDR'];
-    // if (!filter_var($visitorIpAddress, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
-    //     http_response_code(403);
-    //     include 'try2.php';
-    //     exit;
-    // }
-    // Check if the visitor's IP address is in the allowed IP addresses array
-    if (!in_array($visitorIpAddress, $allowedIpAddresses)) {
-        http_response_code(403);
-        include 'denied.php';
+//     // Get the visitor's IP address
+//     $visitorIpAddress = $_SERVER['REMOTE_ADDR'];
+//     // if (!filter_var($visitorIpAddress, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
+//     //     http_response_code(403);
+//     //     include 'try2.php';
+//     //     exit;
+//     // }
+//     // Check if the visitor's IP address is in the allowed IP addresses array
+//     if (!in_array($visitorIpAddress, $allowedIpAddresses)) {
+//         http_response_code(403);
+//         include 'denied.php';
         
-        exit;
-    }
-} else {
-    // Handle database query error
-    echo "Error fetching allowed IP addresses: " . mysqli_error($conn);
-    exit;
-}
+//         exit;
+//     }
+// } else {
+//     // Handle database query error
+//     echo "Error fetching allowed IP addresses: " . mysqli_error($conn);
+//     exit;
+// }
 
 ?>
 
@@ -59,8 +59,19 @@ if ($result) {
 <!-- alert plugin sweetalert2  -->
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <!-- Add this script in the head of your HTML document -->
+<link rel="icon" href="Images/logofinal.png" type="image/png">
+<title>BizMaTechDTR</title>
+<style>
+    @media (max-width: 768px) {
+        /* Adjust font size for smaller screens */
+        .buttons,
+        .buttons2 {
+            font-size: 7px;
+        }
 
-<title>Employee_Daily_Record</title>
+        /* You can customize the font size as needed */
+    }
+</style>
 </head> 
 <body>
     <div class="containerIndex container mt-5 container mx-auto text-center">
@@ -85,20 +96,22 @@ if ($result) {
     <div class="container mx-auto">
         <div class="row text-center mb-1" style="margin-left: 32%;">
             <div class="col-sm-3">
-            <button type="button" id="btnTimeIn1" name="" class="btn buttons btn-block">Morning (IN)</button>
+            <button type="button" id="btnTimeIn1" name="" class="btn buttons btn-block">First (IN)</button>
             </div>
             <div class="col-sm-3">
-            <button type="button" id="btnTimeOut1" name="" class="btn buttons2 btn-block">Morning (OUT)</button>
+            <button type="button" id="btnTimeOut1" name="" class="btn buttons2 btn-block">First (OUT)</button>
             </div>
         </div>
         <div class="row text-center" style="margin-left: 32%;">
             <div class="col-sm-3">
-            <button type="button" id="btnTimeIn2" name="" class="btn buttons btn-block">Afternoon (IN)</button>
+            <button type="button" id="btnTimeIn2" name="" class="btn buttons btn-block">Second (IN)</button>
             </div>
             <div class="col-sm-3">
-            <button type="button" id="btnTimeOut2" name="" class="btn buttons2 btn-block">Afternoon (OUT)</button>
+            <button type="button" id="btnTimeOut2" name="" class="btn buttons2 btn-block">Second (OUT)</button>
             </div>
-            <?php echo $visitorIpAddress; ?>
+            <?php 
+            //echo $visitorIpAddress; 
+            ?>
         </div>
     </div>
     <script>

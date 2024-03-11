@@ -26,6 +26,8 @@ if ($branchResult) {
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> 
 <!-- alert plugin sweetalert2  -->
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<link rel="icon" href="Images/logofinal.png" type="image/png">
+
 <title>Admin_Page</title>
     </head>
     <body id="page-top">

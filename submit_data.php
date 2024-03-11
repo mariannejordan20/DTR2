@@ -78,7 +78,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 } else {
                     // No previous entries for the employee on the current day
                     // Create a new row for the new day
-                    $sql = "INSERT INTO $logsTableName (Employee_ID, $timeLogColumn, $dateLogColumn) VALUES ('$employeeID', '$timestamp', CURDATE())";
+                    // Get the full IP address of the device
+                    $ipaddress = getenv("REMOTE_ADDR") ;
+                    $sql = "INSERT INTO $logsTableName (Employee_ID, $timeLogColumn, $dateLogColumn, IpAddress) VALUES ('$employeeID', '$timestamp', CURDATE(), '$ipaddress')";
 
                     if ($conn->query($sql) === TRUE) {
                         echo "$employeeFullName! YOUR DATA HAS BEEN RECORDED!";
