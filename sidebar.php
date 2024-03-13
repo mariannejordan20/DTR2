@@ -90,7 +90,7 @@
                     <div class="bg-white py-2 collapse-inner rounded"> 
                         <a class="collapse-item" href="AdminBranch.php"><i class="fas fa-fw fa-building"></i> Branch</a> 
                         <a class="collapse-item" href="AdminDepartment.php"><i class="fas fa-fw fa-users"></i> Department</a>
-                        <a class="collapse-item" href="ipAddress.php"><i class="fas fa-fw fa-ip"></i> IP Addresses</a> 
+                        <a class="collapse-item" href="ipAddress.php"><i class="fa fa-user"></i> IP Addresses</a> 
                         <a class="collapse-item" href="reset.php"> <i class="fas fa-history"></i>  Reset</a>  
                         <div class="collapse-divider"></div> 
                     </div>

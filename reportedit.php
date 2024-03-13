@@ -12,7 +12,7 @@ if (isset($_POST['passwordlog'])) {
     $enteredPassword = $_POST['passwordlog'];
 
     // Fetch the admin password from the database
-    $sql = "SELECT password FROM admin_accounts WHERE username = username";
+    $sql = "SELECT password FROM admin_accounts WHERE username = '" . $_SESSION['username'] . "'";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {

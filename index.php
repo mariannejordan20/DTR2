@@ -74,6 +74,18 @@ include 'connection.php';
 </style>
 </head> 
 <body>
+    <?php
+    if (isset($_SESSION['status'])) {
+        echo "Swal.fire({
+                            icon: '" . ($_SESSION['status_code'] == 'success' ? 'success' : 'error') . "',
+                            title: '" . $_SESSION['status'] . "',
+                            showConfirmButton: false,
+                            timer: 1000
+                        });";
+        unset($_SESSION['status']); // Clear the session variable
+        unset($_SESSION['status_code']); // Clear the session variable
+    }
+    ?>
     <div class="containerIndex container mt-5 container mx-auto text-center">
         <div class="compLogo text-center mt-5 mb-5">
             <img src="Images/logofinal.png" alt="BIZMATECH Logo" style="width: 20%;">
@@ -114,6 +126,7 @@ include 'connection.php';
             ?>
         </div>
     </div>
+    
     <script>
     function updateTime() {
             var dateNowElement = document.getElementById('dateNow');
