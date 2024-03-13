@@ -466,10 +466,6 @@ function searchTable() {
             }
         }
     }
-
-    // Log or print the filtered data
-    console.log(filteredData);
-    // You can use this data to further process or display it as needed
 }
 
 </script>

@@ -337,7 +337,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['reset_employee_account
 <!-- End of Logout Modal -->
 
 <!-- start of page loader -->
-<!-- <div class="loader-wrapper">
+<div class="loader-wrapper">
     <h2 id="description">
         Loading...
     </h2>
@@ -347,7 +347,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['reset_employee_account
         <div class="loadingBar" id="loadingBar3"></div>
         <div class="loadingBar" id="loadingBar4"></div>
     </div>
-</div> -->
+</div>
 <!-- SweetAlert script -->
 <script>
     <?php
