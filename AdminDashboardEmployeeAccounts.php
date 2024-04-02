@@ -72,42 +72,68 @@ if(!isset($_SESSION["username"])) {
                                 <th>Department</th>
                                 <th>Position</th>
                                 <th>Sex</th>
+                                <th>Status</th>
                                 <th>Actions</th>
                             </tr>
                             </thead>
                             <tbody class="text-center" style="color: black">
                             <?php
-                            $sql = "SELECT ID, Employee_ID, Employee_FullName,Employee_Branch, Employee_Department, Employee_Position, Employee_Sex FROM `employee_information`";
+                            $sql = "SELECT ID, Employee_ID, Employee_FullName,Employee_Branch, Employee_Department, Employee_Position, Employee_Sex, Employee_Status FROM `employee_information`";
                             $result = $conn -> query($sql);
 
                             $count = 1; // Initialize count variable
 
                             if($result-> num_rows > 0) {
-                                while ($row = $result -> fetch_assoc()) {
+                                while ($row = $result->fetch_assoc()) {
+                                    $status = ""; // Initialize status variable
+                                    $textColor = ""; // Initialize text color variable
+
+                                    // Set status and text color based on Employee_Status
+                                    switch ($row["Employee_Status"]) {
+                                        case 1:
+                                            $status = "Active";
+                                            $textColor = "success";
+                                            break;
+                                        case 2:
+                                            $status = "Inactive";
+                                            $textColor = "danger";
+                                            break;
+                                        case 3:
+                                            $status = "Suspended";
+                                            $textColor = "warning";
+                                            break;
+                                        default:
+                                            $status = "Unknown";
+                                            $textColor = "secondary";
+                                            break;
+                                    }
                                     echo "<tr>
-                                            <td>".$count."</td>
-                                            <td>".$row["Employee_ID"]."</td>
-                                            <td>".$row["Employee_FullName"]."</td>
-                                            <td>".$row["Employee_Branch"]."</td>
-                                            <td>".$row["Employee_Department"]."</td>
-                                            <td>".$row["Employee_Position"]."</td>
-                                            <td>".$row["Employee_Sex"]."</td>
-                                            <td>
-                                                <button type=\"button\" class=\"btn btn-primary btn-sm edit-employee-btn\" data-toggle=\"modal\" data-target=\"#editEmployeeModal\" 
-                                                data-employee-id=\"".$row["Employee_ID"]."\" 
-                                                data-employee-name=\"".$row["Employee_FullName"]."\"
-                                                data-employee-branch=\"".$row["Employee_Branch"]."\"
-                                                data-employee-department=\"".$row["Employee_Department"]."\"
-                                                data-employee-position=\"".$row["Employee_Position"]."\"
-                                                data-employee-sex=\"".$row["Employee_Sex"]."\">
-                                                
-                                                <i class='fas fa-pen'></i>
-                                                </button>
-                                                <button type=\"button\" class=\"btn btn-danger btn-sm delete-employee-btn\" data-toggle=\"modal\" data-target=\"#deleteEmployeeModal\" data-employee-id=\"".$row["Employee_ID"]."\">
-                                                <i class='fas fa-trash'></i>
-                                                </button>
-                                            </td>
-                                        </tr>";
+                                        <td>".$count."</td>
+                                        <td>".$row["Employee_ID"]."</td>
+                                        <td>".$row["Employee_FullName"]."</td>
+                                        <td>".$row["Employee_Branch"]."</td>
+                                        <td>".$row["Employee_Department"]."</td>
+                                        <td>".$row["Employee_Position"]."</td>
+                                        <td>".$row["Employee_Sex"]."</td>
+                                        <td>
+                                            <button class='p-1 rounded text-".$textColor." btn edit-status-btn' data-toggle='modal' data-target='#statusModal' data-employee-id='".$row["Employee_ID"]."'>".$status."</button>
+                                        </td>
+                                        <td>
+                                            <button type=\"button\" class=\"btn btn-primary btn-sm edit-employee-btn\" data-toggle=\"modal\" data-target=\"#editEmployeeModal\" 
+                                            data-employee-id=\"".$row["Employee_ID"]."\" 
+                                            data-employee-name=\"".$row["Employee_FullName"]."\"
+                                            data-employee-branch=\"".$row["Employee_Branch"]."\"
+                                            data-employee-department=\"".$row["Employee_Department"]."\"
+                                            data-employee-position=\"".$row["Employee_Position"]."\"
+                                            data-employee-sex=\"".$row["Employee_Sex"]."\">
+                                            
+                                            <i class='fas fa-pen'></i>
+                                            </button>
+                                            <button type=\"button\" class=\"btn btn-danger btn-sm delete-employee-btn\" data-toggle=\"modal\" data-target=\"#deleteEmployeeModal\" data-employee-id=\"".$row["Employee_ID"]."\">
+                                            <i class='fas fa-trash'></i>
+                                            </button>
+                                        </td>
+                                    </tr>";
                                     $count++; // Increment count for next row
                                 }
                                 echo "</table>";
@@ -115,14 +141,83 @@ if(!isset($_SESSION["username"])) {
                                 echo "0 result";
                             }
                             ?>
+                        </tbody>
 
-                            </tbody>
                         </table>
                     </div>
                 </div>
             </div>
             <!-- /.container-fluid -->
         </div>
+        <!-- Status Modal -->
+        <div class="modal fade" id="statusModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" style="background-color: white; color: black">
+                        <h5 class="modal-title" id="exampleModalLabel">Edit Status</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" id="employeeId">
+                        <button type="button" class="btn btn-success update-status-btn" data-status="1">Active</button>
+                        <button type="button" class="btn btn-danger update-status-btn" data-status="2">Inactive</button>
+                        <button type="button" class="btn btn-warning update-status-btn" data-status="3">Suspend</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+    $(document).ready(function() {
+        // Event listener for status buttons in the modal
+        $('.edit-status-btn').click(function() {
+            var employeeId = $(this).data('employee-id');
+            $('#employeeId').val(employeeId);
+        });
+
+        // Event listener for updating status
+        $('.update-status-btn').click(function() {
+            var status = $(this).data('status');
+            var employeeId = $('#employeeId').val();
+
+            // AJAX request to update status
+            $.ajax({
+                url: 'updateEmployeeStatus.php',
+                type: 'POST',
+                data: { employeeId: employeeId, status: status },
+                success: function(response) {
+                    // Handle success response, if needed
+                    console.log(response);
+                    $('#statusModal').modal('hide');
+                    // Reload the page to refresh the status in the table
+                    location.reload();
+                    // Show success alert
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Status Updated',
+                        text: 'Employee status updated successfully.'
+                    });
+                },
+                error: function(xhr, status, error) {
+                    // Handle error, if needed
+                    console.error('Error updating status:', error);
+                }
+            });
+        });
+
+        // Ensure modal is hidden on close
+        $('#statusModal').on('hidden.bs.modal', function () {
+            $(this).find('.update-status-btn').off('click'); // Remove click event handlers
+        });
+    });
+</script>
+
+
+
+
+
 
         <!-- End of Main Content -->
         <?php

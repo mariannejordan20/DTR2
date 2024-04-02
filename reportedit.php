@@ -6,7 +6,7 @@ session_start();
 if (!isset($_SESSION["username"])) {
     header("location: AdminPortal.php");
 }
-
+    
 // Check if the password is submitted
 if (isset($_POST['passwordlog'])) {
     $enteredPassword = $_POST['passwordlog'];

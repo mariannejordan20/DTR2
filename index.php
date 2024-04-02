@@ -155,7 +155,7 @@ include 'connection.php';
         setInterval(updateTime, 1000);
 
 
-    function submitData(btnId) {
+        function submitData(btnId) {
     var employeeID = document.getElementById("textBoxUserID").value;
     var xhr = new XMLHttpRequest();
     var url = "submit_data.php";
@@ -165,27 +165,40 @@ include 'connection.php';
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
     xhr.onreadystatechange = function () {
-    if (xhr.readyState == 4) {
-        if (xhr.status == 200) {
-            // Success: Use SweetAlert for a custom popup
-            Swal.fire({
-                title: 'Success',
-                text: xhr.responseText,
-                icon: 'success',
-                confirmButtonText: 'OK'
-            });
-        } else {
-            // Error: Use SweetAlert for an error popup
-            Swal.fire({
-                title: 'Error',
-                text: 'An error occurred while processing your request.',
-                icon: 'error',
-                confirmButtonText: 'OK'
-            });
-        }
-    }
-};
+        if (xhr.readyState == 4) {
+            if (xhr.status == 200) {
+                // Parse JSON response
+                var response = JSON.parse(xhr.responseText);
 
+                // Check the status from the response
+                if (response.status === 'success') {
+                    // Success: Use SweetAlert for a custom popup
+                    Swal.fire({
+                        title: 'Success',
+                        text: response.message,
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    });
+                } else {
+                    // Error: Use SweetAlert for an error popup
+                    Swal.fire({
+                        title: 'Invalid',
+                        text: response.message,
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            } else {
+                // Error: Use SweetAlert for an error popup
+                Swal.fire({
+                    title: 'Invalid',
+                    text: 'An error occurred while processing your request.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            }
+        }
+    };
 
     xhr.send(params);
 }
@@ -205,6 +218,7 @@ document.getElementById("btnTimeIn2").addEventListener("click", function () {
 document.getElementById("btnTimeOut2").addEventListener("click", function () {
     submitData("btnTimeOut2");
 });
+
 
 
 </script>
