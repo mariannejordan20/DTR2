@@ -1,5 +1,4 @@
-</style>
-<ul style="background-color: #152039;" class="stickys navbar-nav  sidebar sidebar-dark accordion" id="accordionSidebar">
+<ul style="background-color: #152039;" class="navbar-nav  sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="AdminDashboard.php">
@@ -55,7 +54,29 @@
                         <div class="collapse-divider"></div> 
                     </div>
                 </div>
-            </li>
+            </li>  
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseConfig"
+                    aria-expanded="true" aria-controls="collapsePages">
+                    <i class="ml-1 fas fa-fw fa-cog"></i>
+                    <span>Config</span>
+                </a>
+                <div id="collapseConfig" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded"> 
+                        <a class="collapse-item" href="AdminBranch.php"><i class="fas fa-fw fa-building"></i> Branch</a> 
+                        <a class="collapse-item" href="AdminDepartment.php"><i class="fas fa-fw fa-users"></i> Department</a>  
+                        <div class="collapse-divider"></div> 
+                    </div>
+                </div>
+            </li>  
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                <h6>Generate</h6>
+            </div>
+
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
@@ -69,33 +90,7 @@
                         <div class="collapse-divider"></div> 
                     </div>
                 </div>
-            </li>
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                <h6>Generate</h6>
-            </div>
-
-            
-              
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseConfig"
-                    aria-expanded="true" aria-controls="collapsePages">
-                    <i class="ml-1 fas fa-fw fa-cog"></i>
-                    <span>Config</span>
-                </a>
-                <div id="collapseConfig" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded"> 
-                        <a class="collapse-item" href="AdminBranch.php"><i class="fas fa-fw fa-building"></i> Branch</a> 
-                        <a class="collapse-item" href="AdminDepartment.php"><i class="fas fa-fw fa-users"></i> Department</a>
-                        <a class="collapse-item" href="ipAddress.php"><i class="fa fa-user"></i> IP Addresses</a> 
-                        <a class="collapse-item" href="reset.php"> <i class="fas fa-history"></i>  Reset</a>  
-                        <div class="collapse-divider"></div> 
-                    </div>
-                </div>
-            </li>  
+            </li> 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
 

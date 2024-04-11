@@ -1,20 +1,30 @@
 <?php
 // validate_password.php
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Get the entered password from the AJAX request
+include 'connection.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['password'])) {
     $enteredPassword = $_POST['password'];
 
-    // Define the static password (replace with your desired password)
-    $staticPassword = 'admin123';
+    // Fetch the stored password hash from the database based on the logged-in user's username
+    $username = $_SESSION['username'];
+    $query = "SELECT password FROM admin_accounts WHERE username = '$username'";
+    $result = mysqli_query($conn, $query);
 
-    // Check if the entered password matches the static password
-    $passwordMatches = ($enteredPassword === $staticPassword);
+    if ($result && mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        $storedPasswordHash = $row['password'];
 
-    // Send the result back to the client
-    echo json_encode($passwordMatches ? 'true' : 'false');
+        // Verify the entered password against the stored hash
+        if (password_verify($enteredPassword, $storedPasswordHash)) {
+            echo json_encode(['status' => 'success']);
+        } else {
+            echo json_encode(['status' => 'error']);
+        }
+    } else {
+        echo json_encode(['status' => 'error']);
+    }
 } else {
-    // Handle invalid request method
-    echo json_encode('false - Invalid request method');
+    echo json_encode(['status' => 'error']);
 }
 ?>
