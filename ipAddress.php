@@ -45,28 +45,29 @@ if(!isset($_SESSION["username"])) {
             <!-- Begin Page Content -->
             <div class="container-fluid">
                 <!-- Page Heading -->
-                <h1 class="h3 text-gray-800">List of Branches</h1>
+                <h1 class="h3 text-gray-800">List of Ip Address</h1>
 
                 <!-- Content Row -->
                 <div class="row pl-1 pr-1">
                     <div class="col col-lg-12">
                         <div class="d-flex">
                             <button type="button" class="btn mt-3 mb-3" style="background-color: #45d43d; color: white;"
-                                    data-toggle="modal" data-target="#addBranchModal">
-                                <i class="ml-1 fas fa-fw fa-plus"></i> Add Branch
+                                    data-toggle="modal" data-target="#addIpModal">
+                                <i class="ml-1 fas fa-fw fa-plus"></i> Add IP Address
                             </button>
                         </div>
                         <table id="adminTable" class="table table-success shadow-lg hover" style="width:100%; border:none">
                             <thead class="text-center">
                             <tr>
                                 <th>No.</th>
-                                <th>Name</th>
+                                <th>IP</th>
+                                <th>Location</th>
                                 <th>Actions</th>
                             </tr>
                             </thead>
                             <tbody class="text-center" style="color: black">
                             <?php
-                            $sql = "SELECT `ID`, `branch` FROM `branches`";
+                            $sql = "SELECT * FROM `allowed_ips`";
                             $result = $conn -> query($sql);
 
                             $count = 1; // Initialize count variable
@@ -75,12 +76,13 @@ if(!isset($_SESSION["username"])) {
                                 while ($row = $result -> fetch_assoc()) {
                                     echo "<tr>
                                             <td>".$count."</td>
-                                            <td>".$row["branch"]."</td>
+                                            <td>".$row["ip_address"]."</td>
+                                            <td>".$row["branch_loc"]."</td>
                                             <td>
-                                                <button type=\"button\" class=\"btn btn-primary btn-sm edit-branch-btn\" data-toggle=\"modal\" data-target=\"#editBranchModal\" data-branch-id=\"".$row["ID"]."\" data-branch-name=\"".$row["branch"]."\">
+                                                <button type=\"button\" class=\"btn btn-primary btn-sm edit-ip-btn\" data-toggle=\"modal\" data-target=\"#editIpModal\" data-Ip-id=\"".$row["ID"]."\" data-ip-name=\"".$row["ip_address"]."\" data-ip-location=\"".$row["branch_loc"]."\">
                                                 <i class='fas fa-pen'></i>
                                                 </button>
-                                                <button type=\"button\" class=\"btn btn-danger btn-sm delete-branch-btn\" data-toggle=\"modal\" data-target=\"#deleteBranchModal\" data-branch-id=\"".$row["ID"]."\">
+                                                <button type=\"button\" class=\"btn btn-danger btn-sm delete-Ip-btn\" data-toggle=\"modal\" data-target=\"#deleteIpModal\" data-Ip-id=\"".$row["ID"]."\">
                                                 <i class='fas fa-trash'></i>
                                                 </button>
                                             </td>
@@ -103,21 +105,27 @@ if(!isset($_SESSION["username"])) {
 
         <!-- End of Main Content -->
 
-        <!-- Add New Branch Modal -->
-        <div class="modal fade" id="addBranchModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <!-- Add New Ip Modal -->
+        <div class="modal fade" id="addIpModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header" style="background-color:#4dd145; color:white">
-                        <h5 class="modal-title" id="exampleModalLabel">Add New Branch</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Add New Ip</h5>
                         <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form action="branchaddsave.php" method="post"> <!-- Move the form tag here -->
+                    <form action="ipaddsave.php" method="post"> <!-- Move the form tag here -->
                         <div class="modal-body">
                             <div class="form-group">
-                                <label for="branch_name">Branch Name:</label>
-                                <input type="text" name="branch_name" class="form-control" required />
+                                <label for="ip">Ip Address:</label>
+                                <input type="text" name="ip_name" class="form-control" required />
+                            </div>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="location">Branch Location:</label>
+                                <input type="text" name="ip_location" class="form-control" required />
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -129,25 +137,27 @@ if(!isset($_SESSION["username"])) {
             </div>
         </div>
 
-        <!-- End Add New Branch Modal -->
+        <!-- End Add New Ip Modal -->
 
-        <!-- Edit Branch Modal -->
-        <div class="modal fade" id="editBranchModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        <!-- Edit Ip Modal -->
+        <div class="modal fade" id="editIpModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
              aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header" style="background-color: #007bff; color: white">
-                        <h5 class="modal-title" id="exampleModalLabel">Edit Branch</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Edit Ip</h5>
                         <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form id="editBranchForm" action="brancheditsave.php" method="post">
+                    <form id="editIpForm" action="ipeditsave.php" method="post">
                         <div class="modal-body">
                             <div class="form-group">
-                                <label for="edit_branch_name">Branch Name:</label>
-                                <input type="text" name="edit_branch_name" id="edit_branch_name" class="form-control" required>
-                                <input type="hidden" name="edit_branch_id" id="edit_branch_id">
+                                <label for="edit_ip_name">Ip Address:</label>
+                                <input type="text" name="edit_ip_name" id="edit_ip_name" class="form-control mb-3" required>
+                                <label for="edit_ip_name">Branch Location:</label>
+                                <input type="text" name="edit_ip_location" id="edit_ip_location" class="form-control mb-3" required>
+                                <input type="hidden" name="edit_ip_id" id="edit_ip_id">
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -158,20 +168,20 @@ if(!isset($_SESSION["username"])) {
                 </div>
             </div>
         </div>
-        <!-- End of Edit Branch Modal -->
+        <!-- End of Edit Ip Modal -->
 
-        <!-- Delete Branch Modal -->
-        <div class="modal fade" id="deleteBranchModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <!-- Delete Ip Modal -->
+        <div class="modal fade" id="deleteIpModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header" style="background-color: #dc3545; color: white">
-                        <h5 class="modal-title" id="exampleModalLabel">Delete Branch</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Delete IP</h5>
                         <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        Are you sure you want to delete this branch?
+                        Are you sure you want to delete this IP?
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
@@ -180,7 +190,7 @@ if(!isset($_SESSION["username"])) {
                 </div>
             </div>
         </div>
-        <!-- End of Delete Branch Modal -->
+        <!-- End of Delete Ip Modal -->
 
         <!-- Footer -->
         <footer class="sticky-footer bg-white">
@@ -268,29 +278,32 @@ if(!isset($_SESSION["username"])) {
 <script src="myStyles/JS/loader.js"></script>
 <script>
     $(document).ready(function() {
-        $('.edit-branch-btn').click(function() {
-            var branchId = $(this).data('branch-id');
-            var branchName = $(this).data('branch-name');
+        $('.edit-ip-btn').click(function() {
+            var ipId = $(this).data('ip-id');
+            var ipName = $(this).data('ip-name');
+            var ipLocation = $(this).data('ip-location');
 
-            $('#edit_branch_id').val(branchId);
-            $('#edit_branch_name').val(branchName);
+
+            $('#edit_ip_id').val(ipId);
+            $('#edit_ip_name').val(ipName);
+            $('#edit_ip_location').val(ipLocation);
         });
 
-        $('.delete-branch-btn').click(function() {
-            var branchId = $(this).data('branch-id');
-            $('#deleteBranchModal').find('.confirm-delete-btn').data('branch-id', branchId);
+        $('.delete-ip-btn').click(function() {
+            var ipId = $(this).data('ip-id');
+            $('#deleteIpModal').find('.confirm-delete-btn').data('ip-id', ipId);
         });
 
         $('.confirm-delete-btn').click(function() {
-            var branchId = $(this).data('branch-id');
-            // AJAX request to delete the branch
+            var ipId = $(this).data('ip-id');
+            // AJAX request to delete the ip
             $.ajax({
-                url: 'branchdelete.php',
+                url: 'ipdelete.php',
                 type: 'POST',
-                data: {branchId: branchId},
+                data: {ipId: ipId},
                 success: function(response) {
                     // Handle success, like updating the table
-                    $('#deleteBranchModal').modal('hide');
+                    $('#deleteIpModal').modal('hide');
                     // You might want to reload the table or remove the deleted row
                     location.reload();
                 },
