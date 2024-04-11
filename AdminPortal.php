@@ -1,5 +1,34 @@
 <?php
+// Include your database connection file here
 include 'connection.php';
+
+// // Fetch allowed IP addresses from the database
+// $sql = "SELECT ip_address FROM allowed_ips";
+// $result = mysqli_query($conn, $sql);
+
+// // Check if there are results
+// if ($result) {
+//     $allowedIpAddresses = array();
+
+//     // Fetch IP addresses into an array
+//     while ($row = mysqli_fetch_assoc($result)) {
+//         $allowedIpAddresses[] = $row['ip_address'];
+//     }
+
+//     // Get the visitor's IP address
+//     $visitorIpAddress = $_SERVER['REMOTE_ADDR'];
+
+//     // Check if the visitor's IP address is in the allowed IP addresses array
+//     if (!in_array($visitorIpAddress, $allowedIpAddresses)) {
+//         http_response_code(403);
+//         include 'denied.php';
+//         exit;
+//     }
+// } else {
+//     // Handle database query error
+//     echo "Error fetching allowed IP addresses: " . mysqli_error($conn);
+//     exit;
+// }
 session_start();
 
 // Check if the user is already logged in
@@ -24,7 +53,8 @@ if (isset($_SESSION["username"])) {
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <!-- alert plugin sweetalert2 -->
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <title>Admin_Portal</title>
+    <link rel="icon" href="Images/logofinal.png" type="image/png">
+    <title>BizMaTechPortal</title>
 </head>
 
 <body>
@@ -32,7 +62,7 @@ if (isset($_SESSION["username"])) {
         <div id="formContent">
             <!-- Icon -->
             <p class="companyName mt-5">
-                <h1>BIZMATECH</h1>
+                <h1>BizMaTech</h1>
             </p>
             <!-- Login Form -->
             <input type="text" id="txtBoxUserName" name="txtBoxUserName" placeholder="Username">
@@ -66,7 +96,6 @@ if (isset($_SESSION["username"])) {
                     });
                     return false;
                 }
-
                 $.ajax({
                     url: "checkAdminValid.php",
                     method: "post",
