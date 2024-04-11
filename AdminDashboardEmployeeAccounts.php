@@ -39,8 +39,34 @@ if(!isset($_SESSION["username"])) {
         <div id="content">
 
             <!-- Topbar -->
-       <?php include ('topbar.php');?>
-        <!-- End of Topbar -->
+            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+                <!-- Sidebar Toggle (Topbar) -->
+                <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                    <i class="fa fa-bars"></i>
+                </button>
+                <!-- Topbar Navbar -->
+                <ul class="navbar-nav ml-auto">
+                    <div class="topbar-divider d-none d-sm-block"></div>
+
+                    <!-- Nav Item - User Information -->
+                    <li class="nav-item dropdown no-arrow">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="mr-2 d-none d-lg-inline text-gray-700 small "><h5><i class="fas fa-user"></i>  <?php echo ''.$_SESSION["username"].'';?></h5></span>
+                        </a>
+                        <!-- Dropdown - User Information -->
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                             aria-labelledby="userDropdown">
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Logout
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+            <!-- End of Topbar -->
 
             <!-- Begin Page Content -->
             <div class="container-fluid">
@@ -48,7 +74,7 @@ if(!isset($_SESSION["username"])) {
                 <h1 class="h3 text-gray-800">List of Employee</h1>
                 <!-- Search Bar -->
                 <div class="input-group mb-3">
-                    <input type="text" id="searchInput" class="form-control" placeholder="Search by Employee Name">
+                    <input type="text" id="searchInput" class="form-control" placeholder="Search by Employee Name" oninput="searchTable()">
                     <div class="input-group-append">
                         <button class="btn btn-outline-secondary" type="button">Search</button>
                     </div>
@@ -72,56 +98,19 @@ if(!isset($_SESSION["username"])) {
                                 <th>Department</th>
                                 <th>Position</th>
                                 <th>Sex</th>
-                                <th class="text-center">
-                                    <select id="statusFilter" style="border: none; font-weight: bold; color:#656565;">
-                                        <option value="">Status</option>
-                                    </select>
-                                </th>
-                                <th style="display:none">Status2</th>
                                 <th>Actions</th>
                             </tr>
                             </thead>
                             <tbody class="text-center" style="color: black">
-                                <?php
-                                // Add an array to map numeric status values to text values
-                                $statusText = [
-                                    1 => "Active",
-                                    2 => "Inactive",
-                                    3 => "Suspended",
-                                    // Add more status text values if needed
-                                ];
+                            <?php
+                            $sql = "SELECT ID, Employee_ID, Employee_FullName,Employee_Branch, Employee_Department, Employee_Position, Employee_Sex FROM `employee_information`";
+                            $result = $conn -> query($sql);
 
-                                $sql = "SELECT ID, Employee_ID, Employee_FullName,Employee_Branch, Employee_Department, Employee_Position, Employee_Sex, Employee_Status FROM `employee_information`";
-                                $result = $conn -> query($sql);
+                            $count = 1; // Initialize count variable
 
-                                $count = 1; // Initialize count variable
-                                
-                                if($result-> num_rows > 0) {
-                                    while ($row = $result->fetch_assoc()) {
-                                        $status = ""; // Initialize status variable
-                                        $textColor = ""; // Initialize text color variable
-                                        $status2 = isset($statusText[$row["Employee_Status"]]) ? $statusText[$row["Employee_Status"]] : "Unknown";
-
-                                        // Set status and text color based on Employee_Status
-                                        switch ($row["Employee_Status"]) {
-                                            case 1:
-                                                $status = "Active";
-                                                $textColor = "success";
-                                                break;
-                                            case 2:
-                                                $status = "Inactive";
-                                                $textColor = "danger";
-                                                break;
-                                            case 3:
-                                                $status = "Suspended";
-                                                $textColor = "warning";
-                                                break;
-                                            default:
-                                                $status = "Unknown";
-                                                $textColor = "secondary";
-                                                break;
-                                        }
-                                        echo "<tr>
+                            if($result-> num_rows > 0) {
+                                while ($row = $result -> fetch_assoc()) {
+                                    echo "<tr>
                                             <td>".$count."</td>
                                             <td>".$row["Employee_ID"]."</td>
                                             <td>".$row["Employee_FullName"]."</td>
@@ -129,10 +118,6 @@ if(!isset($_SESSION["username"])) {
                                             <td>".$row["Employee_Department"]."</td>
                                             <td>".$row["Employee_Position"]."</td>
                                             <td>".$row["Employee_Sex"]."</td>
-                                            <td>
-                                                <button class='p-1 rounded text-".$textColor." btn edit-status-btn' data-toggle='modal' data-target='#statusModal' data-employee-id='".$row["Employee_ID"]."'>".$status."</button>
-                                            </td>
-                                            <td style='display:none'>".$status2."</td> <!-- Populate Status2 column with text value -->
                                             <td>
                                                 <button type=\"button\" class=\"btn btn-primary btn-sm edit-employee-btn\" data-toggle=\"modal\" data-target=\"#editEmployeeModal\" 
                                                 data-employee-id=\"".$row["Employee_ID"]."\" 
@@ -149,85 +134,21 @@ if(!isset($_SESSION["username"])) {
                                                 </button>
                                             </td>
                                         </tr>";
-                                        $count++; // Increment count for next row
-                                    }
-                                    echo "</table>";
-                                } else {
-                                    echo "0 result";
+                                    $count++; // Increment count for next row
                                 }
-                                ?>
-                        </tbody>
+                                echo "</table>";
+                            } else {
+                                echo "0 result";
+                            }
+                            ?>
 
+                            </tbody>
                         </table>
                     </div>
                 </div>
             </div>
             <!-- /.container-fluid -->
         </div>
-        <!-- Status Modal -->
-        <div class="modal fade" id="statusModal" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable" role="document">
-                <div class="modal-content">
-                    <div class="modal-header" style="background-color: white; color: black">
-                        <h5 class="modal-title" id="exampleModalLabel">Edit Status</h5>
-                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <input type="hidden" id="employeeId">
-                        <button type="button" class="btn btn-success update-status-btn" data-status="1">Active</button>
-                        <button type="button" class="btn btn-danger update-status-btn" data-status="2">Inactive</button>
-                        <button type="button" class="btn btn-warning update-status-btn" data-status="3">Suspend</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <script>
-            $(document).ready(function() {
-                // Event listener for status buttons in the modal
-                $('.edit-status-btn').click(function() {
-                    var employeeId = $(this).data('employee-id');
-                    $('#employeeId').val(employeeId);
-                });
-
-                // Event listener for updating status
-                $('.update-status-btn').click(function() {
-                    var status = $(this).data('status');
-                    var employeeId = $('#employeeId').val();
-
-                    // AJAX request to update status
-                    $.ajax({
-                        url: 'updateEmployeeStatus.php',
-                        type: 'POST',
-                        data: { employeeId: employeeId, status: status },
-                        success: function(response) {
-                            // Handle success response, if needed
-                            console.log(response);
-                            $('#statusModal').modal('hide');
-                            // Reload the page to refresh the status in the table
-                            location.reload();
-                            // Show success alert
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Status Updated',
-                                text: 'Employee status updated successfully.'
-                            });
-                        },
-                        error: function(xhr, status, error) {
-                            // Handle error, if needed
-                            console.error('Error updating status:', error);
-                        }
-                    });
-                });
-
-                // Ensure modal is hidden on close
-                $('#statusModal').on('hidden.bs.modal', function () {
-                    $(this).find('.update-status-btn').off('click'); // Remove click event handlers
-                });
-            });
-        </script>
 
         <!-- End of Main Content -->
         <?php
@@ -294,13 +215,13 @@ if(!isset($_SESSION["username"])) {
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header" style="background-color: #dc3545; color: white">
-                        <h5 class="modal-title" id="exampleModalLabel">Delete Record</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Delete Branch</h5>
                         <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        Are you sure you want to delete this Employee Information?
+                        Are you sure you want to delete this branch?
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
@@ -458,62 +379,39 @@ if(!isset($_SESSION["username"])) {
         });
     });
 });
-document.addEventListener("DOMContentLoaded", function() {
-    populateDropdown("statusFilter", 8); // Index of status column
-});
 
-function populateDropdown(selectId, columnIndex) {
-    console.log("Populating dropdown...");
-    var select = document.getElementById(selectId);
-    var options = [];
-    var table = document.getElementById("myTable");
-    var rows = table.getElementsByTagName("tr");
-    for (var i = 1; i < rows.length; i++) {
-        var cell = rows[i].getElementsByTagName("td")[columnIndex];
-        var value = cell.textContent || cell.innerText;
-        console.log("Value:", value);
-        if (!options.includes(value)) {
-            options.push(value);
-            var option = document.createElement("option");
-            option.text = value;
-            select.add(option);
-        }
-    }
-    console.log("Dropdown populated successfully.");
-}
+    function searchTable() {
+        var input, filter, table, tr, td1, td2, i, txtValue1, txtValue2;
+        input = document.getElementById("searchInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
 
-
-function filterTable() {
-    console.log("Filtering table...");
-    var selectStatus = document.getElementById("statusFilter");
-    var filterStatus = selectStatus.value.toUpperCase();
-    var searchInput = document.getElementById("searchInput").value.toUpperCase();
-    var table = document.getElementById("myTable");
-    var tr = table.getElementsByTagName("tr");
-
-    for (var i = 1; i < tr.length; i++) {
-        var tdStatus = tr[i].getElementsByTagName("td")[8]; // Index of Status column
-        var tdEmployeeName = tr[i].getElementsByTagName("td")[2]; // Index of Employee Name column
-        var tdEmployeeID = tr[i].getElementsByTagName("td")[1]; // Index of Employee ID column
-        if (tdStatus && tdEmployeeName && tdEmployeeID) {
-            var statusMatch = filterStatus === '' || tdStatus.textContent.toUpperCase() === filterStatus;
-            var employeeNameMatch = tdEmployeeName.textContent.toUpperCase().indexOf(searchInput) > -1;
-            var employeeIDMatch = tdEmployeeID.textContent.toUpperCase().indexOf(searchInput) > -1;
-            if ((statusMatch && employeeNameMatch) || (statusMatch && employeeIDMatch)) {
-                tr[i].style.display = "";
-            } else {
-                tr[i].style.display = "none";
+        for (i = 0; i < tr.length; i++) {
+            td1 = tr[i].getElementsByTagName("td")[1]; // Index 1 corresponds to the Employee_ID column
+            td2 = tr[i].getElementsByTagName("td")[2]; // Index 2 corresponds to the Employee_FullName column
+            if (td1 && td2) {
+                txtValue1 = td1.textContent || td1.innerText;
+                txtValue2 = td2.textContent || td2.innerText;
+                if (txtValue1.toUpperCase().indexOf(filter) > -1 || txtValue2.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
             }
         }
     }
-    console.log("Table filtered successfully.");
-}
-
-
-document.getElementById("statusFilter").addEventListener("change", filterTable);
-document.getElementById("searchInput").addEventListener("input", filterTable);
-
-    
+    $(document).ready(function() {
+        $('#myTable').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "pageLength": 10 // Set the number of rows per page
+        });
+    });
 </script>
 
 </body>
