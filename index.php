@@ -78,7 +78,8 @@ include 'connection.php';
     if (isset($_SESSION['status'])) {
         echo "Swal.fire({
                             icon: '" . ($_SESSION['status_code'] == 'success' ? 'success' : 'error') . "',
-                            title: '" . $_SESSION['status'] . "',
+                            title: '" . ($_SESSION['status_code'] == 'success' ? 'Success' : ($_SESSION['status_code'] == 'inactive' ? 'Inactive' : 'Suspended')) . "',
+                            text: '" . $_SESSION['status'] . "',
                             showConfirmButton: false,
                             timer: 1000
                         });";
@@ -170,28 +171,16 @@ include 'connection.php';
                 // Parse JSON response
                 var response = JSON.parse(xhr.responseText);
 
-                // Check the status from the response
-                if (response.status === 'success') {
-                    // Success: Use SweetAlert for a custom popup
-                    Swal.fire({
-                        title: 'Success',
-                        text: response.message,
-                        icon: 'success',
-                        confirmButtonText: 'OK'
-                    });
-                } else {
-                    // Error: Use SweetAlert for an error popup
-                    Swal.fire({
-                        title: 'Invalid',
-                        text: response.message,
-                        icon: 'error',
-                        confirmButtonText: 'OK'
-                    });
-                }
+                // Use SweetAlert for a custom popup without title
+                Swal.fire({
+                    text: response.message,
+                    icon: response.status === 'success' ? 'success' : 'error',
+                    confirmButtonText: 'OK'
+                });
             } else {
                 // Error: Use SweetAlert for an error popup
                 Swal.fire({
-                    title: 'Invalid',
+                    title: 'Error',
                     text: 'An error occurred while processing your request.',
                     icon: 'error',
                     confirmButtonText: 'OK'
@@ -202,6 +191,7 @@ include 'connection.php';
 
     xhr.send(params);
 }
+
 
 document.getElementById("btnTimeIn1").addEventListener("click", function () {
     submitData("btnTimeIn1");

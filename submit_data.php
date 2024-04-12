@@ -37,8 +37,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $employeeFullName = $employeeInfo['Employee_FullName'];
                 $employeeStatus = $employeeInfo['Employee_Status'];
 
-                // Check if the employee is active (assuming status 1 means active)
+                // Add Employee_Status to the response
+                $response['Employee_Status'] = $employeeStatus;
+
+                // Check if the employee is active (assuming status 1 means active) or suspended (assuming status 2 means suspended)
                 if ($employeeStatus == 1) {
+                    // Employee is active, continue processing
                     // Determine the TimeLog and DateLog columns
                     $timeLogColumn = '';
                     $dateLogColumn = 'DateLog'; // Assuming DateLog is the new column name
@@ -106,9 +110,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $response['status'] = 'error';
                         $response['message'] = "Error querying data: " . $conn->error;
                     }
-                } else {
+                } elseif ($employeeStatus == 2) {
+                    // Employee is suspended
                     $response['status'] = 'error';
-                    $response['message'] = "You cannot time in/out as your account is inactive.";
+                    $response['message'] = "Your account is INACTIVE!";
+                } else {
+                    // Employee is inactive or has other status
+                    $response['status'] = 'error';
+                    $response['message'] = $employeeFullName . ", your account is SUSPENDED!";
                 }
             } else {
                 $response['status'] = 'error';
