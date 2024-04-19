@@ -17,11 +17,6 @@ include 'connection.php';
 
 //     // Get the visitor's IP address
 //     $visitorIpAddress = $_SERVER['REMOTE_ADDR'];
-//     // if (!filter_var($visitorIpAddress, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
-//     //     http_response_code(403);
-//     //     include 'try2.php';
-//     //     exit;
-//     // }
 //     // Check if the visitor's IP address is in the allowed IP addresses array
 //     if (!in_array($visitorIpAddress, $allowedIpAddresses)) {
 //         http_response_code(403);
@@ -62,6 +57,9 @@ include 'connection.php';
 <link rel="icon" href="Images/logofinal.png" type="image/png">
 <title>BizMaTechDTR</title>
 <style>
+    .btn {
+        text-align: left;
+    }
     @media (max-width: 768px) {
         /* Adjust font size for smaller screens */
         .buttons,
@@ -73,7 +71,7 @@ include 'connection.php';
     }
 </style>
 </head> 
-<body>
+<body onload="focusInput()">
     <?php
     if (isset($_SESSION['status'])) {
         echo "Swal.fire({
@@ -109,25 +107,54 @@ include 'connection.php';
     <div class="container mx-auto">
         <div class="row text-center mb-1" style="margin-left: 32%;">
             <div class="col-sm-3">
-            <button type="button" id="btnTimeIn1" name="" class="btn buttons btn-block">First (IN)</button>
+            <button type="button" id="btnTimeIn1" name="" class="btn buttons btn-block">[ Q ] First In</button>
             </div>
             <div class="col-sm-3">
-            <button type="button" id="btnTimeOut1" name="" class="btn buttons2 btn-block">First (OUT)</button>
+            <button type="button" id="btnTimeOut1" name="" class="btn buttons2 btn-block">[ W ] First Out</button>
             </div>
         </div>
         <div class="row text-center" style="margin-left: 32%;">
             <div class="col-sm-3">
-            <button type="button" id="btnTimeIn2" name="" class="btn buttons btn-block">Second (IN)</button>
+            <button type="button" id="btnTimeIn2" name="" class="btn buttons btn-block">[ E ] Second In</button>
             </div>
             <div class="col-sm-3">
-            <button type="button" id="btnTimeOut2" name="" class="btn buttons2 btn-block">Second (OUT)</button>
+            <button type="button" id="btnTimeOut2" name="" class="btn buttons2 btn-block">[ R ] Second Out</button>
             </div>
             <?php 
             //echo $visitorIpAddress; 
             ?>
         </div>
     </div>
-    
+    <script>
+document.addEventListener('keydown', function(event) {
+    // Check if the event key matches the desired hotkey
+    switch(event.key.toUpperCase()) {
+        case 'Q':
+            document.getElementById("btnTimeIn1").click(); // Trigger button click
+            break;
+        case 'W':
+            document.getElementById("btnTimeOut1").click(); // Trigger button click
+            break;
+        case 'E':
+            document.getElementById("btnTimeIn2").click(); // Trigger button click
+            break;
+        case 'R':
+            document.getElementById("btnTimeOut2").click(); // Trigger button click
+            break;
+        default:
+            // Ignore other keys
+            break;
+    }
+});
+</script>
+
+
+    <script>
+    function focusInput() {
+        document.getElementById("textBoxUserID").focus();
+    }
+    </script>
+
     <script>
     function updateTime() {
             var dateNowElement = document.getElementById('dateNow');
@@ -171,12 +198,18 @@ include 'connection.php';
                 // Parse JSON response
                 var response = JSON.parse(xhr.responseText);
 
-                // Use SweetAlert for a custom popup without title
+                // Inside the Swal.fire() success callback
                 Swal.fire({
                     text: response.message,
                     icon: response.status === 'success' ? 'success' : 'error',
                     confirmButtonText: 'OK'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Refresh the page
+                        location.reload();
+                    }
                 });
+
             } else {
                 // Error: Use SweetAlert for an error popup
                 Swal.fire({
@@ -228,5 +261,3 @@ document.getElementById("btnTimeOut2").addEventListener("click", function () {
     
 </body>
 </html>
-
-
